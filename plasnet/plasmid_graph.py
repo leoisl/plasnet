@@ -1,10 +1,15 @@
 from pathlib import Path
-import networkx as nx
 from plasnet.communities import Communities
+from plasnet.base_graph import BaseGraph
+import networkx as nx
 
 
-class PlasmidGraph(nx.Graph):
-    """Class to represent a plasmid graph."""
+class PlasmidGraph(BaseGraph):
+    """
+    Class to represent a plasmid graph.
+    It represents a full plasmid graph, not partitioned into communities or subcommunities.
+    Each node is a plasmid, and each edge represents the gene jaccard similarity between two plasmids.
+    """
 
     @staticmethod
     def from_gene_jaccard_file(gene_jaccard_filepath: Path, gene_jaccard_threshold: float) -> "PlasmidGraph":
@@ -38,7 +43,6 @@ class PlasmidGraph(nx.Graph):
                     graph.add_edge(from_plasmid, to_plasmid, weight=gene_jaccard)
 
         return graph
-
 
     def split_graph_into_communities(self) -> Communities:
         return Communities(list(nx.connected_components(self)))

@@ -1,3 +1,5 @@
+# TODO: refactor
+
 from typing import List
 from plasnet.community_graph import CommunityGraph
 import pickle

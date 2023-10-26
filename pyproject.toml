@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "plasnet"
+version = "0.0.1"
+description = "Clustering, visualising and exploring plasmid networks"
+authors = ["Leandro Lima <leandro@ebi.ac.uk>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/leoisl/plasnet"
+repository = "https://github.com/leoisl/plasnet"
+packages = [{include = "plasnet"}]
+keywords = ["Plasmids", "Networks", "Graphs", "Clustering", "Visualisation", "Exploration"]
+
+[tool.poetry.scripts]
+plasnet = 'plasnet.plasnet:main'
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.13"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

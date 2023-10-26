@@ -1,5 +1,6 @@
 # TODO: refactor
 
+from plasnet.base_graph import BaseGraph
 from plasnet.subcommunities import Subcommunities
 from plasnet.subcommunity_graph import SubcommunityGraph
 import networkx as nx
@@ -7,7 +8,7 @@ import logging
 from typing import List, Dict
 
 
-class CommunityGraph(nx.Graph):
+class CommunityGraph(BaseGraph):
     def get_blackhole_plasmids(self, blackhole_connectivity_threshold: int, edge_density: float) -> List["Nodes"]:
         blackhole_plasmids_in_graph = []
         for node in self.nodes:

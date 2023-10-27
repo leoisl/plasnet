@@ -2,6 +2,7 @@ from pathlib import Path
 from communities import Communities
 from base_graph import BaseGraph
 import networkx as nx
+import pandas as pd
 
 
 class PlasmidGraph(BaseGraph):
@@ -31,18 +32,14 @@ class PlasmidGraph(BaseGraph):
         AP024796.1      CP026642.1      0.5
         AP024796.1      CP027485.1      0.8
         """
-        # TODO: reads as pandas df, filter and load into networkx
-        graph = PlasmidGraph()
-        with open(distance_filepath) as distance_fh:
-            next(distance_fh)  # skips header
-            for line in distance_fh:
-                from_plasmid, to_plasmid, distance = line.strip().split("\t")
-                distance = float(distance)
+        df = pd.read_csv(distance_filepath, sep="\t")
 
-                graph.add_node(from_plasmid)
-                graph.add_node(to_plasmid)
-                if distance <= distance_threshold:
-                    graph.add_edge(from_plasmid, to_plasmid, weight=distance)
+        # apply distance threshold
+        df = df[df["distance"] <= distance_threshold]
+
+        # create graph
+        graph = nx.from_pandas_edgelist(df, source="plasmid_1", target="plasmid_2", edge_attr="distance",
+                                        create_using=PlasmidGraph)
 
         return graph
 

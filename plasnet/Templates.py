@@ -7,7 +7,8 @@ class Templates:
         return get_plasnet_source_dir() / "ext/templates"
 
     @staticmethod
-    def read_template(template_filepath):
+    def read_template(template_name):
+        template_filepath = Templates.get_templates_dir() / (template_name+".html")
         with open(template_filepath) as template_fh:
             template_src = template_fh.readlines()
         return map(lambda line: line.strip("\n"), template_src)

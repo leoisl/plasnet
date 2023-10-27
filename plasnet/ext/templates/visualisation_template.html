@@ -5,22 +5,22 @@
 
     <title>Roundhound visualisation</title>
 
-    <link href="../libs/jquery-ui.min.css" rel="stylesheet">
-    <link href="../libs/style.css" rel="stylesheet">
+    <link href="<libs_relative_path>/libs/jquery-ui.min.css" rel="stylesheet">
+    <link href="<libs_relative_path>/libs/style.css" rel="stylesheet">
 
-    <script src="../libs/cytoscape.min.js"></script>
-    <script src="../libs/jquery-3.6.0.min.js"></script>
-    <script src="../libs/jquery.layout-1.4.0.js"></script>
-    <script src="../libs/jquery-ui.min.js"></script>
-    <script src="../libs/jquery.blockUI.js"></script>
+    <script src="<libs_relative_path>/libs/cytoscape.min.js"></script>
+    <script src="<libs_relative_path>/libs/jquery-3.6.0.min.js"></script>
+    <script src="<libs_relative_path>/libs/jquery.layout-1.4.0.js"></script>
+    <script src="<libs_relative_path>/libs/jquery-ui.min.js"></script>
+    <script src="<libs_relative_path>/libs/jquery.blockUI.js"></script>
 
     <!-- cytoscape layouts -->
-    <script src="../libs/bluebird.js"></script>
-    <script src="../libs/fetch.min.js"></script>
-    <script src="../libs/cytoscape-euler.js"></script>
+    <script src="<libs_relative_path>/libs/bluebird.js"></script>
+    <script src="<libs_relative_path>/libs/fetch.min.js"></script>
+    <script src="<libs_relative_path>/libs/cytoscape-euler.js"></script>
 
-    <script src="../libs/cytoscape-layers.js"></script>
-    <script src="../libs/cytoscape-bubblesets.js"></script>
+    <script src="<libs_relative_path>/libs/cytoscape-layers.js"></script>
+    <script src="<libs_relative_path>/libs/cytoscape-bubblesets.js"></script>
 
     <script>
         cytoscape.warnings(true)
@@ -186,7 +186,7 @@
 
         function redraw() {
             $.blockUI({
-              message: '<img width="25px" src="../libs/resources/images/busy.gif" /> Loading resources and drawing the graph<br/>Please wait (max drawing time is <maxSimulationTime> milisseconds)...' ,
+              message: '<img width="25px" src="<libs_relative_path>/libs/resources/images/busy.gif" /> Loading resources and drawing the graph<br/>Please wait (max drawing time is <maxSimulationTime> milisseconds)...' ,
               css: {
                     border: 'none',
                     padding: '15px',

@@ -1,6 +1,7 @@
 from pathlib import Path
 from plasmid_graph import PlasmidGraph
 import click
+from utils import PathlibPath
 
 
 @click.command(epilog="""
@@ -24,8 +25,8 @@ AP024796.1      CP024687.1      0.0
 AP024796.1      CP026642.1      0.5
 AP024796.1      CP027485.1      0.8
 """)
-@click.argument("distances", type=click.Path(exists=True))
-@click.argument("output-dir", type=click.Path(exists=False))
+@click.argument("distances", type=PathlibPath(exists=True))
+@click.argument("output-dir", type=PathlibPath(exists=False))
 @click.option("--distance-threshold", "-t", type=float, default=0.5, help="Distance threshold")
 @click.option("--output-plasmid-graph", "-p", is_flag=True, help="Also outputs the full, unsplit, plasmid graph")
 def split(distances: Path,

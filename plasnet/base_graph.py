@@ -5,6 +5,7 @@ from plasnet.ColorPicker import ColorPicker
 from plasnet.Templates import Templates
 import json
 from collections import defaultdict
+import pickle
 
 
 class BaseGraph(nx.Graph):
@@ -119,4 +120,12 @@ class BaseGraph(nx.Graph):
 
         return subgraphs
 
+    def save(self, filepath):
+        with open(filepath, 'wb') as fh:
+            pickle.dump(self, fh)
 
+    @staticmethod
+    def load(filepath):
+        with open(filepath, 'rb') as fh:
+            graph = pickle.load(fh)
+            return graph

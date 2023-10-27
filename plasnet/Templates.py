@@ -11,4 +11,4 @@ class Templates:
         template_filepath = Templates.get_templates_dir() / (template_name+".html")
         with open(template_filepath) as template_fh:
             template_src = template_fh.readlines()
-        return map(lambda line: line.strip("\n"), template_src)
+        return list(map(lambda line: line.strip("\n"), template_src))

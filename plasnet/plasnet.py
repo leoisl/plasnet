@@ -1,5 +1,5 @@
 from pathlib import Path
-from plasnet.plasmid_graph import PlasmidGraph
+from plasmid_graph import PlasmidGraph
 import click
 
 

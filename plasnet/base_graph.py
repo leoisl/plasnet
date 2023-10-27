@@ -1,8 +1,8 @@
 # TODO: requires heavy refactoring
 
 import networkx as nx
-from plasnet.ColorPicker import ColorPicker
-from plasnet.Templates import Templates
+from ColorPicker import ColorPicker
+from Templates import Templates
 import json
 from collections import defaultdict
 import pickle

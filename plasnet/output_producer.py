@@ -1,7 +1,7 @@
 import collections
 import shutil
-from plasnet.Templates import Templates
-from plasnet.utils import get_libs_dir
+from Templates import Templates
+from utils import get_libs_dir
 import logging
 from collections import defaultdict
 

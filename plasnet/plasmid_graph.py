@@ -1,6 +1,6 @@
 from pathlib import Path
-from plasnet.communities import Communities
-from plasnet.base_graph import BaseGraph
+from communities import Communities
+from base_graph import BaseGraph
 import networkx as nx
 
 

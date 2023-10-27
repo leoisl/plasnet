@@ -1,8 +1,8 @@
 # TODO: refactor
 
-from plasnet.base_graph import BaseGraph
-from plasnet.subcommunities import Subcommunities
-from plasnet.subcommunity_graph import SubcommunityGraph
+from base_graph import BaseGraph
+from subcommunities import Subcommunities
+from subcommunity_graph import SubcommunityGraph
 import networkx as nx
 import logging
 from typing import List, Dict

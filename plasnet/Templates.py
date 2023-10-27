@@ -1,4 +1,4 @@
-from plasnet.utils import get_plasnet_source_dir
+from utils import get_plasnet_source_dir
 
 
 class Templates:

@@ -45,3 +45,15 @@ class PlasmidGraph(BaseGraph):
 
     def split_graph_into_communities(self) -> Communities:
         return Communities(list(nx.connected_components(self)))
+
+    def _get_libs_relative_path(self) -> str:
+        return "."
+
+    def _get_samples_selectors_HTML(self) -> str:
+        return ""
+
+    def _get_filters_HTML(self) -> str:
+        return ""
+
+    def _get_custom_buttons_HTML(self) -> str:
+        return ""

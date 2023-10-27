@@ -1,5 +1,5 @@
 # TODO: requires heavy refactoring
-
+from abc import abstractmethod
 import networkx as nx
 from ColorPicker import ColorPicker
 from Templates import Templates
@@ -54,15 +54,13 @@ class BaseGraph(nx.Graph):
         else:
             return self.TIME_LIMIT_FOR_LARGE_GRAPHS
 
-    def produce_visualisation(self, outdir, label, nb_of_black_holes, show_blackholes_filter=False, show_samples_filter=False,
-                              sample_to_plasmids=None):
-        outdir.mkdir(parents=True, exist_ok=True)
-
+    def produce_visualisation(self) -> str:
         visualisation_src = Templates.read_template("visualisation_template")
 
         graph_as_cy_dict = nx.cytoscape_data(self)
         elements_as_cy_json = json.dumps(graph_as_cy_dict["elements"])
 
+        """
         if sample_to_plasmids:
             samples_selectors = []
             for sample, plasmids in sample_to_plasmids.items():
@@ -86,6 +84,7 @@ class BaseGraph(nx.Graph):
             samples_selectors_str = ""
             sample_hits_checkboxes = []
 
+
         filters = []
         if show_blackholes_filter:
             filters.append(f'<label for="hide_blackholes">Hide blackhole plasmids ({nb_of_black_holes} present)</label>'
@@ -97,16 +96,43 @@ class BaseGraph(nx.Graph):
         custom_buttons = []
         if show_blackholes_filter:
             custom_buttons.append('<div><input type="submit" value="Redraw" onclick="redraw()"></div>')
+        """
 
-        with open(outdir / f"{label}.html", "w") as visualisation_fh:
-            for line in visualisation_src:
-                line = line.replace("<samples_selectors>", samples_selectors_str)
-                line = line.replace("<elements_tag>", elements_as_cy_json)
-                line = line.replace("<movementThreshold>", str(self.number_of_edges()))
-                line = line.replace("<maxSimulationTime>", str(self.get_simulation_time()))
-                line = line.replace("<filters_tag>", "\n".join(filters))
-                line = line.replace("<custom_buttons_tag>", "\n".join(custom_buttons))
-                print(line, file=visualisation_fh)
+        # [CRITICAL] TODO: improve this horrible performance
+        libs_relative_path = self._get_libs_relative_path()
+        samples_selectors = self._get_samples_selectors_HTML()
+        filters = self._get_filters_HTML()
+        custom_buttons = self._get_custom_buttons_HTML()
+
+        final_html_lines = []
+        for line in visualisation_src:
+            line = line.replace("<libs_relative_path>", libs_relative_path)
+            line = line.replace("<samples_selectors>", samples_selectors)
+            line = line.replace("<elements_tag>", elements_as_cy_json)
+            line = line.replace("<movementThreshold>", str(self.number_of_edges()))
+            line = line.replace("<maxSimulationTime>", str(self.get_simulation_time()))
+            line = line.replace("<filters_tag>", filters)
+            line = line.replace("<custom_buttons_tag>", custom_buttons)
+            final_html_lines.append(line)
+
+        return "\n".join(final_html_lines)
+
+    @abstractmethod
+    def _get_libs_relative_path(self) -> str:
+        ...
+
+    @abstractmethod
+    def _get_samples_selectors_HTML(self) -> str:
+        ...
+
+    @abstractmethod
+    def _get_filters_HTML(self) -> str:
+        ...
+
+    @abstractmethod
+    def _get_custom_buttons_HTML(self) -> str:
+        ...
+
 
     def get_subgraphs(self, plasmid_to_subcommunity, use_subgraphs):
         if use_subgraphs:

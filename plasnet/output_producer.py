@@ -4,6 +4,8 @@ from Templates import Templates
 from utils import get_libs_dir
 import logging
 from collections import defaultdict
+from base_graph import BaseGraph
+from pathlib import Path
 
 
 class OutputProducer:
@@ -46,7 +48,7 @@ class OutputProducer:
                 line = line.replace("<objects_description>", objects_description)
                 print(line, file=index_fh)
 
-        shutil.copytree(get_libs_dir(), outdir / "libs")
+        OutputProducer.copy_libs(outdir)
 
     @staticmethod
     def produce_full_visualization(graphs, plasmid_to_subcommunity, visualisation_outdir, blackhole_plasmids,
@@ -114,3 +116,18 @@ class OutputProducer:
         else:
             OutputProducer.produce_index_file(visualisation_outdir, graphs, descriptions, "community", blackhole_plasmids, graph_to_sample_to_plasmids)
         logging.info("Producing index file - done!")
+
+    @staticmethod
+    def produce_graph_visualisation(graph: BaseGraph, html_path: Path, copy_libs: bool = True):
+        outdir = html_path.parent
+        outdir.mkdir(exist_ok=True, parents=True)
+
+        html = graph.produce_visualisation()
+        html_path.write_text(html)
+
+        if copy_libs:
+            OutputProducer.copy_libs(outdir)
+
+    @staticmethod
+    def copy_libs(outdir):
+        shutil.copytree(get_libs_dir(), outdir / "libs", dirs_exist_ok=True)

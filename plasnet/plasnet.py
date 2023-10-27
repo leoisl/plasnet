@@ -2,6 +2,7 @@ from pathlib import Path
 from plasmid_graph import PlasmidGraph
 import click
 from utils import PathlibPath
+from output_producer import OutputProducer
 
 
 @click.command(epilog="""
@@ -36,11 +37,12 @@ def split(distances: Path,
     plasmid_graph = PlasmidGraph.from_distance_file(distances, distance_threshold)
 
     if output_plasmid_graph:
-        plasmid_graph.produce_visualisation(output_dir/"plasmid_graph", "plasmid_graph", 0, False, False)
+        OutputProducer.produce_graph_visualisation(plasmid_graph,
+                                                   output_dir/"plasmid_graph"/"plasmid_graph.html")
 
-    communities = plasmid_graph.split_graph_into_communities()
-    for community in communities:
-        community.produce_visualisation(output_dir/"communities", "community", 0, False, False)
+    # communities = plasmid_graph.split_graph_into_communities()
+    # for community in communities:
+    #     community.produce_visualisation(output_dir/"communities", "community", 0, False, False)
 
 
 def main():

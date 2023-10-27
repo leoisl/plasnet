@@ -8,39 +8,41 @@ class PlasmidGraph(BaseGraph):
     """
     Class to represent a plasmid graph.
     It represents a full plasmid graph, not partitioned into communities or subcommunities.
-    Each node is a plasmid, and each edge represents the gene jaccard similarity between two plasmids.
+    Each node is a plasmid, and each edge represents an abstract distance between two plasmids.
     """
 
     @staticmethod
-    def from_gene_jaccard_file(gene_jaccard_filepath: Path, gene_jaccard_threshold: float) -> "PlasmidGraph":
+    def from_distance_file(distance_filepath: Path, distance_threshold: float) -> "PlasmidGraph":
         """
-        Creates a plasmid graph from a gene jaccard similarity file.
-        The gene jacard file is a tab-separated file with 3 columns: plasmid_1, plasmid_2, gene_jaccard, for example:
-        plasmid_1       plasmid_2       gene_jaccard
-        AP024796.1      AP024825.1      0.0
-        AP024796.1      CP012142.1      0.007575757575757576
-        AP024796.1      CP014494.1      0.010309278350515464
+        Creates a plasmid graph from a plasmid distance file.
+        The distance file is a tab-separated file with 3 columns: plasmid_1, plasmid_2, distance.
+        plasmid_1 and plasmid_2 are plasmid names, and distance is a float between 0 and 1.
+        The distance threshold is the minimum distance value for two plasmids to be considered connected.
+
+        Example of such file:
+        plasmid_1       plasmid_2       distance
+        AP024796.1      AP024825.1      0.8
+        AP024796.1      CP012142.1      0.5
+        AP024796.1      CP014494.1      0.3
         AP024796.1      CP019149.1      0.0
         AP024796.1      CP021465.1      0.0
-        AP024796.1      CP022675.1      0.0
+        AP024796.1      CP022675.1      1.0
         AP024796.1      CP024687.1      0.0
-        AP024796.1      CP026642.1      0.07575757575757576
-        AP024796.1      CP027485.1      0.09848484848484848
-
-        The definition of gene jaccard between two plasmids is the number of common genes divided by the number of genes.
-        The gene jaccard threshold is the minimum gene jaccard value for two plasmids to be considered connected.
+        AP024796.1      CP026642.1      0.5
+        AP024796.1      CP027485.1      0.8
         """
+        # TODO: reads as pandas df, filter and load into networkx
         graph = PlasmidGraph()
-        with open(gene_jaccard_filepath) as gene_jaccard_fh:
-            next(gene_jaccard_fh)  # skips header
-            for line in gene_jaccard_fh:
-                from_plasmid, to_plasmid, gene_jaccard = line.strip().split("\t")
-                gene_jaccard = float(gene_jaccard)
+        with open(distance_filepath) as distance_fh:
+            next(distance_fh)  # skips header
+            for line in distance_fh:
+                from_plasmid, to_plasmid, distance = line.strip().split("\t")
+                distance = float(distance)
 
                 graph.add_node(from_plasmid)
                 graph.add_node(to_plasmid)
-                if gene_jaccard >= gene_jaccard_threshold:
-                    graph.add_edge(from_plasmid, to_plasmid, weight=gene_jaccard)
+                if distance <= distance_threshold:
+                    graph.add_edge(from_plasmid, to_plasmid, weight=distance)
 
         return graph
 

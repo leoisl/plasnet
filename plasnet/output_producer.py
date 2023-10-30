@@ -6,6 +6,8 @@ import logging
 from collections import defaultdict
 from base_graph import BaseGraph
 from pathlib import Path
+from typing import List
+from community_graph import CommunityGraph
 
 
 class OutputProducer:
@@ -126,7 +128,65 @@ class OutputProducer:
         html_path.write_text(html)
 
         OutputProducer.copy_libs(outdir)
-            OutputProducer.copy_libs(outdir)
+
+    @staticmethod
+    def produce_communities_visualisation(communities, outdir):
+        OutputProducer._write_html_for_all_communities(communities, outdir)
+        OutputProducer._produce_index_file(outdir, communities, "community", )
+
+    @staticmethod
+    def _write_html_for_all_communities(communities: List[CommunityGraph], outdir: Path):
+        graphs_dir = outdir/"graphs"
+        graphs_dir.mkdir(exist_ok=True, parents=True)
+
+        for community_index, community in enumerate(communities):
+            html = community.produce_visualisation()
+            html_path = graphs_dir / f"community_{community_index}.html"
+            html_path.write_text(html)
+
+    @staticmethod
+    def _produce_index_file(outdir, graphs, objects_description, graph_to_sample_to_plasmids=None):
+        nb_of_elems_to_graph_indexes = collections.defaultdict(list)
+        if graph_to_sample_to_plasmids is None:
+            # sort by edges
+            for graph_index, graph in enumerate(graphs):
+                nb_of_elems_to_graph_indexes[graph.number_of_edges()].append(graph_index)
+        else:
+            # sort by number of sample hits
+            for graph_index, sample_to_plasmids in graph_to_sample_to_plasmids.items():
+                nb_of_sample_hits = len(sample_to_plasmids)
+                nb_of_elems_to_graph_indexes[nb_of_sample_hits].append(graph_index)
+
+        index_src = Templates.read_template("index_template")
+
+        visualisation_links = []
+        for nb_of_elems in sorted(nb_of_elems_to_graph_indexes.keys(), reverse=True):
+            for graph_index in nb_of_elems_to_graph_indexes[nb_of_elems]:
+                graph = graphs[graph_index]
+                nb_of_blackhole_plasmids_for_graph = graph.get_nb_of_blackhole_plasmids()
+                if nb_of_blackhole_plasmids_for_graph > 0:
+                    warning = " - WARNING: BLACKHOLE SPOTTED!"
+                else:
+                    warning = ""
+                description = f'View {objects_description} {graph_index} '
+                if graph_to_sample_to_plasmids is not None:
+                    description += f"- {len(graph_to_sample_to_plasmids[graph_index])} samples hit "
+                description += f'({graph.number_of_edges()} edges, {graph.number_of_nodes()} nodes){warning}</a><br/>'
+                visualisation_links.append(
+                    f'<a href="graphs/{objects_description}_{graph_index}.html" target="_blank">{description}')
+
+        with open(outdir / "index.html", "w") as index_fh:
+            for line in index_src:
+                if graph_to_sample_to_plasmids is None:
+                    line = line.replace("<header_message>", f"<h3>Largest {objects_description} are shown first</h3>")
+                else:
+                    line = line.replace("<header_message>",
+                                        f"<h3>{objects_description} with more sample hits are shown first</h3>")
+                line = line.replace("<communities_links_tag>", "\n".join(visualisation_links))
+                line = line.replace("<objects_description>", objects_description)
+                print(line, file=index_fh)
+
+        OutputProducer.copy_libs(outdir)
 
     @staticmethod
     def copy_libs(outdir):

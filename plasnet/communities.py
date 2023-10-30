@@ -1,11 +1,10 @@
 # TODO: refactor
 
-from typing import List
 from community_graph import CommunityGraph
 import pickle
 
 
-class Communities(List[CommunityGraph]):
+class Communities(list[CommunityGraph]):
     """
     Represents plasmid communities
     """

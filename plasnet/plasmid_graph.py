@@ -1,6 +1,7 @@
 from pathlib import Path
 from communities import Communities
 from base_graph import BaseGraph
+from community_graph import CommunityGraph
 import networkx as nx
 import pandas as pd
 
@@ -43,8 +44,10 @@ class PlasmidGraph(BaseGraph):
 
         return graph
 
-    def split_graph_into_communities(self) -> Communities:
-        return Communities(list(nx.connected_components(self)))
+    def split_graph_into_communities(self, bh_connectivity: int, bh_neighbours_edge_density: float) -> Communities:
+        return Communities(
+            CommunityGraph(self.subgraph(component), bh_connectivity, bh_neighbours_edge_density)
+            for component in nx.connected_components(self))
 
     def _get_libs_relative_path(self) -> str:
         return "."

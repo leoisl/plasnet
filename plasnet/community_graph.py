@@ -31,6 +31,9 @@ class CommunityGraph(BaseGraph):
                     logging.debug(f"{node} is highly connected but does not connect unrelated plasmids, not removed")
         return blackhole_plasmids_in_graph
 
+    def get_nb_of_blackhole_plasmids(self) -> int:
+        return len(self._blackhole_plasmids)
+
     def remove_plasmids(self, plasmids_to_be_removed: List["Nodes"]):
         self.remove_nodes_from(plasmids_to_be_removed)
 

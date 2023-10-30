@@ -28,11 +28,15 @@ AP024796.1      CP027485.1      0.8
 """)
 @click.argument("distances", type=PathlibPath(exists=True))
 @click.argument("output-dir", type=PathlibPath(exists=False))
-@click.option("--distance-threshold", "-t", type=float, default=0.5, help="Distance threshold")
+@click.option("--distance-threshold", "-d", type=float, default=0.5, help="Distance threshold")
+@click.option("--bh-connectivity", "-b", type=int, default=10, help="Minimum number of connections a plasmid need to be considered a blackhole plasmid")
+@click.option("--bh-neighbours-edge-density", "-e", type=float, default=0.2, help="Maximum number of edge density between blackhole plasmid neighbours to label the plasmid as blackhole")
 @click.option("--output-plasmid-graph", "-p", is_flag=True, help="Also outputs the full, unsplit, plasmid graph")
 def split(distances: Path,
           output_dir: Path,
           distance_threshold: float,
+          bh_connectivity: int,
+          bh_neighbours_edge_density: float,
           output_plasmid_graph: bool):
     plasmid_graph = PlasmidGraph.from_distance_file(distances, distance_threshold)
 

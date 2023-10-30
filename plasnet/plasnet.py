@@ -3,7 +3,6 @@ from plasmid_graph import PlasmidGraph
 import click
 from utils import PathlibPath
 from output_producer import OutputProducer
-import networkx as nx
 
 
 @click.command(epilog="""
@@ -52,6 +51,7 @@ def split(distances: Path,
     objects_dir.mkdir(parents=True, exist_ok=True)
     plasmid_graph.save(objects_dir/"plasmid_graph.pkl")
     communities.save(objects_dir/"communities.pkl")
+
 
 def main():
     """Entry point for the application script"""

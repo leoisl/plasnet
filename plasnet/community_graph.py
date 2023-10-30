@@ -9,16 +9,22 @@ from typing import List, Dict
 
 
 class CommunityGraph(BaseGraph):
-    def get_blackhole_plasmids(self, blackhole_connectivity_threshold: int, edge_density: float) -> List["Nodes"]:
+    def __init__(self, graph: nx.Graph, blackhole_connectivity_threshold: int, edge_density: float):
+        super().__init__(graph)
+        self._blackhole_connectivity_threshold = blackhole_connectivity_threshold
+        self._edge_density = edge_density
+        self._blackhole_plasmids = self._get_blackhole_plasmids()
+
+    def _get_blackhole_plasmids(self) -> List["Nodes"]:
         blackhole_plasmids_in_graph = []
         for node in self.nodes:
-            if self.degree(node) >= blackhole_connectivity_threshold:
+            if self.degree(node) >= self._blackhole_connectivity_threshold:
                 neighbors = list(self.neighbors(node))
                 subgraph = nx.induced_subgraph(self, neighbors)
                 nb_of_edges_between_neighbours = subgraph.number_of_edges()
                 max_nb_of_edges_between_neighbours = (len(neighbors) * (len(neighbors) - 1)) // 2
                 edge_rate = nb_of_edges_between_neighbours / max_nb_of_edges_between_neighbours
-                if edge_rate <= edge_density:
+                if edge_rate <= self._edge_density:
                     blackhole_plasmids_in_graph.append(node)
                     logging.debug(f"{node} is a blackhole plasmid, REMOVED")
                 else:

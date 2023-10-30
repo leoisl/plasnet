@@ -118,14 +118,14 @@ class OutputProducer:
         logging.info("Producing index file - done!")
 
     @staticmethod
-    def produce_graph_visualisation(graph: BaseGraph, html_path: Path, copy_libs: bool = True):
+    def produce_graph_visualisation(graph: BaseGraph, html_path: Path):
         outdir = html_path.parent
         outdir.mkdir(exist_ok=True, parents=True)
 
         html = graph.produce_visualisation()
         html_path.write_text(html)
 
-        if copy_libs:
+        OutputProducer.copy_libs(outdir)
             OutputProducer.copy_libs(outdir)
 
     @staticmethod

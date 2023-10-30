@@ -38,6 +38,9 @@ class PlasmidGraph(BaseGraph):
         # apply distance threshold
         df = df[df["distance"] <= distance_threshold]
 
+        # round distance to 2 decimals
+        df["distance"] = df["distance"].round(2)
+
         # create graph
         graph = nx.from_pandas_edgelist(df, source="plasmid_1", target="plasmid_2", edge_attr="distance",
                                         create_using=PlasmidGraph)

@@ -3,6 +3,7 @@ from plasmid_graph import PlasmidGraph
 import click
 from utils import PathlibPath
 from output_producer import OutputProducer
+import networkx as nx
 
 
 @click.command(epilog="""
@@ -38,15 +39,19 @@ def split(distances: Path,
           bh_connectivity: int,
           bh_neighbours_edge_density: float,
           output_plasmid_graph: bool):
+    visualisations_dir = output_dir/"visualisations"
     plasmid_graph = PlasmidGraph.from_distance_file(distances, distance_threshold)
 
     if output_plasmid_graph:
-        OutputProducer.produce_graph_visualisation(plasmid_graph,
-                                                   output_dir/"plasmid_graph"/"plasmid_graph.html")
+        OutputProducer.produce_graph_visualisation(plasmid_graph, visualisations_dir/"single_graph"/"single_graph.html")
 
     communities = plasmid_graph.split_graph_into_communities(bh_connectivity, bh_neighbours_edge_density)
-    OutputProducer.produce_communities_visualisation(communities, output_dir/"communities")
+    OutputProducer.produce_communities_visualisation(communities, visualisations_dir/"communities")
 
+    objects_dir = output_dir/"objects"
+    objects_dir.mkdir(parents=True, exist_ok=True)
+    plasmid_graph.save(objects_dir/"plasmid_graph.pkl")
+    communities.save(objects_dir/"communities.pkl")
 
 def main():
     """Entry point for the application script"""

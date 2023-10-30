@@ -44,9 +44,8 @@ def split(distances: Path,
         OutputProducer.produce_graph_visualisation(plasmid_graph,
                                                    output_dir/"plasmid_graph"/"plasmid_graph.html")
 
-    # communities = plasmid_graph.split_graph_into_communities()
-    # for community in communities:
-    #     community.produce_visualisation(output_dir/"communities", "community", 0, False, False)
+    communities = plasmid_graph.split_graph_into_communities(bh_connectivity, bh_neighbours_edge_density)
+    OutputProducer.produce_communities_visualisation(communities, output_dir/"communities")
 
 
 def main():

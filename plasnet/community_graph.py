@@ -15,6 +15,17 @@ class CommunityGraph(BaseGraph):
         self._edge_density = edge_density
         self._blackhole_plasmids = self._get_blackhole_plasmids()
 
+    def _get_node_shape(self, node):
+        if node in self._blackhole_plasmids:
+            return "star"
+        return "circle"
+
+    def _add_special_node_attributes(self, node, attrs):
+        if node in self._blackhole_plasmids:
+            attrs["is_blackhole"] = True
+        else:
+            attrs["is_blackhole"] = False
+
     def _get_blackhole_plasmids(self) -> List["Nodes"]:
         blackhole_plasmids_in_graph = []
         for node in self.nodes:

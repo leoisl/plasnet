@@ -76,3 +76,17 @@ class CommunityGraph(BaseGraph):
         local_subcommunities = list(nx.community.asyn_lpa_communities(G=self, weight='weight', seed=42))
         local_subcommunities = self._fix_small_subcommunities(local_subcommunities, small_subcommunity_size_threshold=small_subcommunity_size_threshold)
         return Subcommunities(local_subcommunities)
+
+    def _get_libs_relative_path(self) -> str:
+        return ".."
+
+    def _get_samples_selectors_HTML(self) -> str:
+        return ""
+
+    def _get_filters_HTML(self) -> str:
+        nb_of_black_holes = len(self._get_blackhole_plasmids())
+        return (f'<label for="hide_blackholes">Hide blackhole plasmids ({nb_of_black_holes} present)</label>'
+                f'<input type="checkbox" id="hide_blackholes" name="hide_blackholes"><br/>')
+
+    def _get_custom_buttons_HTML(self) -> str:
+        return '<div><input type="submit" value="Redraw" onclick="redraw()"></div>'

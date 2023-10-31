@@ -1,4 +1,4 @@
-from base_graph import BaseGraph
+from plasnet.base_graph import BaseGraph
 import pickle
 from typing import Generator
 

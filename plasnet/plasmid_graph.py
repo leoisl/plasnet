@@ -1,7 +1,7 @@
 from pathlib import Path
-from communities import Communities
-from base_graph import BaseGraph
-from community_graph import CommunityGraph
+from plasnet.communities import Communities
+from plasnet.base_graph import BaseGraph
+from plasnet.community_graph import CommunityGraph
 import networkx as nx
 import pandas as pd
 

@@ -1,13 +1,13 @@
 import collections
 import shutil
-from Templates import Templates
-from utils import get_libs_dir
+from plasnet.Templates import Templates
+from plasnet.utils import get_libs_dir
 import logging
 from collections import defaultdict
-from base_graph import BaseGraph
+from plasnet.base_graph import BaseGraph
 from pathlib import Path
 from typing import List
-from community_graph import CommunityGraph
+from plasnet.community_graph import CommunityGraph
 
 
 class OutputProducer:

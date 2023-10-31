@@ -1,8 +1,8 @@
 from pathlib import Path
-from plasmid_graph import PlasmidGraph
+from plasnet.plasmid_graph import PlasmidGraph
 import click
-from utils import PathlibPath
-from output_producer import OutputProducer
+from plasnet.utils import PathlibPath
+from plasnet.output_producer import OutputProducer
 
 
 @click.command(epilog="""

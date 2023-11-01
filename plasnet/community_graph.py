@@ -101,3 +101,17 @@ class CommunityGraph(BaseGraph):
 
     def _get_custom_buttons_HTML(self) -> str:
         return '<div><input type="submit" value="Redraw" onclick="redraw()"></div>'
+
+    def filter_by_distance(self, distance_dict, distance_threshold):
+        # go through each edge and remove it if the distance is above the threshold
+        edges_to_remove = []
+        for edge in self.edges:
+            u, v = edge
+            distance = distance_dict[(u, v)]
+            if distance > distance_threshold:
+                edges_to_remove.append(edge)
+            else:
+                # update the the weight of the edge to the distance
+                self.edges[u, v]["weight"] = distance
+
+        self.remove_edges_from(edges_to_remove)

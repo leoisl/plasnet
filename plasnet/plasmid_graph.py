@@ -14,9 +14,24 @@ class PlasmidGraph(BaseGraph):
     """
 
     @staticmethod
-    def from_distance_file(distance_filepath: Path, distance_threshold: float) -> "PlasmidGraph":
+    def from_distance_file(plasmids_filepath: Path, distance_filepath: Path, distance_threshold: float) -> "PlasmidGraph":
         """
-        Creates a plasmid graph from a plasmid distance file.
+        Creates a plasmid graph from plasmid and distance files.
+
+        The plasmid file is a tab-separated file with one column describing all plasmids in the dataset.
+        Example of such file:
+        plasmid
+        AP024796.1
+        AP024825.1
+        CP012142.1
+        CP014494.1
+        CP019149.1
+        CP021465.1
+        CP022675.1
+        CP024687.1
+        CP026642.1
+        CP027485.1
+
         The distance file is a tab-separated file with 3 columns: plasmid_1, plasmid_2, distance.
         plasmid_1 and plasmid_2 are plasmid names, and distance is a float between 0 and 1.
         The distance threshold is the minimum distance value for two plasmids to be considered connected.
@@ -33,17 +48,20 @@ class PlasmidGraph(BaseGraph):
         AP024796.1      CP026642.1      0.5
         AP024796.1      CP027485.1      0.8
         """
-        df = pd.read_csv(distance_filepath, sep="\t")
+        plasmids = pd.read_csv(plasmids_filepath)
+
+        distance_df = pd.read_csv(distance_filepath, sep="\t")
 
         # apply distance threshold
-        df = df[df["distance"] <= distance_threshold]
+        distance_df = distance_df[distance_df["distance"] <= distance_threshold]
 
         # round distance to 2 decimals
-        df["distance"] = df["distance"].round(2)
+        distance_df["distance"] = distance_df["distance"].round(2)
 
         # create graph
-        graph = nx.from_pandas_edgelist(df, source="plasmid_1", target="plasmid_2", edge_attr="distance",
+        graph = nx.from_pandas_edgelist(distance_df, source="plasmid_1", target="plasmid_2", edge_attr="distance",
                                         create_using=PlasmidGraph)
+        graph.add_nodes_from(plasmids["plasmid"])
 
         return graph
 

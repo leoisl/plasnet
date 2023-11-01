@@ -39,7 +39,7 @@ def split(distances: Path,
           bh_neighbours_edge_density: float,
           output_plasmid_graph: bool):
     visualisations_dir = output_dir/"visualisations"
-    plasmid_graph = PlasmidGraph.from_distance_file(distances, distance_threshold)
+    plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold)
 
     if output_plasmid_graph:
         OutputProducer.produce_graph_visualisation(plasmid_graph, visualisations_dir/"single_graph"/"single_graph.html")

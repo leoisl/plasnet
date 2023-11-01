@@ -14,7 +14,7 @@ class PlasmidGraph(BaseGraph):
     """
 
     @staticmethod
-    def from_distance_file(plasmids_filepath: Path, distance_filepath: Path, distance_threshold: float) -> "PlasmidGraph":
+    def build(plasmids_filepath: Path, distance_filepath: Path, distance_threshold: float) -> "PlasmidGraph":
         """
         Creates a plasmid graph from plasmid and distance files.
 

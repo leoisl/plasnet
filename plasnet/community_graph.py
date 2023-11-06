@@ -11,6 +11,7 @@ from typing import List, Dict
 class CommunityGraph(BaseGraph):
     def __init__(self, graph: nx.Graph, blackhole_connectivity_threshold: int, edge_density: float):
         super().__init__(graph)
+        self._original_graph = graph
         self._blackhole_connectivity_threshold = blackhole_connectivity_threshold
         self._edge_density = edge_density
         self._blackhole_plasmids = self._get_blackhole_plasmids()
@@ -31,7 +32,7 @@ class CommunityGraph(BaseGraph):
         for node in self.nodes:
             if self.degree(node) >= self._blackhole_connectivity_threshold:
                 neighbors = list(self.neighbors(node))
-                subgraph = nx.induced_subgraph(self, neighbors)
+                subgraph = nx.induced_subgraph(self._original_graph, neighbors)
                 nb_of_edges_between_neighbours = subgraph.number_of_edges()
                 max_nb_of_edges_between_neighbours = (len(neighbors) * (len(neighbors) - 1)) // 2
                 edge_rate = nb_of_edges_between_neighbours / max_nb_of_edges_between_neighbours

@@ -3,6 +3,7 @@
 from plasnet.base_graph import BaseGraph
 from plasnet.subcommunities import Subcommunities
 from plasnet.subcommunity_graph import SubcommunityGraph
+from plasnet.utils import DistanceDict
 import networkx as nx
 import logging
 from typing import List, Dict
@@ -103,7 +104,7 @@ class CommunityGraph(BaseGraph):
     def _get_custom_buttons_HTML(self) -> str:
         return '<div><input type="submit" value="Redraw" onclick="redraw()"></div>'
 
-    def filter_by_distance(self, distance_dict, distance_threshold):
+    def filter_by_distance(self, distance_dict: DistanceDict, distance_threshold: float) -> None:
         # go through each edge and remove it if the distance is above the threshold
         edges_to_remove = []
         for edge in self.edges:

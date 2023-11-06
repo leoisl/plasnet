@@ -13,4 +13,4 @@ else:
 
 __version__ = metadata.version("plasnet")
 
-from .plasnet import main
+from .plasnet_main import main

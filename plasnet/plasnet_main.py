@@ -130,7 +130,7 @@ AP024796.1      CP027485.1      0.8
               help="Maximum number of edge density between blackhole plasmid neighbours to label the plasmid as blackhole")
 @click.option('--small-subcommunity-size-threshold', type=int, default=4,
               help='Subcommunities with size up to this parameter will be joined to neighbouring larger subcommunities')
-def type(  communities_pickle: Path,
+def type(     communities_pickle: Path,
               distances: Path,
               output_dir: Path,
               distance_threshold: float,

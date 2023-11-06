@@ -1,8 +1,10 @@
 # TODO: refactor
 from plasnet.list_of_graphs import ListOfGraphs
+from plasnet.utils import DistanceDict
+from plasnet.community_graph import CommunityGraph
 
 
-class Communities(ListOfGraphs):
-    def filter_by_distance(self, distance_dict, distance_threshold):
+class Communities(ListOfGraphs[CommunityGraph]):
+    def filter_by_distance(self, distance_dict: DistanceDict, distance_threshold: float) -> None:
         for community in self:
             community.filter_by_distance(distance_dict, distance_threshold)

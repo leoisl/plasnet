@@ -5,6 +5,8 @@ from plasnet.utils import PathlibPath, distance_df_to_dict
 from plasnet.output_producer import OutputProducer
 from plasnet.communities import Communities
 import pandas as pd
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 
 
 @click.group()
@@ -64,20 +66,27 @@ def split(plasmids: Path,
           bh_neighbours_edge_density: float,
           output_plasmid_graph: bool):
     visualisations_dir = output_dir/"visualisations"
+    logging.info(f"Creating plasmid graph")
     plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold)
 
     if output_plasmid_graph:
+        logging.info(f"Producing full plasmid graph visualisation")
         OutputProducer.produce_graph_visualisation(plasmid_graph, visualisations_dir/"single_graph"/"single_graph.html")
 
+    logging.info(f"Splitting plasmid graph into communities")
     communities = plasmid_graph.split_graph_into_communities(bh_connectivity, bh_neighbours_edge_density)
+
+    logging.info(f"Producing communities visualisation")
     OutputProducer.produce_communities_visualisation(communities, visualisations_dir/"communities")
 
+    logging.info(f"Serialising objects")
     objects_dir = output_dir/"objects"
     objects_dir.mkdir(parents=True, exist_ok=True)
     plasmid_graph.save(objects_dir/"plasmid_graph.pkl")
     communities.save(objects_dir/"communities.pkl")
-
     communities.save_graph_as_text(objects_dir/"communities.txt")
+
+    logging.info(f"All done!")
 
 
 @click.command(

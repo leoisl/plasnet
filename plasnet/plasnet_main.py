@@ -66,7 +66,7 @@ def split(plasmids: Path,
           bh_neighbours_edge_density: float,
           output_plasmid_graph: bool):
     visualisations_dir = output_dir/"visualisations"
-    logging.info(f"Creating plasmid graph")
+    logging.info(f"Creating plasmid graph from {plasmids} and {distances}")
     plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold)
 
     if output_plasmid_graph:

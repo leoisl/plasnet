@@ -1,15 +1,21 @@
 from plasnet.base_graph import BaseGraph
 import pickle
-from typing import Generator
+from typing import Generator, TypeVar
+from pathlib import Path
 
 
-class ListOfGraphs(list[BaseGraph]):
-    def save(self, filepath):
+BaseGraphT = TypeVar('BaseGraphT', bound=BaseGraph)
+
+
+class ListOfGraphs(list[BaseGraphT]):
+    ListOfGraphsT = TypeVar('ListOfGraphsT', bound="ListOfGraphs")
+
+    def save(self, filepath: Path) -> None:
         with open(filepath, "wb") as fh:
             pickle.dump(self, fh)
 
     @staticmethod
-    def load(filepath) -> "ListOfGraphs":
+    def load(filepath: Path) -> ListOfGraphsT:
         with open(filepath, "rb") as fh:
             graphs = pickle.load(fh)
             return graphs
@@ -18,7 +24,7 @@ class ListOfGraphs(list[BaseGraph]):
         for graph in self:
             yield " ".join(graph)
 
-    def save_graph_as_text(self, filepath):
+    def save_graph_as_text(self, filepath: Path) -> None:
         with open(filepath, "w") as fh:
             for graph_as_text in self._get_each_graph_as_list_of_nodes_in_text_format():
                 print(graph_as_text, file=fh)

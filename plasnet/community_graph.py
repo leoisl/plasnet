@@ -16,7 +16,7 @@ class CommunityGraph(BlackholeGraph):
                 node_to_subcommunity[node] = subcommunity_index
         return node_to_subcommunity
 
-    def _fix_small_subcommunities(self, subcommunities, small_subcommunity_size_threshold) -> List[SubcommunityGraph]:
+    def _fix_small_subcommunities(self, subcommunities, small_subcommunity_size_threshold) -> list[SubcommunityGraph]:
         # sort subcommunities by size so that we can safely move smaller subcommunities into larger ones
         subcommunities = sorted(subcommunities, key=lambda subcommunity: len(subcommunity))
         node_to_subcommunity = self._get_node_to_subcommunity(subcommunities)

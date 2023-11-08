@@ -3,11 +3,13 @@ import shutil
 from plasnet.Templates import Templates
 from plasnet.utils import get_libs_dir
 import logging
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from plasnet.base_graph import BaseGraph
 from pathlib import Path
 from typing import List
-from plasnet.community_graph import CommunityGraph
+from plasnet.communities import Communities
+from plasnet.list_of_graphs import ListOfGraphs
+from plasnet.subcommunities import Subcommunities
 
 
 class OutputProducer:
@@ -129,23 +131,41 @@ class OutputProducer:
 
         OutputProducer.copy_libs(outdir)
 
-    @staticmethod
-    def produce_communities_visualisation(communities, outdir):
-        OutputProducer._write_html_for_all_communities(communities, outdir)
-        OutputProducer._produce_index_file(outdir, communities, "community", )
+    FileDescriptor = namedtuple("FileDescriptor", ["path", "description"])
 
     @staticmethod
-    def _write_html_for_all_communities(communities: List[CommunityGraph], outdir: Path):
+    def produce_communities_visualisation(communities: Communities, outdir: Path) -> None:
+        file_descriptors = OutputProducer._write_html_for_all_subgraphs(communities, outdir, "community")
+        OutputProducer._produce_index_file(outdir, communities, "Communities", file_descriptors)
+
+    @staticmethod
+    def produce_subcommunities_visualisation(subcommunities: list[Subcommunities], outdir: Path) -> None:
+        file_descriptors = []
+        for community_index, subcommunities in enumerate(subcommunities):
+            file_descriptors_for_subcommunity = \
+                OutputProducer._write_html_for_all_subgraphs(subcommunities, outdir, f"community_{community_index}_subcommunity_")
+            file_descriptors.extend(file_descriptors_for_subcommunity)
+        OutputProducer._produce_index_file(outdir, subcommunities, "subcommunity", file_descriptors)
+
+    @classmethod
+    def _write_html_for_all_subgraphs(cls, subgraphs: ListOfGraphs, outdir: Path, prefix: str) -> list[FileDescriptor]:
         graphs_dir = outdir/"graphs"
         graphs_dir.mkdir(exist_ok=True, parents=True)
+        file_descriptors = []
 
-        for community_index, community in enumerate(communities):
-            html = community.produce_visualisation()
-            html_path = graphs_dir / f"community_{community_index}.html"
+        for subgraph_index, subgraph in enumerate(subgraphs):
+            html = subgraph.produce_visualisation()
+            description = f"{prefix}_{subgraph_index}"
+            html_path = graphs_dir / f"{description}.html"
             html_path.write_text(html)
+            relative_html_path = f"graphs/{description}.html"
+            file_descriptors.append(cls.FileDescriptor(path=relative_html_path, description=description))
+
+        return file_descriptors
 
     @staticmethod
-    def _produce_index_file(outdir, graphs, objects_description, graph_to_sample_to_plasmids=None):
+    def _produce_index_file(outdir: Path, graphs: ListOfGraphs, objects_description: str,
+                            file_descriptors: list[FileDescriptor], graph_to_sample_to_plasmids=None):
         nb_of_elems_to_graph_indexes = collections.defaultdict(list)
         if graph_to_sample_to_plasmids is None:
             # sort by edges
@@ -163,17 +183,19 @@ class OutputProducer:
         for nb_of_elems in sorted(nb_of_elems_to_graph_indexes.keys(), reverse=True):
             for graph_index in nb_of_elems_to_graph_indexes[nb_of_elems]:
                 graph = graphs[graph_index]
+                file_descriptor = file_descriptors[graph_index]
+
                 nb_of_blackhole_plasmids_for_graph = graph.get_nb_of_blackhole_plasmids()
                 if nb_of_blackhole_plasmids_for_graph > 0:
                     warning = " - WARNING: BLACKHOLE SPOTTED!"
                 else:
                     warning = ""
-                description = f'View {objects_description} {graph_index} '
+                description = f'View {file_descriptor.description}'
                 if graph_to_sample_to_plasmids is not None:
                     description += f"- {len(graph_to_sample_to_plasmids[graph_index])} samples hit "
                 description += f'({graph.number_of_edges()} edges, {graph.number_of_nodes()} nodes){warning}</a><br/>'
                 visualisation_links.append(
-                    f'<a href="graphs/{objects_description}_{graph_index}.html" target="_blank">{description}')
+                    f'<a href="{file_descriptor.path}" target="_blank">{description}')
 
         with open(outdir / "index.html", "w") as index_fh:
             for line in index_src:

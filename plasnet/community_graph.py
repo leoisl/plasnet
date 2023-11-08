@@ -43,10 +43,14 @@ class CommunityGraph(BlackholeGraph):
         return subcommunities
 
 
-    def split_graph_into_subcommunities(self, plasmid_to_plasmid_to_dcj_dist: Dict[str, Dict[str, int]], dcj_dist_threshold: int, small_subcommunity_size_threshold) -> Subcommunities:
-        local_subcommunities = list(nx.community.asyn_lpa_communities(G=self, weight='weight', seed=42))
-        local_subcommunities = self._fix_small_subcommunities(local_subcommunities, small_subcommunity_size_threshold=small_subcommunity_size_threshold)
-        return Subcommunities(local_subcommunities)
+    def split_graph_into_subcommunities(self, small_subcommunity_size_threshold: int) -> Subcommunities:
+        subcommunities_nodes = list(nx.community.asyn_lpa_communities(G=self, weight='weight', seed=42))
+        subcommunities_nodes = self._fix_small_subcommunities(subcommunities_nodes, small_subcommunity_size_threshold)
+        subcommunities = [SubcommunityGraph(self._original_graph.subgraph(subcommunity_nodes),
+                                            self._blackhole_connectivity_threshold,
+                                            self._edge_density)
+                          for subcommunity_nodes in subcommunities_nodes]
+        return Subcommunities(subcommunities)
 
     def _get_libs_relative_path(self) -> str:
         return ".."

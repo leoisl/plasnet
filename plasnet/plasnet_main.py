@@ -91,11 +91,12 @@ def split(plasmids: Path,
 
 
 @click.command(
-    help="Type a previously split plasmid graph into subcommunities or types",
+    help="Type the communities of a previously split plasmid graph into subcommunities or types",
     epilog="""
 \b
-Type a previously split plasmid graph into subcommunities or types.
-This typing is based on a clustering of previously identified communities using a distance file.
+Type the communities of a previously split plasmid graph into subcommunities or types.
+This typing is based on running an asynchronous label propagation algorithm on the previously identified communities.
+This algorithm is implemented in the networkx library, and relies on a given distance file.
 This distance file should be a more precise and careful distance function than the one used to split the graph into communities.
 For example, you could use gene jaccard distance to split the graph and the DCJ-indel distance to type the communities.
 See https://github.com/iqbal-lab-org/pling for a tool to compute gene jaccard and DCJ-indel distances. 
@@ -106,19 +107,19 @@ where <split_out_dir> is the output dir of the split command.
 
 \b
 The distances file is a tab-separated file with 3 columns: plasmid_1, plasmid_2, distance.
-plasmid_1 and plasmid_2 are plasmid names, and distance is a float between 0 and 1.
+plasmid_1 and plasmid_2 are plasmid names, and distance is a float number.
 The distance threshold is the minimum distance value for two plasmids to be considered connected.
 Example of such file:
 plasmid_1       plasmid_2       distance
-AP024796.1      AP024825.1      0.8
-AP024796.1      CP012142.1      0.5
-AP024796.1      CP014494.1      0.3
-AP024796.1      CP019149.1      0.0
-AP024796.1      CP021465.1      0.0
-AP024796.1      CP022675.1      1.0
-AP024796.1      CP024687.1      0.0
-AP024796.1      CP026642.1      0.5
-AP024796.1      CP027485.1      0.8
+AP024796.1      AP024825.1      4
+AP024796.1      CP012142.1      10
+AP024796.1      CP014494.1      20
+AP024796.1      CP019149.1      1
+AP024796.1      CP021465.1      0
+AP024796.1      CP022675.1      50
+AP024796.1      CP024687.1      1000
+AP024796.1      CP026642.1      20
+AP024796.1      CP027485.1      1
 """)
 @click.argument("communities-pickle", type=PathlibPath(exists=True))
 @click.argument("distances", type=PathlibPath(exists=True))

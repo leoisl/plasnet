@@ -1,21 +1,21 @@
 from plasnet.base_graph import BaseGraph
 import pickle
-from typing import Generator, TypeVar
+from typing import Generator, TypeVar, Type
 from pathlib import Path
 
 
 BaseGraphT = TypeVar('BaseGraphT', bound=BaseGraph)
-
+ListOfGraphsT = TypeVar('ListOfGraphsT', bound="ListOfGraphs")
 
 class ListOfGraphs(list[BaseGraphT]):
-    ListOfGraphsT = TypeVar('ListOfGraphsT', bound="ListOfGraphs")
+
 
     def save(self, filepath: Path) -> None:
         with open(filepath, "wb") as fh:
             pickle.dump(self, fh)
 
-    @staticmethod
-    def load(filepath: Path) -> ListOfGraphsT:
+    @classmethod
+    def load(cls: Type[ListOfGraphsT], filepath: Path) -> ListOfGraphsT:
         with open(filepath, "rb") as fh:
             graphs = pickle.load(fh)
             return graphs

@@ -4,7 +4,7 @@ from plasnet.blackhole_graph import BlackholeGraph
 from plasnet.subcommunities import Subcommunities
 from plasnet.subcommunity_graph import SubcommunityGraph
 import networkx as nx
-from utils import DistanceDict
+from plasnet.utils import DistanceDict
 from plasnet.ColorPicker import ColorPicker
 
 

@@ -148,7 +148,8 @@ def type( communities_pickle: Path,
         subcommunities = community.split_graph_into_subcommunities(small_subcommunity_size_threshold)
         all_subcommunities.append(subcommunities)
 
-    OutputProducer.produce_subcommunities_visualisation(all_subcommunities, output_dir/"subcommunities")
+    OutputProducer.produce_communities_visualisation(communities, output_dir / "visualisations/communities")
+    OutputProducer.produce_subcommunities_visualisation(all_subcommunities, output_dir/"visualisations/subcommunities")
 
 
     # produce_full_visualization(graphs_backup, plasmid_to_subcommunity, visualisation_outdir, blackhole_plasmids,

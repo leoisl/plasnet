@@ -9,6 +9,13 @@ from plasnet.ColorPicker import ColorPicker
 
 
 class CommunityGraph(BlackholeGraph):
+    def __init__(self, graph: nx.Graph, blackhole_connectivity_threshold: int, edge_density: float):
+        super().__init__(graph, blackhole_connectivity_threshold, edge_density)
+        self._node_to_colour: dict[str, str] = {}
+
+    def _get_node_color(self, node: str) -> str:
+        return self._node_to_colour.get(node, ColorPicker.get_default_color())
+
     @staticmethod
     def _get_node_to_subcommunity(subcommunities):
         node_to_subcommunity = {}
@@ -50,11 +57,17 @@ class CommunityGraph(BlackholeGraph):
 
         subcommunities = []
         for subcommunity_index, subcommunity_nodes in enumerate(subcommunities_nodes):
+            colour = ColorPicker.get_color_given_index(subcommunity_index)
+
             subcommunity = SubcommunityGraph(self._original_graph.subgraph(subcommunity_nodes),
                                              self._blackhole_connectivity_threshold,
                                              self._edge_density,
-                                             ColorPicker.get_color_given_index(subcommunity_index))
+                                             colour)
             subcommunities.append(subcommunity)
+
+            for node in subcommunity_nodes:
+                self._node_to_colour[node] = colour
+
         return Subcommunities(subcommunities)
 
     def _get_libs_relative_path(self) -> str:

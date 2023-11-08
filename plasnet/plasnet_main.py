@@ -5,6 +5,7 @@ from plasnet.utils import PathlibPath, distance_df_to_dict
 from plasnet.output_producer import OutputProducer
 from plasnet.communities import Communities
 import pandas as pd
+import pickle
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 
@@ -155,13 +156,12 @@ def type( communities_pickle: Path,
     logging.info("Producing subcommunities visualisations")
     OutputProducer.produce_subcommunities_visualisation(all_subcommunities, output_dir/"visualisations/subcommunities")
 
-
-    # produce_full_visualization(graphs_backup, plasmid_to_subcommunity, visualisation_outdir, blackhole_plasmids,
-    #                            show_blackholes_filter=True)
-    #
-    # produce_plasmid_communities_tsv(visualisation_outdir / "plasmid_communities.tsv", plasmid_to_community, plasmid_to_subcommunity)
-    #
-    # save_data_to_disk(misc_outdir/"state.pickle", [graphs_backup, plasmid_to_subcommunity, blackhole_plasmids])
+    logging.info("Serialising objects")
+    objects_dir = output_dir / "objects"
+    objects_dir.mkdir(parents=True, exist_ok=True)
+    communities.save(objects_dir / "communities.pkl")
+    with open(objects_dir / "subcommunities.pkl", "wb") as all_subcommunities_fh:
+        pickle.dump(all_subcommunities, all_subcommunities_fh)
 
     logging.info("All done!")
 

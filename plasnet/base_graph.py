@@ -59,6 +59,7 @@ class BaseGraph(nx.Graph):
             return self.TIME_LIMIT_FOR_LARGE_GRAPHS
 
     def produce_visualisation(self) -> str:
+        self.fix_node_attributes()
         visualisation_src = Templates.read_template("visualisation_template")
 
         graph_as_cy_dict = nx.cytoscape_data(self)

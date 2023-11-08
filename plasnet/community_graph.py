@@ -5,6 +5,7 @@ from plasnet.subcommunities import Subcommunities
 from plasnet.subcommunity_graph import SubcommunityGraph
 import networkx as nx
 from utils import DistanceDict
+from plasnet.ColorPicker import ColorPicker
 
 
 class CommunityGraph(BlackholeGraph):
@@ -46,10 +47,14 @@ class CommunityGraph(BlackholeGraph):
     def split_graph_into_subcommunities(self, small_subcommunity_size_threshold: int) -> Subcommunities:
         subcommunities_nodes = list(nx.community.asyn_lpa_communities(G=self, weight='weight', seed=42))
         subcommunities_nodes = self._fix_small_subcommunities(subcommunities_nodes, small_subcommunity_size_threshold)
-        subcommunities = [SubcommunityGraph(self._original_graph.subgraph(subcommunity_nodes),
-                                            self._blackhole_connectivity_threshold,
-                                            self._edge_density)
-                          for subcommunity_nodes in subcommunities_nodes]
+
+        subcommunities = []
+        for subcommunity_index, subcommunity_nodes in enumerate(subcommunities_nodes):
+            subcommunity = SubcommunityGraph(self._original_graph.subgraph(subcommunity_nodes),
+                                             self._blackhole_connectivity_threshold,
+                                             self._edge_density,
+                                             ColorPicker.get_color_given_index(subcommunity_index))
+            subcommunities.append(subcommunity)
         return Subcommunities(subcommunities)
 
     def _get_libs_relative_path(self) -> str:

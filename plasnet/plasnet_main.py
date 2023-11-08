@@ -135,20 +135,24 @@ def type( communities_pickle: Path,
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    logging.info(f"Loading distances from {distances}")
     distance_df = pd.read_csv(distances, sep="\t")
     distance_dict = distance_df_to_dict(distance_df)
 
+    logging.info(f"Filtering communities by distance")
     communities.filter_by_distance(distance_dict, distance_threshold)
 
-    # communities_backup = communities.deep_copy()
-
+    logging.info(f"Typing communities (i.e. splitting them into subcommunities)")
     all_subcommunities = []
     for community in communities:
         community.remove_blackhole_plasmids()
         subcommunities = community.split_graph_into_subcommunities(small_subcommunity_size_threshold)
         all_subcommunities.append(subcommunities)
 
+    logging.info("Producing communities visualisations")
     OutputProducer.produce_communities_visualisation(communities, output_dir / "visualisations/communities")
+
+    logging.info("Producing subcommunities visualisations")
     OutputProducer.produce_subcommunities_visualisation(all_subcommunities, output_dir/"visualisations/subcommunities")
 
 

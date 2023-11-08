@@ -122,22 +122,16 @@ AP024796.1      CP027485.1      0.8
 @click.argument("communities-pickle", type=PathlibPath(exists=True))
 @click.argument("distances", type=PathlibPath(exists=True))
 @click.argument("output-dir", type=PathlibPath(exists=False))
-@click.option("--distance-threshold", "-d", type=float, default=0.5,
-              help="Distance threshold")
-@click.option("--bh-connectivity", "-b", type=int, default=10,
-              help="Minimum number of connections a plasmid need to be considered a blackhole plasmid")
-@click.option("--bh-neighbours-edge-density", "-e", type=float, default=0.2,
-              help="Maximum number of edge density between blackhole plasmid neighbours to label the plasmid as blackhole")
+@click.option("--distance-threshold", "-d", type=float, default=4, help="Distance threshold")
 @click.option('--small-subcommunity-size-threshold', type=int, default=4,
               help='Subcommunities with size up to this parameter will be joined to neighbouring larger subcommunities')
-def type(     communities_pickle: Path,
-              distances: Path,
-              output_dir: Path,
-              distance_threshold: float,
-              bh_connectivity: int,
-              bh_neighbours_edge_density: float,
-              small_subcommunity_size_threshold: int):
-    communities = Communities.load(communities_pickle)
+def type( communities_pickle: Path,
+          distances: Path,
+          output_dir: Path,
+          distance_threshold: float,
+          small_subcommunity_size_threshold: int):
+    logging.info(f"Loading communities from {communities_pickle}")
+    communities: Communities = Communities.load(communities_pickle)
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -146,22 +140,25 @@ def type(     communities_pickle: Path,
 
     communities.filter_by_distance(distance_dict, distance_threshold)
 
-    # graphs = get_graphs(communities, dcj_dists, int(args.dcj_threshold))
-    # graphs_backup = [graph.copy() for graph in graphs]
-    #
-    # blackhole_plasmids = get_blackhole_plasmids(graphs, blackhole_connectivity_threshold=args.bh_connectivity, edge_density=args.bh_neighbours_edge_density)
-    # remove_plasmids(graphs, blackhole_plasmids)
-    #
-    # subcommunities, plasmid_to_subcommunity = get_subcommunities(graphs, args.small_subcommunity_size_threshold)
-    #
+    # communities_backup = communities.deep_copy()
+
+    all_subcommunities = []
+    for community in communities:
+        community.remove_blackhole_plasmids()
+        subcommunities = community.split_graph_into_subcommunities(small_subcommunity_size_threshold)
+        all_subcommunities.append(subcommunities)
+
+    OutputProducer.produce_subcommunities_visualisation(all_subcommunities, output_dir/"subcommunities")
+
+
     # produce_full_visualization(graphs_backup, plasmid_to_subcommunity, visualisation_outdir, blackhole_plasmids,
     #                            show_blackholes_filter=True)
     #
     # produce_plasmid_communities_tsv(visualisation_outdir / "plasmid_communities.tsv", plasmid_to_community, plasmid_to_subcommunity)
     #
     # save_data_to_disk(misc_outdir/"state.pickle", [graphs_backup, plasmid_to_subcommunity, blackhole_plasmids])
-    #
-    # logging.info("All done!")
+
+    logging.info("All done!")
 
 
 # Add commands to the main group

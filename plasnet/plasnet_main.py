@@ -6,7 +6,6 @@ from plasnet.output_producer import OutputProducer
 from plasnet.communities import Communities
 from plasnet.subcommunities import Subcommunities
 import pandas as pd
-import pickle
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 

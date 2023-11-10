@@ -34,7 +34,7 @@ class BlackholeGraph(BaseGraph):
         else:
             attrs["is_blackhole"] = False
 
-    def _get_blackhole_plasmids(self) -> list["Nodes"]:
+    def _get_blackhole_plasmids(self) -> list[str]:
         blackhole_plasmids_in_graph = []
         for node in self.nodes:
             if self.degree(node) >= self._blackhole_connectivity_threshold:

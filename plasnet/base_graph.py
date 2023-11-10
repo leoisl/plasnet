@@ -46,7 +46,7 @@ class BaseGraph(nx.Graph):
     def _add_special_node_attributes(self, node, attrs):
         ...
 
-    def remove_plasmids(self, plasmids_to_be_removed: list["Nodes"]):
+    def remove_plasmids(self, plasmids_to_be_removed: list[str]):
         self.remove_nodes_from(plasmids_to_be_removed)
 
     def fix_node_attributes(self):

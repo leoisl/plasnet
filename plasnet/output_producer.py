@@ -1,15 +1,16 @@
 import collections
-import shutil
-from plasnet.Templates import Templates
-from plasnet.utils import get_libs_dir
 import logging
+import shutil
 from collections import defaultdict, namedtuple
-from plasnet.base_graph import BaseGraph
 from pathlib import Path
 from typing import List
+
+from plasnet.base_graph import BaseGraph
 from plasnet.communities import Communities
 from plasnet.list_of_graphs import ListOfGraphs
 from plasnet.subcommunities import Subcommunities
+from plasnet.Templates import Templates
+from plasnet.utils import get_libs_dir
 
 
 class OutputProducer:

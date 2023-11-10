@@ -1,5 +1,6 @@
-from plasnet.blackhole_graph import BlackholeGraph
 import networkx as nx
+
+from plasnet.blackhole_graph import BlackholeGraph
 from plasnet.ColorPicker import ColorPicker
 
 

@@ -1,6 +1,8 @@
-from plasnet.base_graph import BaseGraph
-import networkx as nx
 import logging
+
+import networkx as nx
+
+from plasnet.base_graph import BaseGraph
 
 
 class BlackholeGraph(BaseGraph):

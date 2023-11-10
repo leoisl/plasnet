@@ -1,11 +1,12 @@
 # TODO: refactor
 
+import networkx as nx
+
 from plasnet.blackhole_graph import BlackholeGraph
+from plasnet.ColorPicker import ColorPicker
 from plasnet.subcommunities import Subcommunities
 from plasnet.subcommunity_graph import SubcommunityGraph
-import networkx as nx
 from plasnet.utils import DistanceDict
-from plasnet.ColorPicker import ColorPicker
 
 
 class CommunityGraph(BlackholeGraph):

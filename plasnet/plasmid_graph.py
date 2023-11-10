@@ -1,9 +1,11 @@
 from pathlib import Path
-from plasnet.communities import Communities
-from plasnet.base_graph import BaseGraph
-from plasnet.community_graph import CommunityGraph
+
 import networkx as nx
 import pandas as pd
+
+from plasnet.base_graph import BaseGraph
+from plasnet.communities import Communities
+from plasnet.community_graph import CommunityGraph
 
 
 class PlasmidGraph(BaseGraph):

@@ -1,12 +1,14 @@
 # TODO: requires heavy refactoring
+import json
+import pickle
 from abc import abstractmethod
+from collections import defaultdict
+from typing import TextIO
+
 import networkx as nx
+
 from plasnet.ColorPicker import ColorPicker
 from plasnet.Templates import Templates
-import json
-from collections import defaultdict
-import pickle
-from typing import TextIO
 
 
 class BaseGraph(nx.Graph):

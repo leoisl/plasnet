@@ -1,8 +1,8 @@
-from plasnet.base_graph import BaseGraph
 import pickle
-from typing import Generator, TypeVar, Type
 from pathlib import Path
+from typing import Generator, Type, TypeVar
 
+from plasnet.base_graph import BaseGraph
 
 BaseGraphT = TypeVar("BaseGraphT", bound=BaseGraph)
 ListOfGraphsT = TypeVar("ListOfGraphsT", bound="ListOfGraphs")

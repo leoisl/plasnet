@@ -1,12 +1,14 @@
-from pathlib import Path
-from plasnet.plasmid_graph import PlasmidGraph
-import click
-from plasnet.utils import PathlibPath, distance_df_to_dict
-from plasnet.output_producer import OutputProducer
-from plasnet.communities import Communities
-from plasnet.subcommunities import Subcommunities
-import pandas as pd
 import logging
+from pathlib import Path
+
+import click
+import pandas as pd
+
+from plasnet.communities import Communities
+from plasnet.output_producer import OutputProducer
+from plasnet.plasmid_graph import PlasmidGraph
+from plasnet.subcommunities import Subcommunities
+from plasnet.utils import PathlibPath, distance_df_to_dict
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 

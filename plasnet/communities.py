@@ -1,7 +1,7 @@
 # TODO: refactor
+from plasnet.community_graph import CommunityGraph
 from plasnet.list_of_graphs import ListOfGraphs
 from plasnet.utils import DistanceDict
-from plasnet.community_graph import CommunityGraph
 
 
 class Communities(ListOfGraphs[CommunityGraph]):

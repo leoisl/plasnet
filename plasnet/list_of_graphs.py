@@ -28,3 +28,10 @@ class ListOfGraphs(list[BaseGraphT]):
         with open(filepath, "w") as fh:
             for graph_as_text in self._get_each_graph_as_list_of_nodes_in_text_format():
                 print(graph_as_text, file=fh)
+
+    def save_classification(self, filepath: Path, header: str) -> None:
+        with open(filepath, "w") as fh:
+            print(header, file=fh)
+            for subgraph in self:
+                subgraph.write_classification(fh)
+

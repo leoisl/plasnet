@@ -85,7 +85,8 @@ def split(plasmids: Path,
     objects_dir.mkdir(parents=True, exist_ok=True)
     plasmid_graph.save(objects_dir/"plasmid_graph.pkl")
     communities.save(objects_dir/"communities.pkl")
-    communities.save_graph_as_text(objects_dir/"communities.txt")
+    communities.save_graph_as_text(objects_dir / "communities.txt")
+    communities.save_classification(objects_dir / "communities.tsv", "plasmid\tcommunity")
 
     logging.info(f"All done!")
 

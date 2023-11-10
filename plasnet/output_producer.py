@@ -26,9 +26,7 @@ class OutputProducer:
         if graph_to_sample_to_plasmids is None:
             # sort by edges
             for graph_index, graph in enumerate(graphs):
-                nb_of_elems_to_graph_indexes[graph.number_of_edges()].append(
-                    graph_index
-                )
+                nb_of_elems_to_graph_indexes[graph.number_of_edges()].append(graph_index)
         else:
             # sort by number of sample hits
             for graph_index, sample_to_plasmids in graph_to_sample_to_plasmids.items():
@@ -45,9 +43,7 @@ class OutputProducer:
                     warning = " - WARNING: BLACKHOLE SPOTTED!"
                 else:
                     warning = ""
-                description = (
-                    f"View {objects_description} {graphs_descriptions[graph_index]} "
-                )
+                description = f"View {objects_description} {graphs_descriptions[graph_index]} "
                 if graph_to_sample_to_plasmids is not None:
                     description += f"- {len(graph_to_sample_to_plasmids[graph_index])} samples hit "
                 description += f"({graph.number_of_edges()} edges, {graph.number_of_nodes()} nodes){warning}</a><br/>"
@@ -67,9 +63,7 @@ class OutputProducer:
                         "<header_message>",
                         f"<h3>{objects_description} with more sample hits are shown first</h3>",
                     )
-                line = line.replace(
-                    "<communities_links_tag>", "\n".join(visualisation_links)
-                )
+                line = line.replace("<communities_links_tag>", "\n".join(visualisation_links))
                 line = line.replace("<objects_description>", objects_description)
                 print(line, file=index_fh)
 
@@ -95,19 +89,13 @@ class OutputProducer:
         for graph_index, graph in enumerate(graphs):
             logging.info(f"Producing graph {graph_index}/{len(graphs)}")
             blackhole_plasmids_for_graph = set(
-                blackhole_plasmids[graph_index]
-                if blackhole_plasmids is not None
-                else []
+                blackhole_plasmids[graph_index] if blackhole_plasmids is not None else []
             )
 
             # fix_node_to_subcommunity_attributes(graph, plasmid_to_subcommunity, blackhole_plasmids_for_graph)
             graph.fix_node_attributes()
 
-            sample_to_plasmids = (
-                graph_to_sample_to_plasmids.get(graph_index)
-                if graph_to_sample_to_plasmids
-                else None
-            )
+            sample_to_plasmids = graph_to_sample_to_plasmids.get(graph_index) if graph_to_sample_to_plasmids else None
 
             if use_subgraphs or use_subcommunities:
                 # TODO: I am not it is a good idea to remove blackhole plasmids here, for now let's keep this...
@@ -119,9 +107,7 @@ class OutputProducer:
                     # populates all subgraphs variables
                     all_subgraphs.append(subgraph)
 
-                    blackhole_plasmids_for_subgraph = (
-                        blackhole_plasmids_for_graph.intersection(list(subgraph))
-                    )
+                    blackhole_plasmids_for_subgraph = blackhole_plasmids_for_graph.intersection(list(subgraph))
                     subgraphs_blackhole_plasmids.append(blackhole_plasmids_for_subgraph)
 
                     subgraph_sample_to_plasmids = None
@@ -132,9 +118,7 @@ class OutputProducer:
                             for plasmid in plasmids:
                                 if plasmid in subgraph:
                                     subgraph_sample_to_plasmids[sample].add(plasmid)
-                        subgraph_to_sample_to_plasmids[
-                            all_subgraphs_index
-                        ] = subgraph_sample_to_plasmids
+                        subgraph_to_sample_to_plasmids[all_subgraphs_index] = subgraph_sample_to_plasmids
 
                     description = f"graph_{graph_index}_subgraph_{subgraph_index}"
                     descriptions.append(description)
@@ -194,31 +178,17 @@ class OutputProducer:
     FileDescriptor = namedtuple("FileDescriptor", ["path", "description"])
 
     @staticmethod
-    def produce_communities_visualisation(
-        communities: Communities, outdir: Path
-    ) -> None:
-        file_descriptors = OutputProducer._write_html_for_all_subgraphs(
-            communities, outdir
-        )
-        OutputProducer._produce_index_file(
-            outdir, communities, "Communities", file_descriptors
-        )
+    def produce_communities_visualisation(communities: Communities, outdir: Path) -> None:
+        file_descriptors = OutputProducer._write_html_for_all_subgraphs(communities, outdir)
+        OutputProducer._produce_index_file(outdir, communities, "Communities", file_descriptors)
 
     @staticmethod
-    def produce_subcommunities_visualisation(
-        subcommunities: Subcommunities, outdir: Path
-    ) -> None:
-        file_descriptors = OutputProducer._write_html_for_all_subgraphs(
-            subcommunities, outdir
-        )
-        OutputProducer._produce_index_file(
-            outdir, subcommunities, "subcommunity", file_descriptors
-        )
+    def produce_subcommunities_visualisation(subcommunities: Subcommunities, outdir: Path) -> None:
+        file_descriptors = OutputProducer._write_html_for_all_subgraphs(subcommunities, outdir)
+        OutputProducer._produce_index_file(outdir, subcommunities, "subcommunity", file_descriptors)
 
     @classmethod
-    def _write_html_for_all_subgraphs(
-        cls, subgraphs: ListOfGraphs, outdir: Path
-    ) -> list[FileDescriptor]:
+    def _write_html_for_all_subgraphs(cls, subgraphs: ListOfGraphs, outdir: Path) -> list[FileDescriptor]:
         graphs_dir = outdir / "graphs"
         graphs_dir.mkdir(exist_ok=True, parents=True)
         file_descriptors = []
@@ -228,9 +198,7 @@ class OutputProducer:
             html_path = graphs_dir / f"{subgraph.label}.html"
             html_path.write_text(html)
             relative_html_path = f"graphs/{subgraph.label}.html"
-            file_descriptors.append(
-                cls.FileDescriptor(path=relative_html_path, description=subgraph.label)
-            )
+            file_descriptors.append(cls.FileDescriptor(path=relative_html_path, description=subgraph.label))
 
         return file_descriptors
 
@@ -246,9 +214,7 @@ class OutputProducer:
         if graph_to_sample_to_plasmids is None:
             # sort by edges
             for graph_index, graph in enumerate(graphs):
-                nb_of_elems_to_graph_indexes[graph.number_of_edges()].append(
-                    graph_index
-                )
+                nb_of_elems_to_graph_indexes[graph.number_of_edges()].append(graph_index)
         else:
             # sort by number of sample hits
             for graph_index, sample_to_plasmids in graph_to_sample_to_plasmids.items():
@@ -263,9 +229,7 @@ class OutputProducer:
                 graph = graphs[graph_index]
                 file_descriptor = file_descriptors[graph_index]
 
-                nb_of_blackhole_plasmids_for_graph = (
-                    graph.get_nb_of_blackhole_plasmids()
-                )
+                nb_of_blackhole_plasmids_for_graph = graph.get_nb_of_blackhole_plasmids()
                 if nb_of_blackhole_plasmids_for_graph > 0:
                     warning = " - WARNING: BLACKHOLE SPOTTED!"
                 else:
@@ -274,9 +238,7 @@ class OutputProducer:
                 if graph_to_sample_to_plasmids is not None:
                     description += f"- {len(graph_to_sample_to_plasmids[graph_index])} samples hit "
                 description += f"({graph.number_of_edges()} edges, {graph.number_of_nodes()} nodes){warning}</a><br/>"
-                visualisation_links.append(
-                    f'<a href="{file_descriptor.path}" target="_blank">{description}'
-                )
+                visualisation_links.append(f'<a href="{file_descriptor.path}" target="_blank">{description}')
 
         with open(outdir / "index.html", "w") as index_fh:
             for line in index_src:
@@ -290,9 +252,7 @@ class OutputProducer:
                         "<header_message>",
                         f"<h3>{objects_description} with more sample hits are shown first</h3>",
                     )
-                line = line.replace(
-                    "<communities_links_tag>", "\n".join(visualisation_links)
-                )
+                line = line.replace("<communities_links_tag>", "\n".join(visualisation_links))
                 line = line.replace("<objects_description>", objects_description)
                 print(line, file=index_fh)
 

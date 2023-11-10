@@ -60,9 +60,7 @@ AP024796.1      CP027485.1      0.8
 @click.argument("plasmids", type=PathlibPath(exists=True))
 @click.argument("distances", type=PathlibPath(exists=True))
 @click.argument("output-dir", type=PathlibPath(exists=False))
-@click.option(
-    "--distance-threshold", "-d", type=float, default=0.5, help="Distance threshold"
-)
+@click.option("--distance-threshold", "-d", type=float, default=0.5, help="Distance threshold")
 @click.option(
     "--bh-connectivity",
     "-b",
@@ -103,14 +101,10 @@ def split(
         )
 
     logging.info("Splitting plasmid graph into communities")
-    communities = plasmid_graph.split_graph_into_communities(
-        bh_connectivity, bh_neighbours_edge_density
-    )
+    communities = plasmid_graph.split_graph_into_communities(bh_connectivity, bh_neighbours_edge_density)
 
     logging.info("Producing communities visualisation")
-    OutputProducer.produce_communities_visualisation(
-        communities, visualisations_dir / "communities"
-    )
+    OutputProducer.produce_communities_visualisation(communities, visualisations_dir / "communities")
 
     logging.info("Serialising objects")
     objects_dir = output_dir / "objects"
@@ -118,9 +112,7 @@ def split(
     plasmid_graph.save(objects_dir / "plasmid_graph.pkl")
     communities.save(objects_dir / "communities.pkl")
     communities.save_graph_as_text(objects_dir / "communities.txt")
-    communities.save_classification(
-        objects_dir / "communities.tsv", "plasmid\tcommunity"
-    )
+    communities.save_classification(objects_dir / "communities.tsv", "plasmid\tcommunity")
 
     logging.info("All done!")
 
@@ -160,9 +152,7 @@ AP024796.1      CP027485.1      1
 @click.argument("communities-pickle", type=PathlibPath(exists=True))
 @click.argument("distances", type=PathlibPath(exists=True))
 @click.argument("output-dir", type=PathlibPath(exists=False))
-@click.option(
-    "--distance-threshold", "-d", type=float, default=4, help="Distance threshold"
-)
+@click.option("--distance-threshold", "-d", type=float, default=4, help="Distance threshold")
 @click.option(
     "--small-subcommunity-size-threshold",
     type=int,
@@ -192,15 +182,11 @@ def type(
     all_subcommunities = Subcommunities()
     for community in communities:
         community.remove_blackhole_plasmids()
-        subcommunities = community.split_graph_into_subcommunities(
-            small_subcommunity_size_threshold
-        )
+        subcommunities = community.split_graph_into_subcommunities(small_subcommunity_size_threshold)
         all_subcommunities.extend(subcommunities)
 
     logging.info("Producing communities visualisations")
-    OutputProducer.produce_communities_visualisation(
-        communities, output_dir / "visualisations/communities"
-    )
+    OutputProducer.produce_communities_visualisation(communities, output_dir / "visualisations/communities")
 
     logging.info("Producing subcommunities visualisations")
     OutputProducer.produce_subcommunities_visualisation(

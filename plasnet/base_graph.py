@@ -63,9 +63,7 @@ class BaseGraph(nx.Graph):
     TIME_LIMIT_FOR_LARGE_GRAPHS = 10000
 
     def get_simulation_time(self):
-        is_a_small_enough_graph = (
-            self.number_of_nodes() <= 5 or self.number_of_edges() <= 10
-        )
+        is_a_small_enough_graph = self.number_of_nodes() <= 5 or self.number_of_edges() <= 10
         if is_a_small_enough_graph:
             return self.TIME_LIMIT_FOR_SMALL_GRAPHS
         else:
@@ -162,10 +160,7 @@ class BaseGraph(nx.Graph):
             for plasmid in self:
                 subcommunity = plasmid_to_subcommunity[plasmid]
                 components[subcommunity].append(plasmid)
-            subgraphs = {
-                comp_index: self.subgraph(component).copy()
-                for comp_index, component in components.items()
-            }
+            subgraphs = {comp_index: self.subgraph(component).copy() for comp_index, component in components.items()}
 
         return subgraphs
 

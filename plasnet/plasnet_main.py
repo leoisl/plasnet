@@ -4,6 +4,7 @@ import click
 from plasnet.utils import PathlibPath, distance_df_to_dict
 from plasnet.output_producer import OutputProducer
 from plasnet.communities import Communities
+from plasnet.subcommunities import Subcommunities
 import pandas as pd
 import pickle
 import logging
@@ -146,11 +147,11 @@ def type( communities_pickle: Path,
     communities.filter_by_distance(distance_dict, distance_threshold)
 
     logging.info(f"Typing communities (i.e. splitting them into subcommunities)")
-    all_subcommunities = []
+    all_subcommunities = Subcommunities()
     for community in communities:
         community.remove_blackhole_plasmids()
         subcommunities = community.split_graph_into_subcommunities(small_subcommunity_size_threshold)
-        all_subcommunities.append(subcommunities)
+        all_subcommunities.extend(subcommunities)
 
     logging.info("Producing communities visualisations")
     OutputProducer.produce_communities_visualisation(communities, output_dir / "visualisations/communities")
@@ -162,14 +163,8 @@ def type( communities_pickle: Path,
     objects_dir = output_dir / "objects"
     objects_dir.mkdir(parents=True, exist_ok=True)
     communities.save(objects_dir / "communities.pkl")
-    with open(objects_dir / "subcommunities.pkl", "wb") as all_subcommunities_fh:
-        pickle.dump(all_subcommunities, all_subcommunities_fh)
-
-    with open(objects_dir / "typing.tsv", "w") as typing_fh:
-        typing_fh.write("plasmid\ttype\n")
-        for subcommunities in all_subcommunities:
-            for subcommunity in subcommunities:
-                subcommunity.write_classification(typing_fh)
+    all_subcommunities.save(objects_dir / "subcommunities.pkl")
+    all_subcommunities.save_classification(objects_dir / "typing.tsv", "plasmid\ttype")
 
     logging.info("All done!")
 

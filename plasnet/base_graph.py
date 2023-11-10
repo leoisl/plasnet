@@ -25,6 +25,14 @@ class BaseGraph(nx.Graph):
     #         else:
     #             attrs["is_blackhole"] = False
 
+    def __init__(self, graph: nx.Graph = None, label: str = "") -> None:
+        super().__init__(graph)
+        self._label = label
+
+    @property
+    def label(self) -> str:
+        return self._label
+
     def _get_node_color(self, node):
         return ColorPicker.get_default_color()
 

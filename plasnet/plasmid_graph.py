@@ -12,6 +12,8 @@ class PlasmidGraph(BaseGraph):
     It represents a full plasmid graph, not partitioned into communities or subcommunities.
     Each node is a plasmid, and each edge represents an abstract distance between two plasmids.
     """
+    def __init__(self, graph: nx.Graph = None, label: str = "") -> None:
+        super().__init__(graph, label)
 
     @staticmethod
     def build(plasmids_filepath: Path, distance_filepath: Path, distance_threshold: float) -> "PlasmidGraph":

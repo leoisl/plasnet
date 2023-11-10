@@ -7,8 +7,8 @@ class BlackholeGraph(BaseGraph):
     """
     This is a class that recognises and labels blackhole plasmids.
     """
-    def __init__(self, graph: nx.Graph, blackhole_connectivity_threshold: int, edge_density: float):
-        super().__init__(graph)
+    def __init__(self, graph: nx.Graph = None, blackhole_connectivity_threshold: int = 0, edge_density: float = 0.0, label: str = ""):
+        super().__init__(graph, label)
         self._original_graph = graph
         self._blackhole_connectivity_threshold = blackhole_connectivity_threshold
         self._edge_density = edge_density

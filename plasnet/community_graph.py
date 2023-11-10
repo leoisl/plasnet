@@ -9,8 +9,8 @@ from plasnet.ColorPicker import ColorPicker
 
 
 class CommunityGraph(BlackholeGraph):
-    def __init__(self, graph: nx.Graph, blackhole_connectivity_threshold: int, edge_density: float):
-        super().__init__(graph, blackhole_connectivity_threshold, edge_density)
+    def __init__(self, graph: nx.Graph = None, blackhole_connectivity_threshold: int = 0, edge_density: float = 0.0, label: str = ""):
+        super().__init__(graph, blackhole_connectivity_threshold, edge_density, label)
         self._node_to_colour: dict[str, str] = {}
 
     def _get_node_color(self, node: str) -> str:

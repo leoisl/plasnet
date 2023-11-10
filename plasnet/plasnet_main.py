@@ -55,7 +55,7 @@ AP024796.1      CP022675.1      1.0
 AP024796.1      CP024687.1      0.0
 AP024796.1      CP026642.1      0.5
 AP024796.1      CP027485.1      0.8
-""",
+""",  # noqa: E501
 )
 @click.argument("plasmids", type=PathlibPath(exists=True))
 @click.argument("distances", type=PathlibPath(exists=True))
@@ -97,22 +97,22 @@ def split(
     plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold)
 
     if output_plasmid_graph:
-        logging.info(f"Producing full plasmid graph visualisation")
+        logging.info("Producing full plasmid graph visualisation")
         OutputProducer.produce_graph_visualisation(
             plasmid_graph, visualisations_dir / "single_graph" / "single_graph.html"
         )
 
-    logging.info(f"Splitting plasmid graph into communities")
+    logging.info("Splitting plasmid graph into communities")
     communities = plasmid_graph.split_graph_into_communities(
         bh_connectivity, bh_neighbours_edge_density
     )
 
-    logging.info(f"Producing communities visualisation")
+    logging.info("Producing communities visualisation")
     OutputProducer.produce_communities_visualisation(
         communities, visualisations_dir / "communities"
     )
 
-    logging.info(f"Serialising objects")
+    logging.info("Serialising objects")
     objects_dir = output_dir / "objects"
     objects_dir.mkdir(parents=True, exist_ok=True)
     plasmid_graph.save(objects_dir / "plasmid_graph.pkl")
@@ -122,7 +122,7 @@ def split(
         objects_dir / "communities.tsv", "plasmid\tcommunity"
     )
 
-    logging.info(f"All done!")
+    logging.info("All done!")
 
 
 @click.command(
@@ -134,7 +134,7 @@ This typing is based on running an asynchronous label propagation algorithm on t
 This algorithm is implemented in the networkx library, and relies on a given distance file.
 This distance file should be a more precise and careful distance function than the one used to split the graph into communities.
 For example, you could use gene jaccard distance to split the graph and the DCJ-indel distance to type the communities.
-See https://github.com/iqbal-lab-org/pling for a tool to compute gene jaccard and DCJ-indel distances. 
+See https://github.com/iqbal-lab-org/pling for a tool to compute gene jaccard and DCJ-indel distances.
 
 \b
 The first file, describing the communities, is a pickle file (.pkl) that can be found in <split_out_dir>/objects/communities.pkl,
@@ -155,7 +155,7 @@ AP024796.1      CP022675.1      50
 AP024796.1      CP024687.1      1000
 AP024796.1      CP026642.1      20
 AP024796.1      CP027485.1      1
-""",
+""",  # noqa: E501
 )
 @click.argument("communities-pickle", type=PathlibPath(exists=True))
 @click.argument("distances", type=PathlibPath(exists=True))
@@ -185,10 +185,10 @@ def type(
     distance_df = pd.read_csv(distances, sep="\t")
     distance_dict = distance_df_to_dict(distance_df)
 
-    logging.info(f"Filtering communities by distance")
+    logging.info("Filtering communities by distance")
     communities.filter_by_distance(distance_dict, distance_threshold)
 
-    logging.info(f"Typing communities (i.e. splitting them into subcommunities)")
+    logging.info("Typing communities (i.e. splitting them into subcommunities)")
     all_subcommunities = Subcommunities()
     for community in communities:
         community.remove_blackhole_plasmids()

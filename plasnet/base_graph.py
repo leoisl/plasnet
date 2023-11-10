@@ -114,7 +114,7 @@ class BaseGraph(nx.Graph):
         custom_buttons = []
         if show_blackholes_filter:
             custom_buttons.append('<div><input type="submit" value="Redraw" onclick="redraw()"></div>')
-        """
+        """  # noqa: E501
 
         # [CRITICAL] TODO: improve this horrible performance
         libs_relative_path = self._get_libs_relative_path()

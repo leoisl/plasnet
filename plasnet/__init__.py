@@ -12,5 +12,3 @@ else:
     import importlib_metadata as metadata
 
 __version__ = metadata.version("plasnet")
-
-from .plasnet_main import main

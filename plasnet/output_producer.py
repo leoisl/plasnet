@@ -3,7 +3,6 @@ import logging
 import shutil
 from collections import defaultdict, namedtuple
 from pathlib import Path
-from typing import List
 
 from plasnet.base_graph import BaseGraph
 from plasnet.communities import Communities
@@ -56,7 +55,7 @@ class OutputProducer:
                     f'<a href="graphs/{graphs_descriptions[graph_index]}.html" target="_blank">{description}'
                 )
 
-        with open(outdir / f"index.html", "w") as index_fh:
+        with open(outdir / "index.html", "w") as index_fh:
             for line in index_src:
                 if graph_to_sample_to_plasmids is None:
                     line = line.replace(

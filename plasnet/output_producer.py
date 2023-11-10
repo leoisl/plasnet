@@ -139,15 +139,9 @@ class OutputProducer:
         OutputProducer._produce_index_file(outdir, communities, "Communities", file_descriptors)
 
     @staticmethod
-    def produce_subcommunities_visualisation(subcommunities: list[Subcommunities], outdir: Path) -> None:
-        flattened_subcommunities = []
-        file_descriptors = []
-        for community_index, subcommunities in enumerate(subcommunities):
-            flattened_subcommunities.extend(subcommunities)
-            file_descriptors_for_subcommunity = \
-                OutputProducer._write_html_for_all_subgraphs(subcommunities, outdir)
-            file_descriptors.extend(file_descriptors_for_subcommunity)
-        OutputProducer._produce_index_file(outdir, flattened_subcommunities, "subcommunity", file_descriptors)
+    def produce_subcommunities_visualisation(subcommunities: Subcommunities, outdir: Path) -> None:
+        file_descriptors = OutputProducer._write_html_for_all_subgraphs(subcommunities, outdir)
+        OutputProducer._produce_index_file(outdir, subcommunities, "subcommunity", file_descriptors)
 
     @classmethod
     def _write_html_for_all_subgraphs(cls, subgraphs: ListOfGraphs, outdir: Path) -> list[FileDescriptor]:

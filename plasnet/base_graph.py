@@ -1,8 +1,8 @@
-# TODO: requires heavy refactoring
 import json
 import pickle
 from abc import abstractmethod
 from collections import defaultdict
+from pathlib import Path
 from typing import TextIO
 
 import networkx as nx
@@ -37,32 +37,32 @@ class BaseGraph(nx.Graph):
     def label(self) -> str:
         return self._label
 
-    def _get_node_color(self, node):
+    def _get_node_color(self, node: str) -> str:
         return ColorPicker.get_default_color()
 
-    def _get_node_shape(self, node):
+    def _get_node_shape(self, node: str) -> str:
         return "circle"
 
-    def _add_special_node_attributes(self, node, attrs):
+    def _add_special_node_attributes(self, node: str, attrs: dict[str, str]) -> None:
         ...
 
-    def remove_plasmids(self, plasmids_to_be_removed: list[str]):
+    def remove_plasmids(self, plasmids_to_be_removed: list[str]) -> None:
         self.remove_nodes_from(plasmids_to_be_removed)
 
-    def fix_node_attributes(self):
+    def fix_node_attributes(self) -> None:
         for node, attrs in self.nodes.items():
             attrs["color"] = self._get_node_color(node)
             attrs["shape"] = self._get_node_shape(node)
             self._add_special_node_attributes(node, attrs)
 
-    def get_induced_components(self, nodes):
+    def get_induced_components(self, nodes: list[str]) -> "BaseGraph":
         subgraph = self.subgraph(nodes)
         return nx.connected_components(subgraph)
 
     TIME_LIMIT_FOR_SMALL_GRAPHS = 1000
     TIME_LIMIT_FOR_LARGE_GRAPHS = 10000
 
-    def get_simulation_time(self):
+    def get_simulation_time(self) -> int:
         is_a_small_enough_graph = self.number_of_nodes() <= 5 or self.number_of_edges() <= 10
         if is_a_small_enough_graph:
             return self.TIME_LIMIT_FOR_SMALL_GRAPHS
@@ -164,7 +164,7 @@ class BaseGraph(nx.Graph):
 
         return subgraphs
 
-    def save(self, filepath):
+    def save(self, filepath: Path) -> None:
         with open(filepath, "wb") as fh:
             pickle.dump(self, fh)
 

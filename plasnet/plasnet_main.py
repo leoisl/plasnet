@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 
 
 @click.group()
-def cli():
+def cli() -> None:
     pass
 
 
@@ -89,7 +89,7 @@ def split(
     bh_connectivity: int,
     bh_neighbours_edge_density: float,
     output_plasmid_graph: bool,
-):
+) -> None:
     visualisations_dir = output_dir / "visualisations"
     logging.info(f"Creating plasmid graph from {plasmids} and {distances}")
     plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold)
@@ -165,7 +165,7 @@ def type(
     output_dir: Path,
     distance_threshold: float,
     small_subcommunity_size_threshold: int,
-):
+) -> None:
     logging.info(f"Loading communities from {communities_pickle}")
     communities: Communities = Communities.load(communities_pickle)
 
@@ -208,6 +208,6 @@ cli.add_command(split)
 cli.add_command(type)
 
 
-def main():
+def main() -> None:
     """Entry point for the application script"""
     cli()

@@ -13,7 +13,7 @@ def get_libs_dir() -> Path:
 
 
 class PathlibPath(click.Path):
-    def convert(self, value, param, ctx):
+    def convert(self, value: str, param, ctx) -> Path:
         return Path(super().convert(value, param, ctx))
 
 

@@ -209,7 +209,7 @@ class OutputProducer:
         objects_description: str,
         file_descriptors: list[FileDescriptor],
         graph_to_sample_to_plasmids=None,
-    ):
+    ) -> None:
         nb_of_elems_to_graph_indexes = collections.defaultdict(list)
         if graph_to_sample_to_plasmids is None:
             # sort by edges
@@ -259,5 +259,5 @@ class OutputProducer:
         OutputProducer.copy_libs(outdir)
 
     @staticmethod
-    def copy_libs(outdir):
+    def copy_libs(outdir: Path) -> None:
         shutil.copytree(get_libs_dir(), outdir / "libs", dirs_exist_ok=True)

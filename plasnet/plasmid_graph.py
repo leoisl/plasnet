@@ -69,8 +69,8 @@ class PlasmidGraph(BaseGraph):
 
     def split_graph_into_communities(self, bh_connectivity: int, bh_neighbours_edge_density: float) -> Communities:
         return Communities(
-            CommunityGraph(self.subgraph(component), bh_connectivity, bh_neighbours_edge_density)
-            for component in nx.connected_components(self))
+            CommunityGraph(self.subgraph(component), bh_connectivity, bh_neighbours_edge_density, label=f"community_{idx}")
+            for idx, component in enumerate(nx.connected_components(self)))
 
     def _get_libs_relative_path(self) -> str:
         return "."

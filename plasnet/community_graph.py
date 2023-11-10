@@ -62,7 +62,8 @@ class CommunityGraph(BlackholeGraph):
             subcommunity = SubcommunityGraph(self._original_graph.subgraph(subcommunity_nodes),
                                              self._blackhole_connectivity_threshold,
                                              self._edge_density,
-                                             colour)
+                                             label=f"{self.label}_subcommunity_{subcommunity_index}",
+                                             colour=colour)
             subcommunities.append(subcommunity)
 
             for node in subcommunity_nodes:

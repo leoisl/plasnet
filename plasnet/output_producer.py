@@ -135,7 +135,7 @@ class OutputProducer:
 
     @staticmethod
     def produce_communities_visualisation(communities: Communities, outdir: Path) -> None:
-        file_descriptors = OutputProducer._write_html_for_all_subgraphs(communities, outdir, "community")
+        file_descriptors = OutputProducer._write_html_for_all_subgraphs(communities, outdir)
         OutputProducer._produce_index_file(outdir, communities, "Communities", file_descriptors)
 
     @staticmethod
@@ -145,23 +145,22 @@ class OutputProducer:
         for community_index, subcommunities in enumerate(subcommunities):
             flattened_subcommunities.extend(subcommunities)
             file_descriptors_for_subcommunity = \
-                OutputProducer._write_html_for_all_subgraphs(subcommunities, outdir, f"community_{community_index}_subcommunity_")
+                OutputProducer._write_html_for_all_subgraphs(subcommunities, outdir)
             file_descriptors.extend(file_descriptors_for_subcommunity)
         OutputProducer._produce_index_file(outdir, flattened_subcommunities, "subcommunity", file_descriptors)
 
     @classmethod
-    def _write_html_for_all_subgraphs(cls, subgraphs: ListOfGraphs, outdir: Path, prefix: str) -> list[FileDescriptor]:
+    def _write_html_for_all_subgraphs(cls, subgraphs: ListOfGraphs, outdir: Path) -> list[FileDescriptor]:
         graphs_dir = outdir/"graphs"
         graphs_dir.mkdir(exist_ok=True, parents=True)
         file_descriptors = []
 
         for subgraph_index, subgraph in enumerate(subgraphs):
             html = subgraph.produce_visualisation()
-            description = f"{prefix}_{subgraph_index}"
-            html_path = graphs_dir / f"{description}.html"
+            html_path = graphs_dir / f"{subgraph.label}.html"
             html_path.write_text(html)
-            relative_html_path = f"graphs/{description}.html"
-            file_descriptors.append(cls.FileDescriptor(path=relative_html_path, description=description))
+            relative_html_path = f"graphs/{subgraph.label}.html"
+            file_descriptors.append(cls.FileDescriptor(path=relative_html_path, description=subgraph.label))
 
         return file_descriptors
 

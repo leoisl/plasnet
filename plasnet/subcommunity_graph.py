@@ -2,9 +2,16 @@ from plasnet.blackhole_graph import BlackholeGraph
 import networkx as nx
 from plasnet.ColorPicker import ColorPicker
 
+
 class SubcommunityGraph(BlackholeGraph):
-    def __init__(self, graph: nx.Graph = None, blackhole_connectivity_threshold: int = 0, edge_density: float = 0.0, label: str = "",
-                 colour: str = ColorPicker.get_default_color()):
+    def __init__(
+        self,
+        graph: nx.Graph = None,
+        blackhole_connectivity_threshold: int = 0,
+        edge_density: float = 0.0,
+        label: str = "",
+        colour: str = ColorPicker.get_default_color(),
+    ):
         super().__init__(graph, blackhole_connectivity_threshold, edge_density, label)
         self._colour = colour
 

@@ -12,11 +12,14 @@ class PlasmidGraph(BaseGraph):
     It represents a full plasmid graph, not partitioned into communities or subcommunities.
     Each node is a plasmid, and each edge represents an abstract distance between two plasmids.
     """
+
     def __init__(self, graph: nx.Graph = None, label: str = "") -> None:
         super().__init__(graph, label)
 
     @staticmethod
-    def build(plasmids_filepath: Path, distance_filepath: Path, distance_threshold: float) -> "PlasmidGraph":
+    def build(
+        plasmids_filepath: Path, distance_filepath: Path, distance_threshold: float
+    ) -> "PlasmidGraph":
         """
         Creates a plasmid graph from plasmid and distance files.
 
@@ -61,16 +64,29 @@ class PlasmidGraph(BaseGraph):
         distance_df["distance"] = distance_df["distance"].round(2)
 
         # create graph
-        graph = nx.from_pandas_edgelist(distance_df, source="plasmid_1", target="plasmid_2", edge_attr="distance",
-                                        create_using=PlasmidGraph)
+        graph = nx.from_pandas_edgelist(
+            distance_df,
+            source="plasmid_1",
+            target="plasmid_2",
+            edge_attr="distance",
+            create_using=PlasmidGraph,
+        )
         graph.add_nodes_from(plasmids["plasmid"])
 
         return graph
 
-    def split_graph_into_communities(self, bh_connectivity: int, bh_neighbours_edge_density: float) -> Communities:
+    def split_graph_into_communities(
+        self, bh_connectivity: int, bh_neighbours_edge_density: float
+    ) -> Communities:
         return Communities(
-            CommunityGraph(self.subgraph(component), bh_connectivity, bh_neighbours_edge_density, label=f"community_{idx}")
-            for idx, component in enumerate(nx.connected_components(self)))
+            CommunityGraph(
+                self.subgraph(component),
+                bh_connectivity,
+                bh_neighbours_edge_density,
+                label=f"community_{idx}",
+            )
+            for idx, component in enumerate(nx.connected_components(self))
+        )
 
     def _get_libs_relative_path(self) -> str:
         return "."

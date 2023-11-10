@@ -4,12 +4,11 @@ from typing import Generator, TypeVar, Type
 from pathlib import Path
 
 
-BaseGraphT = TypeVar('BaseGraphT', bound=BaseGraph)
-ListOfGraphsT = TypeVar('ListOfGraphsT', bound="ListOfGraphs")
+BaseGraphT = TypeVar("BaseGraphT", bound=BaseGraph)
+ListOfGraphsT = TypeVar("ListOfGraphsT", bound="ListOfGraphs")
+
 
 class ListOfGraphs(list[BaseGraphT]):
-
-
     def save(self, filepath: Path) -> None:
         with open(filepath, "wb") as fh:
             pickle.dump(self, fh)
@@ -20,7 +19,9 @@ class ListOfGraphs(list[BaseGraphT]):
             graphs = pickle.load(fh)
             return graphs
 
-    def _get_each_graph_as_list_of_nodes_in_text_format(self) -> Generator[str, None, None]:
+    def _get_each_graph_as_list_of_nodes_in_text_format(
+        self,
+    ) -> Generator[str, None, None]:
         for graph in self:
             yield " ".join(graph)
 
@@ -34,4 +35,3 @@ class ListOfGraphs(list[BaseGraphT]):
             print(header, file=fh)
             for subgraph in self:
                 subgraph.write_classification(fh)
-

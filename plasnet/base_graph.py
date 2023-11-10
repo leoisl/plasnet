@@ -13,6 +13,7 @@ class BaseGraph(nx.Graph):
     """
     Class to represent a base class to concentrate common methods between the different types of graphs.
     """
+
     # def fix_node_to_subcommunity_attributes(self, node_to_subcommunity, blackhole_plasmids):
     #     for node, attrs in self.nodes.items():
     #         if node in node_to_subcommunity:
@@ -46,7 +47,6 @@ class BaseGraph(nx.Graph):
     def remove_plasmids(self, plasmids_to_be_removed: list["Nodes"]):
         self.remove_nodes_from(plasmids_to_be_removed)
 
-
     def fix_node_attributes(self):
         for node, attrs in self.nodes.items():
             attrs["color"] = self._get_node_color(node)
@@ -57,11 +57,13 @@ class BaseGraph(nx.Graph):
         subgraph = self.subgraph(nodes)
         return nx.connected_components(subgraph)
 
-
     TIME_LIMIT_FOR_SMALL_GRAPHS = 1000
     TIME_LIMIT_FOR_LARGE_GRAPHS = 10000
+
     def get_simulation_time(self):
-        is_a_small_enough_graph = self.number_of_nodes() <= 5 or self.number_of_edges() <= 10
+        is_a_small_enough_graph = (
+            self.number_of_nodes() <= 5 or self.number_of_edges() <= 10
+        )
         if is_a_small_enough_graph:
             return self.TIME_LIMIT_FOR_SMALL_GRAPHS
         else:
@@ -147,26 +149,31 @@ class BaseGraph(nx.Graph):
     def _get_custom_buttons_HTML(self) -> str:
         ...
 
-
     def get_subgraphs(self, plasmid_to_subcommunity, use_subgraphs):
         if use_subgraphs:
-            subgraphs = {comp_index: self.subgraph(component).copy() for comp_index, component in enumerate(nx.connected_components(self))}
+            subgraphs = {
+                comp_index: self.subgraph(component).copy()
+                for comp_index, component in enumerate(nx.connected_components(self))
+            }
         else:
             components = defaultdict(list)
             for plasmid in self:
                 subcommunity = plasmid_to_subcommunity[plasmid]
                 components[subcommunity].append(plasmid)
-            subgraphs = {comp_index: self.subgraph(component).copy() for comp_index, component in components.items()}
+            subgraphs = {
+                comp_index: self.subgraph(component).copy()
+                for comp_index, component in components.items()
+            }
 
         return subgraphs
 
     def save(self, filepath):
-        with open(filepath, 'wb') as fh:
+        with open(filepath, "wb") as fh:
             pickle.dump(self, fh)
 
     @staticmethod
     def load(filepath):
-        with open(filepath, 'rb') as fh:
+        with open(filepath, "rb") as fh:
             graph = pickle.load(fh)
             return graph
 

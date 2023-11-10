@@ -7,7 +7,14 @@ class BlackholeGraph(BaseGraph):
     """
     This is a class that recognises and labels blackhole plasmids.
     """
-    def __init__(self, graph: nx.Graph = None, blackhole_connectivity_threshold: int = 0, edge_density: float = 0.0, label: str = ""):
+
+    def __init__(
+        self,
+        graph: nx.Graph = None,
+        blackhole_connectivity_threshold: int = 0,
+        edge_density: float = 0.0,
+        label: str = "",
+    ):
         super().__init__(graph, label)
         self._original_graph = graph
         self._blackhole_connectivity_threshold = blackhole_connectivity_threshold
@@ -32,13 +39,19 @@ class BlackholeGraph(BaseGraph):
                 neighbors = list(self.neighbors(node))
                 subgraph = nx.induced_subgraph(self._original_graph, neighbors)
                 nb_of_edges_between_neighbours = subgraph.number_of_edges()
-                max_nb_of_edges_between_neighbours = (len(neighbors) * (len(neighbors) - 1)) // 2
-                edge_rate = nb_of_edges_between_neighbours / max_nb_of_edges_between_neighbours
+                max_nb_of_edges_between_neighbours = (
+                    len(neighbors) * (len(neighbors) - 1)
+                ) // 2
+                edge_rate = (
+                    nb_of_edges_between_neighbours / max_nb_of_edges_between_neighbours
+                )
                 if edge_rate <= self._edge_density:
                     blackhole_plasmids_in_graph.append(node)
                     logging.debug(f"{node} is a blackhole plasmid, REMOVED")
                 else:
-                    logging.debug(f"{node} is highly connected but does not connect unrelated plasmids, not removed")
+                    logging.debug(
+                        f"{node} is highly connected but does not connect unrelated plasmids, not removed"
+                    )
         return blackhole_plasmids_in_graph
 
     def get_nb_of_blackhole_plasmids(self) -> int:
@@ -49,8 +62,10 @@ class BlackholeGraph(BaseGraph):
 
     def _get_filters_HTML(self) -> str:
         nb_of_black_holes = len(self._get_blackhole_plasmids())
-        return (f'<label for="hide_blackholes">Hide blackhole plasmids ({nb_of_black_holes} present)</label>'
-                f'<input type="checkbox" id="hide_blackholes" name="hide_blackholes"><br/>')
+        return (
+            f'<label for="hide_blackholes">Hide blackhole plasmids ({nb_of_black_holes} present)</label>'
+            f'<input type="checkbox" id="hide_blackholes" name="hide_blackholes"><br/>'
+        )
 
     def _get_custom_buttons_HTML(self) -> str:
         return '<div><input type="submit" value="Redraw" onclick="redraw()"></div>'

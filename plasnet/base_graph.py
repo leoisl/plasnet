@@ -6,6 +6,7 @@ from plasnet.Templates import Templates
 import json
 from collections import defaultdict
 import pickle
+from typing import TextIO
 
 
 class BaseGraph(nx.Graph):
@@ -168,3 +169,7 @@ class BaseGraph(nx.Graph):
         with open(filepath, 'rb') as fh:
             graph = pickle.load(fh)
             return graph
+
+    def write_classification(self, typing_fh: TextIO) -> None:
+        for node in self.nodes:
+            typing_fh.write(f"{node}\t{self.label}\n")

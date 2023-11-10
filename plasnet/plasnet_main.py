@@ -164,6 +164,12 @@ def type( communities_pickle: Path,
     with open(objects_dir / "subcommunities.pkl", "wb") as all_subcommunities_fh:
         pickle.dump(all_subcommunities, all_subcommunities_fh)
 
+    with open(objects_dir / "typing.tsv", "w") as typing_fh:
+        typing_fh.write("plasmid\ttype\n")
+        for subcommunities in all_subcommunities:
+            for subcommunity in subcommunities:
+                subcommunity.write_classification(typing_fh)
+
     logging.info("All done!")
 
 

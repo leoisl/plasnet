@@ -40,6 +40,7 @@ repos:
           --ignore-missing-imports,
           -v
         ]
+        log_file: mypy.log
 
 -   repo: https://github.com/pycqa/flake8
     rev: 6.1.0
@@ -49,3 +50,4 @@ repos:
           --max-line-length=100,
           -v
         ]
+        log_file: flake8.log

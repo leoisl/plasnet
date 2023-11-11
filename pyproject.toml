@@ -21,7 +21,6 @@ pandas = "^2.1.2"
 
 [tool.poetry.group.dev.dependencies]
 matplotlib = "^3.8.0"
-pandas-stubs = "^2.1.1.230928"
 pre-commit = "^3.5.0"
 
 [build-system]

@@ -73,7 +73,7 @@ class PlasmidGraph(BaseGraph):
         )
         graph.add_nodes_from(plasmids["plasmid"])
 
-        return graph
+        return PlasmidGraph(graph)
 
     def split_graph_into_communities(self, bh_connectivity: int, bh_neighbours_edge_density: float) -> Communities:
         return Communities(

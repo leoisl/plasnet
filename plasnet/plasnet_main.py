@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from typing import cast
 
 import click
 import pandas as pd
@@ -167,7 +168,7 @@ def type(
     small_subcommunity_size_threshold: int,
 ) -> None:
     logging.info(f"Loading communities from {communities_pickle}")
-    communities: Communities = Communities.load(communities_pickle)
+    communities = cast(Communities, Communities.load(communities_pickle))
 
     output_dir.mkdir(parents=True, exist_ok=True)
 

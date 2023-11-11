@@ -74,7 +74,8 @@ AP024796.1      CP027485.1      0.8
     "-e",
     type=float,
     default=0.2,
-    help="Maximum number of edge density between blackhole plasmid neighbours to label the plasmid as blackhole",
+    help="Maximum number of edge density between blackhole plasmid neighbours to "
+    "label the plasmid as blackhole",
 )
 @click.option(
     "--output-plasmid-graph",
@@ -102,10 +103,14 @@ def split(
         )
 
     logging.info("Splitting plasmid graph into communities")
-    communities = plasmid_graph.split_graph_into_communities(bh_connectivity, bh_neighbours_edge_density)
+    communities = plasmid_graph.split_graph_into_communities(
+        bh_connectivity, bh_neighbours_edge_density
+    )
 
     logging.info("Producing communities visualisation")
-    OutputProducer.produce_communities_visualisation(communities, visualisations_dir / "communities")
+    OutputProducer.produce_communities_visualisation(
+        communities, visualisations_dir / "communities"
+    )
 
     logging.info("Serialising objects")
     objects_dir = output_dir / "objects"
@@ -158,7 +163,8 @@ AP024796.1      CP027485.1      1
     "--small-subcommunity-size-threshold",
     type=int,
     default=4,
-    help="Subcommunities with size up to this parameter will be joined to neighbouring larger subcommunities",
+    help="Subcommunities with size up to this parameter will be joined to "
+    "neighbouring larger subcommunities",
 )
 def type(
     communities_pickle: Path,
@@ -183,11 +189,15 @@ def type(
     all_subcommunities = Subcommunities()
     for community in communities:
         community.remove_blackhole_plasmids()
-        subcommunities = community.split_graph_into_subcommunities(small_subcommunity_size_threshold)
+        subcommunities = community.split_graph_into_subcommunities(
+            small_subcommunity_size_threshold
+        )
         all_subcommunities.extend(subcommunities)
 
     logging.info("Producing communities visualisations")
-    OutputProducer.produce_communities_visualisation(communities, output_dir / "visualisations/communities")
+    OutputProducer.produce_communities_visualisation(
+        communities, output_dir / "visualisations/communities"
+    )
 
     logging.info("Producing subcommunities visualisations")
     OutputProducer.produce_subcommunities_visualisation(

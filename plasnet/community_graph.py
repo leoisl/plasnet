@@ -34,7 +34,8 @@ class CommunityGraph(BlackholeGraph):
     def _fix_small_subcommunities(
         self, subcommunities: list[set[str]], small_subcommunity_size_threshold: int
     ) -> list[set[str]]:
-        # sort subcommunities by size so that we can safely move smaller subcommunities into larger ones
+        # sort subcommunities by size so that we can safely move
+        # smaller subcommunities into larger ones
         subcommunities = sorted(subcommunities, key=lambda subcommunity: len(subcommunity))
         node_to_subcommunity = self._get_node_to_subcommunity(subcommunities)
 
@@ -48,7 +49,9 @@ class CommunityGraph(BlackholeGraph):
                 if subcommunity_has_no_neighbors:
                     continue
 
-                candidate_subcommunities = set(node_to_subcommunity[neighbor] for neighbor in subcommunity_neighbours)
+                candidate_subcommunities = set(
+                    node_to_subcommunity[neighbor] for neighbor in subcommunity_neighbours
+                )
                 largest_subcommunity_size = max(
                     len(subcommunities[subcommunity]) for subcommunity in candidate_subcommunities
                 )
@@ -64,9 +67,15 @@ class CommunityGraph(BlackholeGraph):
                     subcommunities[subcommunity_idx] = set()
         return subcommunities
 
-    def split_graph_into_subcommunities(self, small_subcommunity_size_threshold: int) -> Subcommunities:
-        subcommunities_nodes: list[set[str]] = list(nx.community.asyn_lpa_communities(G=self, weight="weight", seed=42))
-        subcommunities_nodes = self._fix_small_subcommunities(subcommunities_nodes, small_subcommunity_size_threshold)
+    def split_graph_into_subcommunities(
+        self, small_subcommunity_size_threshold: int
+    ) -> Subcommunities:
+        subcommunities_nodes: list[set[str]] = list(
+            nx.community.asyn_lpa_communities(G=self, weight="weight", seed=42)
+        )
+        subcommunities_nodes = self._fix_small_subcommunities(
+            subcommunities_nodes, small_subcommunity_size_threshold
+        )
 
         subcommunities = []
         for subcommunity_index, subcommunity_nodes in enumerate(subcommunities_nodes):

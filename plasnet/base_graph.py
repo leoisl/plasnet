@@ -14,7 +14,8 @@ BaseGraphType = TypeVar("BaseGraphType", bound="BaseGraph")
 
 class BaseGraph(nx.Graph):  # type: ignore
     """
-    Class to represent a base class to concentrate common methods between the different types of graphs.
+    Class to represent a base class to concentrate common methods
+    between the different types of graphs.
     """
 
     # def fix_node_to_subcommunity_attributes(self, node_to_subcommunity, blackhole_plasmids):

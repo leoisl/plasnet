@@ -19,7 +19,9 @@ class PlasmidGraph(BaseGraph):
         super().__init__(graph, label)
 
     @staticmethod
-    def build(plasmids_filepath: Path, distance_filepath: Path, distance_threshold: float) -> "PlasmidGraph":
+    def build(
+        plasmids_filepath: Path, distance_filepath: Path, distance_threshold: float
+    ) -> "PlasmidGraph":
         """
         Creates a plasmid graph from plasmid and distance files.
 
@@ -52,7 +54,7 @@ class PlasmidGraph(BaseGraph):
         AP024796.1      CP024687.1      0.0
         AP024796.1      CP026642.1      0.5
         AP024796.1      CP027485.1      0.8
-        """
+        """  # noqa: E501
         plasmids = pd.read_csv(plasmids_filepath)
 
         distance_df = pd.read_csv(distance_filepath, sep="\t")
@@ -75,7 +77,9 @@ class PlasmidGraph(BaseGraph):
 
         return PlasmidGraph(graph)
 
-    def split_graph_into_communities(self, bh_connectivity: int, bh_neighbours_edge_density: float) -> Communities:
+    def split_graph_into_communities(
+        self, bh_connectivity: int, bh_neighbours_edge_density: float
+    ) -> Communities:
         return Communities(
             CommunityGraph(
                 self.subgraph(component),

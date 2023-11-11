@@ -37,7 +37,9 @@ class OutputProducer:
         OutputProducer._produce_index_file(outdir, subcommunities, "subcommunity", file_descriptors)
 
     @classmethod
-    def _write_html_for_all_subgraphs(cls, subgraphs: ListOfGraphs[BaseGraph], outdir: Path) -> list[FileDescriptor]:
+    def _write_html_for_all_subgraphs(
+        cls, subgraphs: ListOfGraphs[BaseGraph], outdir: Path
+    ) -> list[FileDescriptor]:
         graphs_dir = outdir / "graphs"
         graphs_dir.mkdir(exist_ok=True, parents=True)
         file_descriptors = []
@@ -47,7 +49,9 @@ class OutputProducer:
             html_path = graphs_dir / f"{subgraph.label}.html"
             html_path.write_text(html)
             relative_html_path = f"graphs/{subgraph.label}.html"
-            file_descriptors.append(cls.FileDescriptor(path=relative_html_path, description=subgraph.label))
+            file_descriptors.append(
+                cls.FileDescriptor(path=relative_html_path, description=subgraph.label)
+            )
 
         return file_descriptors
 
@@ -86,8 +90,14 @@ class OutputProducer:
                 description = f"View {file_descriptor.description}"
                 if graph_to_sample_to_plasmids is not None:
                     description += f"- {len(graph_to_sample_to_plasmids[graph_index])} samples hit "
-                description += f"({graph.number_of_edges()} edges, {graph.number_of_nodes()} nodes){warning}</a><br/>"
-                visualisation_links.append(f'<a href="{file_descriptor.path}" target="_blank">{description}')
+                description += (
+                    f"({graph.number_of_edges()} edges, "
+                    f"{graph.number_of_nodes()} nodes)"
+                    f"{warning}</a><br/>"
+                )
+                visualisation_links.append(
+                    f'<a href="{file_descriptor.path}" target="_blank">{description}'
+                )
 
         with open(outdir / "index.html", "w") as index_fh:
             for line in index_src:

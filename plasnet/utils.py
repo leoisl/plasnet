@@ -14,7 +14,9 @@ def get_libs_dir() -> Path:
 
 
 class PathlibPath(click.Path):
-    def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]) -> Path:  # type: ignore
+    def convert(  # type: ignore
+        self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]
+    ) -> Path:
         return Path(super().convert(value, param, ctx))
 
 

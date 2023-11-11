@@ -48,7 +48,10 @@ class BlackholeGraph(BaseGraph):
                     blackhole_plasmids_in_graph.append(node)
                     logging.debug(f"{node} is a blackhole plasmid, REMOVED")
                 else:
-                    logging.debug(f"{node} is highly connected but does not connect unrelated plasmids, not removed")
+                    logging.debug(
+                        f"{node} is highly connected but does not connect "
+                        f"unrelated plasmids, not removed"
+                    )
         return blackhole_plasmids_in_graph
 
     def get_nb_of_blackhole_plasmids(self) -> int:
@@ -60,7 +63,9 @@ class BlackholeGraph(BaseGraph):
     def _get_filters_HTML(self) -> str:
         nb_of_black_holes = len(self._get_blackhole_plasmids())
         return (
-            f'<label for="hide_blackholes">Hide blackhole plasmids ({nb_of_black_holes} present)</label>'
+            f'<label for="hide_blackholes">'
+            f"Hide blackhole plasmids ({nb_of_black_holes} present)"
+            f"</label>"
             f'<input type="checkbox" id="hide_blackholes" name="hide_blackholes"><br/>'
         )
 

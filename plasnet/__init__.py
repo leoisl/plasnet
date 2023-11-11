@@ -14,3 +14,5 @@ else:
 __version__ = metadata.version("plasnet")
 
 from .plasnet_main import main  # noqa: F401
+
+__all__ = ["main"]

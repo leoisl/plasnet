@@ -56,7 +56,7 @@ class BaseGraph(nx.Graph):
 
     def get_induced_components(self, nodes: list[str]) -> "BaseGraph":
         subgraph = self.subgraph(nodes)
-        return nx.connected_components(subgraph)
+        return BaseGraph(nx.connected_components(subgraph))
 
     TIME_LIMIT_FOR_SMALL_GRAPHS = 1000
     TIME_LIMIT_FOR_LARGE_GRAPHS = 10000

@@ -36,7 +36,7 @@ class BaseGraph(nx.Graph):  # type: ignore
         self._label = label
 
     @property
-    def label(self) -> Path:
+    def label(self) -> str:
         return self._label
 
     def _get_node_color(self, node: str) -> str:

@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 import click
 import pandas as pd
@@ -13,7 +14,7 @@ def get_libs_dir() -> Path:
 
 
 class PathlibPath(click.Path):
-    def convert(self, value: str, param, ctx) -> Path:
+    def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]) -> Path:  # type: ignore
         return Path(super().convert(value, param, ctx))
 
 

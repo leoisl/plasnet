@@ -22,5 +22,5 @@ class SubcommunityGraph(BlackholeGraph):
     def _get_samples_selectors_HTML(self) -> str:
         return ""
 
-    def _get_node_color(self, node):
+    def _get_node_color(self, node: str) -> str:
         return self._colour

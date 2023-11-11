@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 import networkx as nx
 
@@ -23,12 +24,12 @@ class BlackholeGraph(BaseGraph):
         self._edge_density = edge_density
         self._blackhole_plasmids = self._get_blackhole_plasmids()
 
-    def _get_node_shape(self, node):
+    def _get_node_shape(self, node: str) -> str:
         if node in self._blackhole_plasmids:
             return "star"
         return "circle"
 
-    def _add_special_node_attributes(self, node, attrs):
+    def _add_special_node_attributes(self, node: str, attrs: dict[str, Any]) -> None:
         if node in self._blackhole_plasmids:
             attrs["is_blackhole"] = True
         else:

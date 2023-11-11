@@ -1,8 +1,8 @@
 import collections
-import logging
 import shutil
-from collections import defaultdict, namedtuple
+from collections import namedtuple
 from pathlib import Path
+from typing import Any
 
 from plasnet.base_graph import BaseGraph
 from plasnet.communities import Communities
@@ -15,7 +15,6 @@ from plasnet.utils import get_libs_dir
 class OutputProducer:
     @staticmethod
     def produce_graph_visualisation(graph: BaseGraph, html_path: Path) -> None:
-    def produce_graph_visualisation(graph: BaseGraph, html_path: Path):
         outdir = html_path.parent
         outdir.mkdir(exist_ok=True, parents=True)
 
@@ -57,7 +56,7 @@ class OutputProducer:
         graphs: ListOfGraphs,
         objects_description: str,
         file_descriptors: list[FileDescriptor],
-        graph_to_sample_to_plasmids=None,
+        graph_to_sample_to_plasmids: Any = None,  # TODO: fix this when adding sample hits
     ) -> None:
         nb_of_elems_to_graph_indexes = collections.defaultdict(list)
         if graph_to_sample_to_plasmids is None:

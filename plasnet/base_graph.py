@@ -1,9 +1,8 @@
 import json
 import pickle
 from abc import abstractmethod
-from collections import defaultdict
 from pathlib import Path
-from typing import TextIO
+from typing import Any, TextIO
 
 import networkx as nx
 
@@ -43,7 +42,7 @@ class BaseGraph(nx.Graph):
     def _get_node_shape(self, node: str) -> str:
         return "circle"
 
-    def _add_special_node_attributes(self, node: str, attrs: dict[str, str]) -> None:
+    def _add_special_node_attributes(self, node: str, attrs: dict[str, Any]) -> None:
         ...
 
     def remove_plasmids(self, plasmids_to_be_removed: list[str]) -> None:
@@ -154,7 +153,7 @@ class BaseGraph(nx.Graph):
             pickle.dump(self, fh)
 
     @staticmethod
-    def load(filepath):
+    def load(filepath: Path) -> "BaseGraph":
         with open(filepath, "rb") as fh:
             graph = pickle.load(fh)
             return graph

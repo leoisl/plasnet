@@ -11,7 +11,7 @@ if sys.version_info >= (3, 8):
 else:
     import importlib_metadata as metadata
 
-__version__ = metadata.version("plasnet")
+__version__: str = metadata.version("plasnet")
 
 from .plasnet_main import main
 

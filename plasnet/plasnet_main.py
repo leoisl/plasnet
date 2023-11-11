@@ -5,6 +5,7 @@ from typing import cast
 import click
 import pandas as pd
 
+from plasnet import __version__
 from plasnet.communities import Communities
 from plasnet.output_producer import OutputProducer
 from plasnet.plasmid_graph import PlasmidGraph
@@ -15,6 +16,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 
 
 @click.group()
+@click.version_option(version=__version__)
 def cli() -> None:
     pass
 

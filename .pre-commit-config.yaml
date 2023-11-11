@@ -50,12 +50,11 @@ repos:
         ]
         log_file: flake8.log
 
-# TODO: add pylint in the future
-#-   repo: local
-#    hooks:
-#      - id: pylint
-#        name: pylint
-#        entry: pylint
-#        language: system
-#        types: [python]
-#        log_file: pylint.log
+-   repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: bash -c 'pylint "$@" || true' --
+        language: system
+        types: [python]
+        log_file: pylint.log

@@ -149,21 +149,6 @@ class BaseGraph(nx.Graph):
     def _get_custom_buttons_HTML(self) -> str:
         ...
 
-    def get_subgraphs(self, plasmid_to_subcommunity, use_subgraphs):
-        if use_subgraphs:
-            subgraphs = {
-                comp_index: self.subgraph(component).copy()
-                for comp_index, component in enumerate(nx.connected_components(self))
-            }
-        else:
-            components = defaultdict(list)
-            for plasmid in self:
-                subcommunity = plasmid_to_subcommunity[plasmid]
-                components[subcommunity].append(plasmid)
-            subgraphs = {comp_index: self.subgraph(component).copy() for comp_index, component in components.items()}
-
-        return subgraphs
-
     def save(self, filepath: Path) -> None:
         with open(filepath, "wb") as fh:
             pickle.dump(self, fh)

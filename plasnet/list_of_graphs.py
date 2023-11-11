@@ -1,23 +1,20 @@
 import pickle
 from pathlib import Path
-from typing import Generator, Type, TypeVar
+from typing import Generator, cast
 
-from plasnet.base_graph import BaseGraph
-
-BaseGraphT = TypeVar("BaseGraphT", bound=BaseGraph)
-ListOfGraphsT = TypeVar("ListOfGraphsT", bound="ListOfGraphs")
+from plasnet.base_graph import BaseGraphType
 
 
-class ListOfGraphs(list[BaseGraphT]):
+class ListOfGraphs(list[BaseGraphType]):
     def save(self, filepath: Path) -> None:
         with open(filepath, "wb") as fh:
             pickle.dump(self, fh)
 
     @classmethod
-    def load(cls: Type[ListOfGraphsT], filepath: Path) -> ListOfGraphsT:
+    def load(cls, filepath: Path) -> "ListOfGraphs[BaseGraphType]":
         with open(filepath, "rb") as fh:
             graphs = pickle.load(fh)
-            return graphs
+            return cast(ListOfGraphs[BaseGraphType], graphs)
 
     def _get_each_graph_as_list_of_nodes_in_text_format(
         self,

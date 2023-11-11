@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from plasnet.base_graph import BaseGraph
+from plasnet.blackhole_graph import BlackholeGraph
 from plasnet.communities import Communities
 from plasnet.list_of_graphs import ListOfGraphs
 from plasnet.subcommunities import Subcommunities
@@ -36,7 +37,7 @@ class OutputProducer:
         OutputProducer._produce_index_file(outdir, subcommunities, "subcommunity", file_descriptors)
 
     @classmethod
-    def _write_html_for_all_subgraphs(cls, subgraphs: ListOfGraphs, outdir: Path) -> list[FileDescriptor]:
+    def _write_html_for_all_subgraphs(cls, subgraphs: ListOfGraphs[BaseGraph], outdir: Path) -> list[FileDescriptor]:
         graphs_dir = outdir / "graphs"
         graphs_dir.mkdir(exist_ok=True, parents=True)
         file_descriptors = []
@@ -53,7 +54,7 @@ class OutputProducer:
     @staticmethod
     def _produce_index_file(
         outdir: Path,
-        graphs: ListOfGraphs,
+        graphs: ListOfGraphs[BlackholeGraph],
         objects_description: str,
         file_descriptors: list[FileDescriptor],
         graph_to_sample_to_plasmids: Any = None,  # TODO: fix this when adding sample hits

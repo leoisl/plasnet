@@ -2,15 +2,17 @@ import json
 import pickle
 from abc import abstractmethod
 from pathlib import Path
-from typing import Any, TextIO
+from typing import Any, TextIO, Type, TypeVar, cast
 
 import networkx as nx
 
 from plasnet.ColorPicker import ColorPicker
 from plasnet.Templates import Templates
 
+BaseGraphType = TypeVar("BaseGraphType", bound="BaseGraph")
 
-class BaseGraph(nx.Graph):
+
+class BaseGraph(nx.Graph):  # type: ignore
     """
     Class to represent a base class to concentrate common methods between the different types of graphs.
     """
@@ -152,11 +154,11 @@ class BaseGraph(nx.Graph):
         with open(filepath, "wb") as fh:
             pickle.dump(self, fh)
 
-    @staticmethod
-    def load(filepath: Path) -> "BaseGraph":
+    @classmethod
+    def load(cls: Type[BaseGraphType], filepath: Path) -> BaseGraphType:
         with open(filepath, "rb") as fh:
             graph = pickle.load(fh)
-            return graph
+            return cast(BaseGraphType, graph)
 
     def write_classification(self, typing_fh: TextIO) -> None:
         for node in self.nodes:

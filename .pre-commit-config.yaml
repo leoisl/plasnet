@@ -34,7 +34,7 @@ repos:
     -   id: mypy
         additional_dependencies: [tokenize-rt==5.2.0, pandas-stubs==2.1.1.230928, types-click==7.1.8]
         args: [
-          --strict,
+          --strict,  # Note: try not to remove strict type checking
           --ignore-missing-imports
         ]
         log_file: mypy.log

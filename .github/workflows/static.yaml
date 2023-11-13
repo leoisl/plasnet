@@ -35,6 +35,9 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
+
       - name: Install
         run:  make install-ci
 

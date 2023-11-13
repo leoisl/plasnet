@@ -1,3 +1,4 @@
+# Inspired by https://github.com/snakemake/snakefmt/blob/master/Makefile
 PROJECT = plasnet
 OS := $(shell uname -s)
 VERSION := $(shell poetry version -s)

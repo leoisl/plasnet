@@ -9,6 +9,31 @@ Python package for clustering, typing, visualisation and exploration of plasmid 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+## TLDR
+
+`plasnet` allows you to cluster, type and visualise plasmids given their evolutionary distance, computed upstream.
+
+### split
+
+The first `plasnet` command is `split`. It creates a plasmid graph given a list of plasmids and their pairwise distances.
+It then splits this graph into communities. Communities are groups of plasmids that roughly connected to each other.
+This command allows you to view the full plasmids graph and also the isolated communities.
+
+[Click here to view an example of the full plasmid graph from the latest version on an example dataset](https://leoisl.github.io/plasnet/split_out/visualisations/single_graph/single_graph.html)
+
+[Click here to view an example of the isolated communities from the latest version on an example dataset](https://leoisl.github.io/plasnet/split_out/visualisations/communities/index.html)
+
+### type
+
+This command allows you to refine the communities defined in the `split` command into types or subcommunities.
+The idea is that you can use a more precise distance function to type the communities than the one used to split the graph.
+The different types or subcommunities will have different colours in the visualisation.
+
+[Click here to view an example of the typed communities from the latest version on an example dataset](https://leoisl.github.io/plasnet/type_out/visualisations/communities/index.html)
+
+[Click here to view an example of the typed isolated subcommunities from the latest version on an example dataset](https://leoisl.github.io/plasnet/type_out/visualisations/subcommunities/index.html)
+
+
 ## Installation
 
 ```

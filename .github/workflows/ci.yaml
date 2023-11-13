@@ -31,6 +31,9 @@ jobs:
     - name: Test
       run:  make test
 
+    - name: Coverage
+      run:  make coverage
+
     - name: Coverage Badge
       uses: tj-actions/coverage-badge-py@v2
 

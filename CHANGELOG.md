@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/leoisl/plasnet/compare/v0.1.4...v0.1.5) (2023-11-13)
+
+
+### Continuous Integration
+
+* running release-pypi when release is published ([442bdb6](https://github.com/leoisl/plasnet/commit/442bdb6a327a34c910b578e71037d91945fdd46a))
+
 ## [0.1.4](https://github.com/leoisl/plasnet/compare/v0.1.3...v0.1.4) (2023-11-13)
 
 

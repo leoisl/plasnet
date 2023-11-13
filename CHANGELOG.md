@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/leoisl/plasnet/compare/v0.1.2...v0.1.3) (2023-11-13)
+
+
+### Continuous Integration
+
+* automatically uploading plasnet results to gh-pages ([97a434e](https://github.com/leoisl/plasnet/commit/97a434ea15f846f3d4e68ad45f4690588519f537))
+
 ## [0.1.2](https://github.com/leoisl/plasnet/compare/v0.1.1...v0.1.2) (2023-11-13)
 
 

@@ -21,9 +21,9 @@ install-ci:
 pre-commit:
 	poetry run pre-commit run --all-files -v
 
-# .PHONY: test
-# test:
-# 	poetry run pythom -m unittest tests/
+.PHONY: test
+test:
+	poetry run python -m unittest discover -s tests -t .
 
 .PHONY: build
 build:

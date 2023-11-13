@@ -25,6 +25,11 @@ pre-commit:
 test:
 	poetry run python -m unittest discover -s tests -t .
 
+.PHONY: coverage
+coverage:
+	poetry run coverage run -m unittest discover -s tests -t .
+	poetry run coverage report -m
+
 .PHONY: build
 build:
 	poetry build

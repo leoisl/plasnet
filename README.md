@@ -2,6 +2,13 @@
 
 Python package for clustering, typing, visualisation and exploration of plasmid networks.
 
+[![Python CI](https://github.com/leoisl/plasnet/actions/workflows/ci.yaml/badge.svg)](https://github.com/leoisl/plasnet/actions/workflows/ci.yaml/badge.svg)
+![coverage badge](./coverage.svg)
+[![PyPI](https://img.shields.io/pypi/v/plasnet)](https://pypi.org/project/plasnet/)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/plasnet)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 ## Installation
 
 ```

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/leoisl/plasnet/compare/v0.1.5...v0.1.6) (2023-11-13)
+
+
+### Continuous Integration
+
+* allowing release-pypi workflow to be manually triggered ([38b8edc](https://github.com/leoisl/plasnet/commit/38b8edce2ad0cb106722fe895c91f164b482023d))
+
 ## [0.1.5](https://github.com/leoisl/plasnet/compare/v0.1.4...v0.1.5) (2023-11-13)
 
 

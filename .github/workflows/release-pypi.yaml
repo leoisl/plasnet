@@ -3,9 +3,9 @@
 name: Release on PyPI
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  release:
+    types: [created]
+
 
 jobs:
   build-and-publish:

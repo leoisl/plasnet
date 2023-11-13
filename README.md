@@ -2,13 +2,17 @@
 
 Python package for clustering, typing, visualisation and exploration of plasmid networks.
 
-Code under heavy development, not expected to work and not refactored for now.
-
+[![Python CI](https://github.com/leoisl/plasnet/actions/workflows/ci.yaml/badge.svg)](https://github.com/leoisl/plasnet/actions/workflows/ci.yaml/badge.svg)
+![coverage badge](./coverage.svg)
+[![PyPI](https://img.shields.io/pypi/v/plasnet)](https://pypi.org/project/plasnet/)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/plasnet)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ## Installation
 
 ```
-pip install git+https://github.com/leoisl/plasnet
+pip install plasnet
 ```
 
 ## Usage
@@ -19,12 +23,12 @@ pip install git+https://github.com/leoisl/plasnet
 Usage: plasnet [OPTIONS] COMMAND [ARGS]...
 
 Options:
-  --help  Show this message and exit.
+  --version  Show the version and exit.
+  --help     Show this message and exit.
 
 Commands:
   split  Creates and split a plasmid graph into communities
-  type   Type a previously split plasmid graph into subcommunities or types
-
+  type   Type the communities of a previously split plasmid graph into...
 ```
 
 ### split subcommand

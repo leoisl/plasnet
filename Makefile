@@ -21,16 +21,15 @@ install-ci:
 pre-commit:
 	poetry run pre-commit run --all-files -v
 
-# .PHONY: test
-# test:
-# 	poetry run pythom -m unittest tests/
+.PHONY: test
+test:
+	poetry run python -m unittest discover -s tests -t .
+
+.PHONY: coverage
+coverage:
+	poetry run coverage run -m unittest discover -s tests -t .
+	poetry run coverage report -m
 
 .PHONY: build
 build:
 	poetry build
-
-# prints out the commands to run to tag the release and push it
-.PHONY: tag
-tag:
-	@echo "Run $(BOLD)git tag -a $(VERSION) -m <message>$(NORMAL) to tag the release"
-	@echo "Then run $(BOLD)git push upstream $(VERSION)$(NORMAL) to push the tag"

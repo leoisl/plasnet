@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/leoisl/plasnet/compare/v0.1.0...v0.1.1) (2023-11-13)
+
+
+### Continuous Integration
+
+* adding release-pypi workflow for tagged commits ([4b9df0e](https://github.com/leoisl/plasnet/commit/4b9df0e3d7fb9ba42ac28d575988fe5f59af6ba0))
+
 ## 0.1.0 (2023-11-13)
 
 

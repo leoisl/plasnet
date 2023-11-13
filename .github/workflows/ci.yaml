@@ -27,3 +27,6 @@ jobs:
 
     - name: Install
       run:  make install-ci
+
+    - name: Test
+      run:  make test

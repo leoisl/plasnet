@@ -1,5 +1,41 @@
 # Changelog
 
+## [0.1.2](https://github.com/leoisl/plasnet/compare/v0.1.1...v0.1.2) (2023-11-13)
+
+
+### Build System
+
+* adding coverage to dev deps ([263646d](https://github.com/leoisl/plasnet/commit/263646d21dd020f4c3a53354af377abcf49e4932))
+* adding test command to Makefile ([6b20632](https://github.com/leoisl/plasnet/commit/6b206329ea65ab9d228ae6cf0fe50df5c0f248e8))
+* removing tag command from Makefile ([9a7f562](https://github.com/leoisl/plasnet/commit/9a7f5629b343fc763dcfce8426ea7be595706322))
+* updating make coverage ([eecb53f](https://github.com/leoisl/plasnet/commit/eecb53ff76671fb5a121c063986210be80aed902))
+
+
+### Continuous Integration
+
+* adding coverage badge ([584b9cc](https://github.com/leoisl/plasnet/commit/584b9cc53c7b50cd45a0c90a1239a8d82bca908d))
+* CI debugging ([72c1b53](https://github.com/leoisl/plasnet/commit/72c1b539d97d5935515ec38d279ce9fee56b0089))
+* CI debugging ([64d083c](https://github.com/leoisl/plasnet/commit/64d083c2169adbc8268481fe819ccc59d82fd3cc))
+* now running make coverage ([fd0d2c1](https://github.com/leoisl/plasnet/commit/fd0d2c1b6d3845fb3836d454263e8355a0e8fde5))
+* now running tests in CI ([95bc22a](https://github.com/leoisl/plasnet/commit/95bc22a5a3317af2ee4e064b52747cd385fc643a))
+* trying to fix Coverage Push changes step in CI ([44a77cb](https://github.com/leoisl/plasnet/commit/44a77cbd4042a4794ea6ac9b714693f674816b02))
+
+
+### Miscellaneous Chores
+
+* updating readme with badges ([aa4e700](https://github.com/leoisl/plasnet/commit/aa4e7001de139adf9f4ac1c2fc3a545f5756a802))
+
+
+### Documentation
+
+* updating README installation and usage ([29acd34](https://github.com/leoisl/plasnet/commit/29acd34618f94149066002fe27f408cf7932ac9f))
+
+
+### Tests
+
+* adding integration test data ([e718a7b](https://github.com/leoisl/plasnet/commit/e718a7bb3d938d9a4c1ad83ee2faafe086df1bc4))
+* adding split and type command integration tests ([191c049](https://github.com/leoisl/plasnet/commit/191c04923e4c2cb6fdc04a11d87fb86af8d7c4ce))
+
 ## [0.1.1](https://github.com/leoisl/plasnet/compare/v0.1.0...v0.1.1) (2023-11-13)
 
 

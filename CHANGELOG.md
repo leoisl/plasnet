@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.3](https://github.com/leoisl/plasnet/compare/v0.1.2...v0.1.3) (2023-11-13)
+
+
+### Continuous Integration
+
+* automatically uploading plasnet results to gh-pages ([97a434e](https://github.com/leoisl/plasnet/commit/97a434ea15f846f3d4e68ad45f4690588519f537))
+* just generating new visualisations with pushes to the main branch ([3babbcb](https://github.com/leoisl/plasnet/commit/3babbcb059a893cabd6b6ee60b0d7a25875a2c9d))
+* setting up poetry before installing ([e345f4b](https://github.com/leoisl/plasnet/commit/e345f4bf3d41e6907dec658ae29e54eed097a7eb))
+
+
+### Documentation
+
+* adding links to the latest visualisations to README ([4af8669](https://github.com/leoisl/plasnet/commit/4af8669452f6c0734e25182aa47bfc4a90d4637a))
+
 ## [0.1.2](https://github.com/leoisl/plasnet/compare/v0.1.1...v0.1.2) (2023-11-13)
 
 

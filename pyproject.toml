@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "plasnet"
-version = "0.1.4"
+version = "0.1.5"
 description = "Clustering, visualising and exploring plasmid networks"
 authors = ["Leandro Lima <leandro@ebi.ac.uk>"]
 license = "MIT"

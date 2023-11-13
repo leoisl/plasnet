@@ -43,6 +43,9 @@ jobs:
       with:
         files: coverage.svg
 
+    - run: git pull
+    - run: git status
+
     - name: Coverage Commit files
       if: steps.verify-changed-files.outputs.files_changed == 'true'
       run: |
@@ -50,6 +53,8 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git add coverage.svg
         git commit -m "Updated coverage.svg"
+
+    - run: git status
 
     - name: Coverage Push changes
       if: steps.verify-changed-files.outputs.files_changed == 'true'

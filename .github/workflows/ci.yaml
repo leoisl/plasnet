@@ -1,6 +1,4 @@
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
@@ -14,6 +12,10 @@ jobs:
         python-version: [ 3.11 ]
     steps:
     - uses: actions/checkout@v3
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+        fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+        ref: ${{ github.event.pull_request.head.ref }}
 
     - name: Run pre-commit hooks
       uses: pre-commit/action@v3.0.0
@@ -43,9 +45,6 @@ jobs:
       with:
         files: coverage.svg
 
-    - run: git pull
-    - run: git status
-
     - name: Coverage Commit files
       if: steps.verify-changed-files.outputs.files_changed == 'true'
       run: |
@@ -53,8 +52,6 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git add coverage.svg
         git commit -m "Updated coverage.svg"
-
-    - run: git status
 
     - name: Coverage Push changes
       if: steps.verify-changed-files.outputs.files_changed == 'true'

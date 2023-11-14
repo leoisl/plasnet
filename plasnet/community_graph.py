@@ -84,7 +84,7 @@ class CommunityGraph(BlackholeGraph):
             colour = ColorPicker.get_color_given_index(subcommunity_index)
 
             subcommunity = SubcommunityGraph(
-                self._original_graph.subgraph(subcommunity_nodes),
+                self.subgraph(subcommunity_nodes),
                 self._blackhole_connectivity_threshold,
                 self._edge_density,
                 label=f"{self.label}_subcommunity_{subcommunity_index}",

@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.2.0](https://github.com/leoisl/plasnet/compare/v0.1.7...v0.2.0) (2023-11-14)
+
+
+### Continuous Integration
+
+* removing conventional-prs.yaml ([ef78901](https://github.com/leoisl/plasnet/commit/ef78901d0c91a6cf585c6c1811fbb27be35446b7))
+* temporarily removing pylint from pre-commit and ci ([d821f19](https://github.com/leoisl/plasnet/commit/d821f1949e6b677acff6090a8a9b6b71408e7793))
+
+
+### Features
+
+* edges now show the split and type distance in their labels ([51c5c00](https://github.com/leoisl/plasnet/commit/51c5c00d42544f80baf1b3b7277353fac0d36db2))
+
+
+### Bug Fixes
+
+* colouring the original communities, pre-typing, in the type command ([0fc3821](https://github.com/leoisl/plasnet/commit/0fc382151c42959a126ef91b8e3f531107096edc))
+* removing redundant attribute BlackholeGraph._original_graph ([4e622e0](https://github.com/leoisl/plasnet/commit/4e622e0d074a0e0b87360fe0d1f9f098e72a4149))
+
+
+### Tests
+
+* updating tests/data/communities.pkl ([11c4588](https://github.com/leoisl/plasnet/commit/11c4588b211ccec4fa2ddb814f3cade2e3fdc000))
+
 ## [0.1.7](https://github.com/leoisl/plasnet/compare/v0.1.6...v0.1.7) (2023-11-14)
 
 

@@ -117,3 +117,7 @@ class CommunityGraph(BlackholeGraph):
                 edges_to_remove.append(edge)
 
         self.remove_edges_from(edges_to_remove)
+
+    def recolour_nodes(self, other_community: "CommunityGraph") -> None:
+        for node in self.nodes:
+            self._node_to_colour[node] = other_community._node_to_colour[node]

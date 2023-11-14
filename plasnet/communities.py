@@ -12,3 +12,7 @@ class Communities(ListOfGraphs[CommunityGraph]):
     def filter_by_distance(self, distance_threshold: float) -> None:
         for community in self:
             community.filter_by_distance(distance_threshold)
+
+    def recolour_nodes(self, other_communities: "Communities") -> None:
+        for my_community, other_community in zip(self, other_communities):
+            my_community.recolour_nodes(other_community)

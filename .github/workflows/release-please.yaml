@@ -30,3 +30,4 @@ jobs:
               { "type": "style", "section": "Styles", "hidden": false },
               { "type": "test", "section": "Tests", "hidden": false }
             ]
+          token: ${{ secrets.RELEASEPLEASEPAT }}

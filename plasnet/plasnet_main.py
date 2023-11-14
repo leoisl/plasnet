@@ -1,4 +1,5 @@
 import logging
+from copy import deepcopy
 from pathlib import Path
 from typing import cast
 
@@ -180,12 +181,18 @@ def type(
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    logging.info(f"Loading distances from {distances}")
+    logging.info(f"Loading typing distances from {distances}")
     distance_df = pd.read_csv(distances, sep="\t")
     distance_dict = distance_df_to_dict(distance_df)
 
-    logging.info("Filtering communities by distance")
-    communities.filter_by_distance(distance_dict, distance_threshold)
+    logging.info("Adding typing distance in plasmid graph")
+    communities.add_typing_distances(distance_dict)
+
+    logging.info("Backing up communities before applying distance filter")
+    original_communities = deepcopy(communities)
+
+    logging.info("Applying distance filter")
+    communities.filter_by_distance(distance_threshold)
 
     logging.info("Typing communities (i.e. splitting them into subcommunities)")
     all_subcommunities = Subcommunities()
@@ -197,8 +204,9 @@ def type(
         all_subcommunities.extend(subcommunities)
 
     logging.info("Producing communities visualisations")
+    original_communities.recolour_nodes(communities)
     OutputProducer.produce_communities_visualisation(
-        communities, output_dir / "visualisations/communities"
+        original_communities, output_dir / "visualisations/communities"
     )
 
     logging.info("Producing subcommunities visualisations")
@@ -209,7 +217,7 @@ def type(
     logging.info("Serialising objects")
     objects_dir = output_dir / "objects"
     objects_dir.mkdir(parents=True, exist_ok=True)
-    communities.save(objects_dir / "communities.pkl")
+    original_communities.save(objects_dir / "communities.pkl")
     all_subcommunities.save(objects_dir / "subcommunities.pkl")
     all_subcommunities.save_classification(objects_dir / "typing.tsv", "plasmid\ttype")
 

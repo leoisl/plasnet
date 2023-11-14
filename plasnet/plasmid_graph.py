@@ -6,6 +6,7 @@ import pandas as pd
 from plasnet.base_graph import BaseGraph
 from plasnet.communities import Communities
 from plasnet.community_graph import CommunityGraph
+from plasnet.utils import DistanceTags
 
 
 class PlasmidGraph(BaseGraph):
@@ -58,19 +59,24 @@ class PlasmidGraph(BaseGraph):
         plasmids = pd.read_csv(plasmids_filepath)
 
         distance_df = pd.read_csv(distance_filepath, sep="\t")
+        distance_df[DistanceTags.SplitDistanceTag.value] = distance_df["distance"]
 
         # apply distance threshold
-        distance_df = distance_df[distance_df["distance"] <= distance_threshold]
+        distance_df = distance_df[
+            distance_df[DistanceTags.SplitDistanceTag.value] <= distance_threshold
+        ]
 
         # round distance to 2 decimals
-        distance_df["distance"] = distance_df["distance"].round(2)
+        distance_df[DistanceTags.SplitDistanceTag.value] = distance_df[
+            DistanceTags.SplitDistanceTag.value
+        ].round(2)
 
         # create graph
         graph = nx.from_pandas_edgelist(
             distance_df,
             source="plasmid_1",
             target="plasmid_2",
-            edge_attr="distance",
+            edge_attr=DistanceTags.SplitDistanceTag.value,
             create_using=PlasmidGraph,
         )
         graph.add_nodes_from(plasmids["plasmid"])

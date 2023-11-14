@@ -19,7 +19,6 @@ class BlackholeGraph(BaseGraph):
         label: str = "",
     ):
         super().__init__(graph, label)
-        self._original_graph = graph
         self._blackhole_connectivity_threshold = blackhole_connectivity_threshold
         self._edge_density = edge_density
         self._blackhole_plasmids = self._get_blackhole_plasmids()
@@ -40,7 +39,7 @@ class BlackholeGraph(BaseGraph):
         for node in self.nodes:
             if self.degree(node) >= self._blackhole_connectivity_threshold:
                 neighbors = list(self.neighbors(node))
-                subgraph = nx.induced_subgraph(self._original_graph, neighbors)
+                subgraph = nx.induced_subgraph(self, neighbors)
                 nb_of_edges_between_neighbours = subgraph.number_of_edges()
                 max_nb_of_edges_between_neighbours = (len(neighbors) * (len(neighbors) - 1)) // 2
                 edge_rate = nb_of_edges_between_neighbours / max_nb_of_edges_between_neighbours

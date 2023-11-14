@@ -1,4 +1,5 @@
 import json
+import math
 import pickle
 from abc import abstractmethod
 from pathlib import Path
@@ -8,6 +9,7 @@ import networkx as nx
 
 from plasnet.ColorPicker import ColorPicker
 from plasnet.Templates import Templates
+from plasnet.utils import DistanceTags
 
 BaseGraphType = TypeVar("BaseGraphType", bound="BaseGraph")
 
@@ -57,6 +59,17 @@ class BaseGraph(nx.Graph):  # type: ignore
             attrs["shape"] = self._get_node_shape(node)
             self._add_special_node_attributes(node, attrs)
 
+    def fix_edge_attributes(self) -> None:
+        for edge, attrs in self.edges.items():
+            distances = (
+                attrs.get(DistanceTags.SplitDistanceTag.value, math.nan),
+                attrs.get(DistanceTags.TypeDistanceTag.value, math.nan),
+            )
+            filtered_distances = filter(lambda x: not math.isnan(x), distances)
+            string_distances = map(str, filtered_distances)
+            distance_label = " / ".join(string_distances)
+            attrs["d_lbl"] = distance_label
+
     def get_induced_components(self, nodes: list[str]) -> "BaseGraph":
         subgraph = self.subgraph(nodes)
         return BaseGraph(nx.connected_components(subgraph))
@@ -73,6 +86,7 @@ class BaseGraph(nx.Graph):  # type: ignore
 
     def produce_visualisation(self) -> str:
         self.fix_node_attributes()
+        self.fix_edge_attributes()
         visualisation_src = Templates.read_template("visualisation_template")
 
         graph_as_cy_dict = nx.cytoscape_data(self)

@@ -180,12 +180,15 @@ def type(
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    logging.info(f"Loading distances from {distances}")
+    logging.info(f"Loading typing distances from {distances}")
     distance_df = pd.read_csv(distances, sep="\t")
     distance_dict = distance_df_to_dict(distance_df)
 
-    logging.info("Filtering communities by distance")
-    communities.filter_by_distance(distance_dict, distance_threshold)
+    logging.info("Adding typing distance in plasmid graph")
+    communities.add_typing_distances(distance_dict)
+
+    logging.info("Applying distance filter")
+    communities.filter_by_distance(distance_threshold)
 
     logging.info("Typing communities (i.e. splitting them into subcommunities)")
     all_subcommunities = Subcommunities()

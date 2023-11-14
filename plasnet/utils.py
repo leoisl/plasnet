@@ -1,3 +1,4 @@
+from enum import Enum
 from pathlib import Path
 from typing import Optional
 
@@ -21,6 +22,11 @@ class PathlibPath(click.Path):
 
 
 DistanceDict = dict[tuple[str, str], float]
+
+
+class DistanceTags(Enum):
+    SplitDistanceTag = "sd"
+    TypeDistanceTag = "td"
 
 
 def distance_df_to_dict(df: pd.DataFrame) -> DistanceDict:

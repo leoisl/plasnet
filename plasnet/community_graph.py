@@ -6,7 +6,7 @@ from plasnet.blackhole_graph import BlackholeGraph
 from plasnet.ColorPicker import ColorPicker
 from plasnet.subcommunities import Subcommunities
 from plasnet.subcommunity_graph import SubcommunityGraph
-from plasnet.utils import DistanceDict
+from plasnet.utils import DistanceDict, DistanceTags
 
 
 class CommunityGraph(BlackholeGraph):
@@ -71,7 +71,9 @@ class CommunityGraph(BlackholeGraph):
         self, small_subcommunity_size_threshold: int
     ) -> Subcommunities:
         subcommunities_nodes: list[set[str]] = list(
-            nx.community.asyn_lpa_communities(G=self, weight="weight", seed=42)
+            nx.community.asyn_lpa_communities(
+                G=self, weight=DistanceTags.TypeDistanceTag.value, seed=42
+            )
         )
         subcommunities_nodes = self._fix_small_subcommunities(
             subcommunities_nodes, small_subcommunity_size_threshold
@@ -101,16 +103,17 @@ class CommunityGraph(BlackholeGraph):
     def _get_samples_selectors_HTML(self) -> str:
         return ""
 
-    def filter_by_distance(self, distance_dict: DistanceDict, distance_threshold: float) -> None:
-        # go through each edge and remove it if the distance is above the threshold
+    def add_typing_distances(self, distance_dict: DistanceDict) -> None:
+        for edge in self.edges:
+            self.edges[edge][DistanceTags.TypeDistanceTag.value] = distance_dict[edge]
+
+    def filter_by_distance(self, distance_threshold: float) -> None:
         edges_to_remove = []
         for edge in self.edges:
-            u, v = edge
-            distance = distance_dict[(u, v)]
-            if distance > distance_threshold:
+            edge_should_be_removed = (
+                self.edges[edge][DistanceTags.TypeDistanceTag.value] > distance_threshold
+            )
+            if edge_should_be_removed:
                 edges_to_remove.append(edge)
-            else:
-                # update the the weight of the edge to the distance
-                self.edges[u, v]["weight"] = distance
 
         self.remove_edges_from(edges_to_remove)

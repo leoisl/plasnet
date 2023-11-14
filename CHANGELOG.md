@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/leoisl/plasnet/compare/v0.1.6...v0.1.7) (2023-11-14)
+
+
+### Continuous Integration
+
+* now correctly making release-pypi deploy to pypi once a release is published ([f05f764](https://github.com/leoisl/plasnet/commit/f05f7644595312da106facb210709ed4d5c91a48))
+
 ## [0.1.6](https://github.com/leoisl/plasnet/compare/v0.1.5...v0.1.6) (2023-11-13)
 
 

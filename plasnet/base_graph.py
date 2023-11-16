@@ -36,10 +36,19 @@ class BaseGraph(nx.Graph):  # type: ignore
     def __init__(self, graph: Optional[nx.Graph] = None, label: str = "") -> None:
         super().__init__(graph)
         self._label = label
+        self._path: Optional[Path] = None  # path to html file for visualisation of this graph
 
     @property
     def label(self) -> str:
         return self._label
+
+    @property
+    def path(self) -> Optional[Path]:
+        return self._path
+
+    @path.setter
+    def path(self, path: Path) -> None:
+        self._path = path
 
     def _get_node_color(self, node: str) -> str:
         return ColorPicker.get_default_color()

@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.2.1](https://github.com/leoisl/plasnet/compare/v0.2.0...v0.2.1) (2023-11-16)
+
+
+### Bug Fixes
+
+* removing unused tag in index_template.html ([33d9690](https://github.com/leoisl/plasnet/commit/33d96901b7a41073429c1901e7e8c62d04c2b193))
+
+
+### Code Refactoring
+
+* adding attribute description to BaseGraph instead of computing it when producing visualiation ([a2496fc](https://github.com/leoisl/plasnet/commit/a2496fcd0ef9cc50e575c190edc2a2bb5d27e084))
+* adding attribute path to BaseGraph instead of computing it when producing the visualisation ([4367bc0](https://github.com/leoisl/plasnet/commit/4367bc03bb8ff8a85e89ed8e58e92ea1c89f323f))
+* adding method ListOfGraphs.get_graphs_sorted_by_size() instead of computing this during visualisation ([69d1db7](https://github.com/leoisl/plasnet/commit/69d1db756ed99beea1e018a3e64f7554a09655ce))
+* big refactor in OutputProducer, using the previous changes to produce visualisation ([750a8de](https://github.com/leoisl/plasnet/commit/750a8decc9f87c31556d2576b1ff376dfda9146b))
+* graph parameter in BaseGraph classes and its subclasses is now properly typed as Optional ([09f92cf](https://github.com/leoisl/plasnet/commit/09f92cf41cd615342c1ebd2dd34b098bc7c2829e))
+
 ## [0.2.0](https://github.com/leoisl/plasnet/compare/v0.1.7...v0.2.0) (2023-11-14)
 
 

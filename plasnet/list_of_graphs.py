@@ -32,3 +32,6 @@ class ListOfGraphs(list[BaseGraphType]):
             print(header, file=fh)
             for subgraph in self:
                 subgraph.write_classification(fh)
+
+    def get_graphs_sorted_by_size(self) -> "ListOfGraphs[BaseGraphType]":
+        return ListOfGraphs(sorted(self, key=lambda graph: graph.number_of_nodes(), reverse=True))

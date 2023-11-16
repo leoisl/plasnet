@@ -3,7 +3,7 @@ import math
 import pickle
 from abc import abstractmethod
 from pathlib import Path
-from typing import Any, TextIO, Type, TypeVar, cast
+from typing import Any, Optional, TextIO, Type, TypeVar, cast
 
 import networkx as nx
 
@@ -33,13 +33,26 @@ class BaseGraph(nx.Graph):  # type: ignore
     #         else:
     #             attrs["is_blackhole"] = False
 
-    def __init__(self, graph: nx.Graph = None, label: str = "") -> None:
+    def __init__(self, graph: Optional[nx.Graph] = None, label: str = "") -> None:
         super().__init__(graph)
         self._label = label
+        self._path: Optional[Path] = None  # path to html file for visualisation of this graph
 
     @property
     def label(self) -> str:
         return self._label
+
+    @property
+    def path(self) -> Optional[Path]:
+        return self._path
+
+    @path.setter
+    def path(self, path: Path) -> None:
+        self._path = path
+
+    @property
+    def description(self) -> str:
+        return f"{self.label} ({self.number_of_nodes()} nodes, {self.number_of_edges()} edges)"
 
     def _get_node_color(self, node: str) -> str:
         return ColorPicker.get_default_color()

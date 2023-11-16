@@ -1,5 +1,5 @@
 import logging
-from typing import Any
+from typing import Any, Optional
 
 import networkx as nx
 
@@ -13,7 +13,7 @@ class BlackholeGraph(BaseGraph):
 
     def __init__(
         self,
-        graph: nx.Graph = None,
+        graph: Optional[nx.Graph] = None,
         blackhole_connectivity_threshold: int = 0,
         edge_density: float = 0.0,
         label: str = "",

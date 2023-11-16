@@ -1,3 +1,5 @@
+from typing import Optional
+
 import networkx as nx
 
 from plasnet.blackhole_graph import BlackholeGraph
@@ -7,7 +9,7 @@ from plasnet.ColorPicker import ColorPicker
 class SubcommunityGraph(BlackholeGraph):
     def __init__(
         self,
-        graph: nx.Graph = None,
+        graph: Optional[nx.Graph] = None,
         blackhole_connectivity_threshold: int = 0,
         edge_density: float = 0.0,
         label: str = "",

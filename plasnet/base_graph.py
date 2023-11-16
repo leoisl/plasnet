@@ -3,7 +3,7 @@ import math
 import pickle
 from abc import abstractmethod
 from pathlib import Path
-from typing import Any, TextIO, Type, TypeVar, cast
+from typing import Any, Optional, TextIO, Type, TypeVar, cast
 
 import networkx as nx
 
@@ -33,7 +33,7 @@ class BaseGraph(nx.Graph):  # type: ignore
     #         else:
     #             attrs["is_blackhole"] = False
 
-    def __init__(self, graph: nx.Graph = None, label: str = "") -> None:
+    def __init__(self, graph: Optional[nx.Graph] = None, label: str = "") -> None:
         super().__init__(graph)
         self._label = label
 

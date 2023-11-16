@@ -50,6 +50,10 @@ class BaseGraph(nx.Graph):  # type: ignore
     def path(self, path: Path) -> None:
         self._path = path
 
+    @property
+    def description(self) -> str:
+        return f"{self.label} ({self.number_of_nodes()} nodes, {self.number_of_edges()} edges)"
+
     def _get_node_color(self, node: str) -> str:
         return ColorPicker.get_default_color()
 

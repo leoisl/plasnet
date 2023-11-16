@@ -70,3 +70,11 @@ class BlackholeGraph(BaseGraph):
 
     def _get_custom_buttons_HTML(self) -> str:
         return '<div><input type="submit" value="Redraw" onclick="redraw()"></div>'
+
+    @property
+    def description(self) -> str:
+        description = super().description
+        blackholes_detected = len(self._blackhole_plasmids) > 0
+        if blackholes_detected:
+            description += " - WARNING: BLACKHOLE SPOTTED!"
+        return description

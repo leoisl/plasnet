@@ -18,8 +18,11 @@ class SampleGraph(SubcommunityGraph):
         sample_plasmid: Optional[pd.DataFrame] = None,
     ):
         super().__init__(graph, blackhole_connectivity_threshold, edge_density, label, colour)
-        assert sample_plasmid is not None, "Sample plasmid dataframe is required"
-        self._sample_to_plasmids = sample_plasmid.groupby("sample")["plasmid"].apply(list).to_dict()
+        if sample_plasmid is not None:
+            self._sample_to_plasmids = (
+                sample_plasmid.groupby("sample")["plasmid"].apply(list).to_dict()
+            )
+
 
     def get_number_of_hit_samples(self) -> int:
         return len(self._sample_to_plasmids)

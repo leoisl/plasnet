@@ -33,6 +33,14 @@ The different types or subcommunities will have different colours in the visuali
 
 [Click here to view an example of the typed isolated subcommunities from the latest version on an example dataset](https://leoisl.github.io/plasnet/type_out/visualisations/subcommunities/index.html)
 
+### add-sample-hits
+
+This command allows you to add sample hits annotations on top of previously identified subcommunities or types
+in the `type` command. With this command you can explore the subcommunities several different samples hit in more
+details and check if they are, for example, sharing plasmids.
+
+[Click here to view an example of two samples hitting a subcommunity](https://leoisl.github.io/plasnet/add_sample_hits_out/visualisations/sample_graphs/graphs/community_1_subcommunity_40.html/)
+
 
 ## Installation
 
@@ -148,4 +156,36 @@ Options:
   AP024796.1      CP024687.1      1000
   AP024796.1      CP026642.1      20
   AP024796.1      CP027485.1      1
+```
+
+### add-sample-hits subcommand
+
+```
+Usage: plasnet add-sample-hits [OPTIONS] SUBCOMMUNITIES_PICKLE SAMPLE_HITS
+                               OUTPUT_DIR
+
+  Add sample hits annotations on top of previously identified subcommunities
+  or types
+
+Options:
+  --help  Show this message and exit.
+
+  Add sample hits annotations on top of previously identified subcommunities or types.
+
+  The first file, describing the subcommunities, is a pickle file (.pkl) that can be found in <type_out_dir>/objects/subcommunities.pkl,
+  where <type_out_dir> is the output dir of the type command.
+
+  The sample-hits file is a tab-separated file with 2 columns: sample, plasmid.
+  These columns are self-explanatory and identifies the plasmids present in each sample.
+  Example of such file:
+  sample              plasmid
+  cpe001_trim_ill     NZ_CP006799.1
+  cpe001_trim_ill     NZ_CP028929.1
+  cpe002_trim_ill     NZ_CP079159.1
+  cpe005_trim_ill     NZ_CP006799.1
+  cpe005_trim_ill     NZ_CP079676.1
+  cpe010_trim_ill     NZ_CP028929.1
+  cpe020_trim_ill     NZ_CP006799.1
+  cpe020_trim_ill     NZ_CP079676.1
+  cpe021_trim_ill     NZ_CP006799.1
 ```

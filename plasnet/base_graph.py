@@ -3,7 +3,7 @@ import math
 import pickle
 from abc import abstractmethod
 from pathlib import Path
-from typing import Any, Optional, TextIO, Type, TypeVar, cast
+from typing import Any, Generator, Optional, TextIO, Type, TypeVar, cast
 
 import networkx as nx
 
@@ -83,9 +83,12 @@ class BaseGraph(nx.Graph):  # type: ignore
             distance_label = " / ".join(string_distances)
             attrs["d_lbl"] = distance_label
 
-    def get_induced_components(self, nodes: list[str]) -> "BaseGraph":
+    def get_induced_components(self, nodes: list[str]) -> Generator["BaseGraph", None, None]:
         subgraph = self.subgraph(nodes)
-        return BaseGraph(nx.connected_components(subgraph))
+        yield from (
+            BaseGraph(subgraph.subgraph(component))
+            for component in nx.connected_components(subgraph)
+        )
 
     TIME_LIMIT_FOR_SMALL_GRAPHS = 1000
     TIME_LIMIT_FOR_LARGE_GRAPHS = 10000
@@ -104,44 +107,6 @@ class BaseGraph(nx.Graph):  # type: ignore
 
         graph_as_cy_dict = nx.cytoscape_data(self)
         elements_as_cy_json = json.dumps(graph_as_cy_dict["elements"])
-
-        """
-        if sample_to_plasmids:
-            samples_selectors = []
-            for sample, plasmids in sample_to_plasmids.items():
-                induced_components = self.get_induced_components(plasmids)
-                for component_index, component in enumerate(induced_components):
-                    node_selector = [f"node#{node}" for node in component]
-                    node_selector = ", ".join(node_selector)
-                    if component_index==0:
-                        samples_selectors.append(f"sample_selector_nodes['{sample}'] = [];")
-                    samples_selectors.append(f"sample_selector_nodes['{sample}'].push(cy.elements('{node_selector}'));")
-            samples_selectors_str = "\n".join(samples_selectors)
-
-            sample_hits_checkboxes = []
-            for sample_index, sample in enumerate(sample_to_plasmids):
-                colour = ColorPicker.get_color_given_index(sample_index)
-                sample_hits_checkboxes.append(
-                    f'<input type="checkbox" id="{sample}" name="{sample}" onclick="show_sample_hits(\'{sample}\', \'{colour}\')">'
-                    f'<label for="{sample}">{sample} ({len(sample_to_plasmids[sample])} hits) <span style="color:{colour}">&#9632;</span></label><br/>'
-                )
-        else:
-            samples_selectors_str = ""
-            sample_hits_checkboxes = []
-
-
-        filters = []
-        if show_blackholes_filter:
-            filters.append(f'<label for="hide_blackholes">Hide blackhole plasmids ({nb_of_black_holes} present)</label>'
-                           f'<input type="checkbox" id="hide_blackholes" name="hide_blackholes"><br/>')
-        if show_samples_filter:
-            filters.append("Show hits for samples:<br/>")
-            filters.extend(sample_hits_checkboxes)
-
-        custom_buttons = []
-        if show_blackholes_filter:
-            custom_buttons.append('<div><input type="submit" value="Redraw" onclick="redraw()"></div>')
-        """  # noqa: E501
 
         # [CRITICAL] TODO: improve this horrible performance
         libs_relative_path = self._get_libs_relative_path()

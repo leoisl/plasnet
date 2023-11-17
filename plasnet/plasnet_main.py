@@ -10,6 +10,8 @@ from plasnet import __version__
 from plasnet.communities import Communities
 from plasnet.output_producer import OutputProducer
 from plasnet.plasmid_graph import PlasmidGraph
+from plasnet.sample_graph import SampleGraph
+from plasnet.sample_graphs import SampleGraphs
 from plasnet.subcommunities import Subcommunities
 from plasnet.utils import PathlibPath, distance_df_to_dict
 
@@ -224,9 +226,72 @@ def type(
     logging.info("All done!")
 
 
+@click.command(
+    help="Add sample hits annotations on top of previously identified subcommunities or types",
+    epilog="""
+\b
+Add sample hits annotations on top of previously identified subcommunities or types.
+
+
+\b
+The first file, describing the subcommunities, is a pickle file (.pkl) that can be found in <type_out_dir>/objects/subcommunities.pkl,
+where <type_out_dir> is the output dir of the type command.
+
+\b
+The sample-hits file is a tab-separated file with 2 columns: sample, plasmid.
+These columns are self-explanatory and identifies the plasmids present in each sample.
+Example of such file:
+sample              plasmid
+cpe001_trim_ill     NZ_CP006799.1
+cpe001_trim_ill     NZ_CP028929.1
+cpe002_trim_ill     NZ_CP079159.1
+cpe005_trim_ill     NZ_CP006799.1
+cpe005_trim_ill     NZ_CP079676.1
+cpe010_trim_ill     NZ_CP028929.1
+cpe020_trim_ill     NZ_CP006799.1
+cpe020_trim_ill     NZ_CP079676.1
+cpe021_trim_ill     NZ_CP006799.1
+""",  # noqa: E501
+)
+@click.argument("subcommunities-pickle", type=PathlibPath(exists=True))
+@click.argument("sample-hits", type=PathlibPath(exists=True))
+@click.argument("output-dir", type=PathlibPath(exists=False))
+def add_sample_hits(
+    subcommunities_pickle: Path,
+    sample_hits: Path,
+    output_dir: Path,
+) -> None:
+    logging.info(f"Loading subcommunities from {subcommunities_pickle}")
+    subcommunities = cast(Subcommunities, Subcommunities.load(subcommunities_pickle))
+
+    logging.info(f"Loading sample hits from {sample_hits}")
+    sample_hits_df = pd.read_csv(sample_hits, sep="\t")
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    logging.info("Producing sample graphs")
+    sample_graphs = SampleGraphs()
+    for subcommunity in subcommunities:
+        sample_plasmid_for_this_subcommunity = sample_hits_df[
+            sample_hits_df["plasmid"].isin(subcommunity.nodes)
+        ]
+        sample_graph = SampleGraph.from_subcommunity_graph(
+            subcommunity, sample_plasmid_for_this_subcommunity
+        )
+        sample_graphs.append(sample_graph)
+
+    logging.info("Producing sample graphs visualisations")
+    OutputProducer.produce_subcommunities_visualisation(
+        sample_graphs, output_dir / "visualisations/sample_graphs"
+    )
+
+    logging.info("All done!")
+
+
 # Add commands to the main group
 cli.add_command(split)
 cli.add_command(type)
+cli.add_command(add_sample_hits)
 
 
 def main() -> None:

@@ -3,7 +3,7 @@ import math
 import pickle
 from abc import abstractmethod
 from pathlib import Path
-from typing import Any, Optional, TextIO, Type, TypeVar, cast
+from typing import Any, Generator, Optional, TextIO, Type, TypeVar, cast
 
 import networkx as nx
 
@@ -83,9 +83,12 @@ class BaseGraph(nx.Graph):  # type: ignore
             distance_label = " / ".join(string_distances)
             attrs["d_lbl"] = distance_label
 
-    def get_induced_components(self, nodes: list[str]) -> "BaseGraph":
+    def get_induced_components(self, nodes: list[str]) -> Generator["BaseGraph", None, None]:
         subgraph = self.subgraph(nodes)
-        return BaseGraph(nx.connected_components(subgraph))
+        yield from (
+            BaseGraph(subgraph.subgraph(component))
+            for component in nx.connected_components(subgraph)
+        )
 
     TIME_LIMIT_FOR_SMALL_GRAPHS = 1000
     TIME_LIMIT_FOR_LARGE_GRAPHS = 10000

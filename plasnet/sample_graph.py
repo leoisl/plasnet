@@ -23,6 +23,18 @@ class SampleGraph(SubcommunityGraph):
                 sample_plasmid.groupby("sample")["plasmid"].apply(list).to_dict()
             )
 
+    @classmethod
+    def from_subcommunity_graph(
+        cls, subcommunity_graph: SubcommunityGraph, sample_plasmid: pd.DataFrame
+    ) -> "SampleGraph":
+        return cls(
+            subcommunity_graph,
+            subcommunity_graph._blackhole_connectivity_threshold,
+            subcommunity_graph._edge_density,
+            subcommunity_graph.label,
+            subcommunity_graph._colour,
+            sample_plasmid,
+        )
 
     def get_number_of_hit_samples(self) -> int:
         return len(self._sample_to_plasmids)

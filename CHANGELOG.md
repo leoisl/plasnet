@@ -1,5 +1,47 @@
 # Changelog
 
+## [0.3.0](https://github.com/leoisl/plasnet/compare/v0.2.0...v0.3.0) (2023-11-17)
+
+
+### Documentation
+
+* updating README.md with add-sample-hits subcommand documentation ([2df8bc5](https://github.com/leoisl/plasnet/commit/2df8bc5246cdd99c24505ee4ff523cd2adca3868))
+
+
+### Features
+
+* adding ListOfSampleGraphs class ([0b29530](https://github.com/leoisl/plasnet/commit/0b2953005045cceea9f59e0db43d203bcfc72449))
+* adding SampleGraph class ([e673f36](https://github.com/leoisl/plasnet/commit/e673f361ed71ebef443f569c394599bb07550d67))
+* adding subcommand add-sample-hits ([34c25b9](https://github.com/leoisl/plasnet/commit/34c25b9a12439a01afa7dd9ed2654af237331519))
+
+
+### Bug Fixes
+
+* adding SampleGraph.from_subcommunity_graph() ([398d863](https://github.com/leoisl/plasnet/commit/398d863a1f6a32c3f26d80d80105b39a0ea1bf23))
+* fixing BaseGraph.get_induced_components() ([d9e277c](https://github.com/leoisl/plasnet/commit/d9e277c2bc6ae3bc8e27f609be7919806b39cb22))
+* fixing HTML sample filters production ([8db01bc](https://github.com/leoisl/plasnet/commit/8db01bc08ab7c740c8bac089aca2bbf8e76f955e))
+* fixing OutputProducer.produce_subcommunities_visualisation() typing ([90875c4](https://github.com/leoisl/plasnet/commit/90875c446d655e25fabd4d5ebd406cedfe8591c6))
+* fixing SampleGraph constructor ([f5edfb0](https://github.com/leoisl/plasnet/commit/f5edfb09f21dc06c4f1dba991af1bb403ba90b32))
+* removing unused tag in index_template.html ([33d9690](https://github.com/leoisl/plasnet/commit/33d96901b7a41073429c1901e7e8c62d04c2b193))
+
+
+### Code Refactoring
+
+* adding attribute description to BaseGraph instead of computing it when producing visualiation ([a2496fc](https://github.com/leoisl/plasnet/commit/a2496fcd0ef9cc50e575c190edc2a2bb5d27e084))
+* adding attribute path to BaseGraph instead of computing it when producing the visualisation ([4367bc0](https://github.com/leoisl/plasnet/commit/4367bc03bb8ff8a85e89ed8e58e92ea1c89f323f))
+* adding method ListOfGraphs.get_graphs_sorted_by_size() instead of computing this during visualisation ([69d1db7](https://github.com/leoisl/plasnet/commit/69d1db756ed99beea1e018a3e64f7554a09655ce))
+* big refactor in OutputProducer, using the previous changes to produce visualisation ([750a8de](https://github.com/leoisl/plasnet/commit/750a8decc9f87c31556d2576b1ff376dfda9146b))
+* graph parameter in BaseGraph classes and its subclasses is now properly typed as Optional ([09f92cf](https://github.com/leoisl/plasnet/commit/09f92cf41cd615342c1ebd2dd34b098bc7c2829e))
+* ListOfSampleGraphs -&gt; SampleGraphs ([9062ca2](https://github.com/leoisl/plasnet/commit/9062ca266b1d927dfadb01a6d14ac8b3d8682c30))
+* removing old code to add sample hits from BaseGraph ([4445907](https://github.com/leoisl/plasnet/commit/444590762fe248dd04a4130c63de0de4423b1737))
+
+
+### Tests
+
+* adding add-sample-hits integration test ([f700e88](https://github.com/leoisl/plasnet/commit/f700e88f603ea9329e64ff758244a637827ad56f))
+* adding subcommunities pickle to test data ([d216dcc](https://github.com/leoisl/plasnet/commit/d216dcc6acf226cc072afb6493b7ee98ad274c8d))
+* updating test data ([6e33af4](https://github.com/leoisl/plasnet/commit/6e33af45d6c05b6a855c01861bc1313d38d6eb5c))
+
 ## [0.2.0](https://github.com/leoisl/plasnet/compare/v0.1.7...v0.2.0) (2023-11-14)
 
 

@@ -39,7 +39,7 @@ This command allows you to add sample hits annotations on top of previously iden
 in the `type` command. With this command you can explore the subcommunities several different samples hit in more
 details and check if they are, for example, sharing plasmids.
 
-[Click here to view an example of two samples hitting a subcommunity](https://leoisl.github.io/plasnet/add_sample_hits_out/visualisations/sample_graphs/graphs/community_1_subcommunity_40.html/)
+[Click here to view an example of two samples hitting a subcommunity](https://leoisl.github.io/plasnet/sample_hits_out/visualisations/sample_graphs/graphs/community_1_subcommunity_40.html)
 
 
 ## Installation

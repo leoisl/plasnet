@@ -5,7 +5,6 @@ from plasnet.base_graph import BaseGraph
 from plasnet.blackhole_graph import BlackholeGraph
 from plasnet.communities import Communities
 from plasnet.list_of_graphs import ListOfGraphs
-from plasnet.subcommunities import Subcommunities
 from plasnet.Templates import Templates
 from plasnet.utils import get_libs_dir
 
@@ -27,7 +26,9 @@ class OutputProducer:
         OutputProducer._produce_index_file(outdir, communities, "Communities")
 
     @staticmethod
-    def produce_subcommunities_visualisation(subcommunities: Subcommunities, outdir: Path) -> None:
+    def produce_subcommunities_visualisation(
+        subcommunities: ListOfGraphs[BlackholeGraph], outdir: Path
+    ) -> None:
         OutputProducer._write_html_for_all_subgraphs(subcommunities, outdir)
         OutputProducer._produce_index_file(outdir, subcommunities, "subcommunity")
 

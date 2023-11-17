@@ -68,7 +68,9 @@ class SampleGraph(SubcommunityGraph):
             )
 
         html_filters = (
-            f"{previous_filters}<br/>" f"Show hits for samples:<br/>" f"{sample_hits_checkboxes}"
+            f"{previous_filters}<br/>"
+            f"Show hits for samples:<br/>"
+            f"{''.join(sample_hits_checkboxes)}"
         )
         return html_filters
 

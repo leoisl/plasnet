@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.1](https://github.com/leoisl/plasnet/compare/v0.3.0...v0.3.1) (2023-11-17)
+
+
+### Continuous Integration
+
+* re-enabling python versions 3.8, 3.9 and 3.10 in the CI tests ([c30c2a0](https://github.com/leoisl/plasnet/commit/c30c2a03a1f9586380976023d1796082b3d71a9b))
+
+
+### Documentation
+
+* small fix to the link of add-sample-hits output in README.md ([ef945bf](https://github.com/leoisl/plasnet/commit/ef945bf6cb48d20c44d984e2b5e9acd0c3089305))
+
 ## [0.3.0](https://github.com/leoisl/plasnet/compare/v0.2.0...v0.3.0) (2023-11-17)
 
 

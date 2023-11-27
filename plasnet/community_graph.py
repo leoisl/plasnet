@@ -122,4 +122,4 @@ class CommunityGraph(BlackholeGraph):
 
     def recolour_nodes(self, other_community: "CommunityGraph") -> None:
         for node in self.nodes:
-            self._node_to_colour[node] = other_community._node_to_colour[node]
+            self._node_to_colour[node] = other_community._get_node_color(node)

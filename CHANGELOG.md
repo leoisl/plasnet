@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/leoisl/plasnet/compare/v0.3.1...v0.3.2) (2023-11-27)
+
+
+### Bug Fixes
+
+* now setting the default colour for blackhole plasmids instead of erroring out with KeyError ([fa966d2](https://github.com/leoisl/plasnet/commit/fa966d2d78412a70b9dea0e268ce83b1d2311e94))
+
 ## [0.3.1](https://github.com/leoisl/plasnet/compare/v0.3.0...v0.3.1) (2023-11-17)
 
 

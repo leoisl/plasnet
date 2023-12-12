@@ -21,15 +21,14 @@ class BlackholeGraph(BaseGraph):
         super().__init__(graph, label)
         self._blackhole_connectivity_threshold = blackhole_connectivity_threshold
         self._edge_density = edge_density
-        self._blackhole_plasmids = self._get_blackhole_plasmids()
 
     def _get_node_shape(self, node: str) -> str:
-        if node in self._blackhole_plasmids:
+        if node in self._get_blackhole_plasmids():
             return "star"
         return "circle"
 
     def _add_special_node_attributes(self, node: str, attrs: dict[str, Any]) -> None:
-        if node in self._blackhole_plasmids:
+        if node in self._get_blackhole_plasmids():
             attrs["is_blackhole"] = True
         else:
             attrs["is_blackhole"] = False
@@ -45,19 +44,19 @@ class BlackholeGraph(BaseGraph):
                 edge_rate = nb_of_edges_between_neighbours / max_nb_of_edges_between_neighbours
                 if edge_rate <= self._edge_density:
                     blackhole_plasmids_in_graph.append(node)
-                    logging.debug(f"{node} is a blackhole plasmid, REMOVED")
+                    logging.debug(f"{node} is a blackhole plasmid")
                 else:
                     logging.debug(
                         f"{node} is highly connected but does not connect "
-                        f"unrelated plasmids, not removed"
+                        f"unrelated plasmids, not a blackhole plasmid"
                     )
         return blackhole_plasmids_in_graph
 
     def get_nb_of_blackhole_plasmids(self) -> int:
-        return len(self._blackhole_plasmids)
+        return len(self._get_blackhole_plasmids())
 
     def remove_blackhole_plasmids(self) -> None:
-        self.remove_nodes_from(self._blackhole_plasmids)
+        self.remove_nodes_from(self._get_blackhole_plasmids())
 
     def _get_filters_HTML(self) -> str:
         nb_of_black_holes = len(self._get_blackhole_plasmids())
@@ -74,7 +73,7 @@ class BlackholeGraph(BaseGraph):
     @property
     def description(self) -> str:
         description = super().description
-        blackholes_detected = len(self._blackhole_plasmids) > 0
+        blackholes_detected = self.get_nb_of_blackhole_plasmids() > 0
         if blackholes_detected:
             description += " - WARNING: BLACKHOLE SPOTTED!"
         return description

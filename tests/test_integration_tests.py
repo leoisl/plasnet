@@ -1,8 +1,21 @@
+from pathlib import Path
 from unittest import TestCase
 
 from click.testing import CliRunner
 
 from plasnet.plasnet_main import cli
+
+
+def check_if_files_are_equal(file_1: Path, file_2: Path, sort: bool = False) -> bool:
+    with open(file_1) as fh1, open(file_2) as fh2:
+        file1_contents = fh1.readlines()
+        file2_contents = fh2.readlines()
+
+        if sort:
+            file1_contents.sort()
+            file2_contents.sort()
+
+        return file1_contents == file2_contents
 
 
 class TestSplitCommand(TestCase):
@@ -59,3 +72,25 @@ class TestAddSampleHitsCommand(TestCase):
             ],
         )
         self.assertEqual(result.exit_code, 0)
+
+
+class TestRemoveBlackholePlasmids(TestCase):
+    def test_remove_blackhole_plasmids(self) -> None:
+        runner = CliRunner()
+        result = runner.invoke(
+            cli,
+            [
+                "type",
+                "tests/data/blackhole/communities.pkl",
+                "tests/data/blackhole/all_plasmids_distances.tsv",
+                "tests/data/blackhole/out",
+            ],
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertTrue(
+            check_if_files_are_equal(
+                Path("tests/data/blackhole/out/objects/typing.tsv"),
+                Path("tests/data/blackhole/truth_typing.tsv"),
+                sort=True,
+            )
+        )

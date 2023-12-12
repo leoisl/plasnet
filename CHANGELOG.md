@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.4](https://github.com/leoisl/plasnet/compare/v0.3.3...v0.3.4) (2023-12-12)
+
+
+### Bug Fixes
+
+* iteratively removing blackholes until convergence ([976c8d1](https://github.com/leoisl/plasnet/commit/976c8d19126de853284316fbab5611fd0836a7a3))
+
 ## [0.3.3](https://github.com/leoisl/plasnet/compare/v0.3.2...v0.3.3) (2023-12-12)
 
 

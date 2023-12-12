@@ -56,7 +56,8 @@ class BlackholeGraph(BaseGraph):
         return len(self._get_blackhole_plasmids())
 
     def remove_blackhole_plasmids(self) -> None:
-        self.remove_nodes_from(self._get_blackhole_plasmids())
+        while self.get_nb_of_blackhole_plasmids() > 0:
+            self.remove_nodes_from(self._get_blackhole_plasmids())
 
     def _get_filters_HTML(self) -> str:
         nb_of_black_holes = len(self._get_blackhole_plasmids())

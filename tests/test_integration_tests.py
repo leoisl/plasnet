@@ -94,3 +94,25 @@ class TestRemoveBlackholePlasmids(TestCase):
                 sort=True,
             )
         )
+
+
+class TestRemoveBlackholePlasmidsIteratively(TestCase):
+    def test_remove_blackhole_plasmids_iteratively(self) -> None:
+        runner = CliRunner()
+        result = runner.invoke(
+            cli,
+            [
+                "type",
+                "tests/data/blackhole_2/communities.pkl",
+                "tests/data/blackhole_2/all_plasmids_distances.tsv",
+                "tests/data/blackhole_2/out",
+            ],
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertTrue(
+            check_if_files_are_equal(
+                Path("tests/data/blackhole_2/out/objects/typing.tsv"),
+                Path("tests/data/blackhole_2/truth_typing.tsv"),
+                sort=True,
+            )
+        )

@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.3](https://github.com/leoisl/plasnet/compare/v0.3.2...v0.3.3) (2023-12-12)
+
+
+### Continuous Integration
+
+* just running coverage if python version is 3.11 ([2084763](https://github.com/leoisl/plasnet/commit/20847632d7016baf3e4448c5e41c5c576b725e43))
+
+
+### Bug Fixes
+
+* fix a bug where plasnet was not correctly recognising blackholes in type command ([92bbefa](https://github.com/leoisl/plasnet/commit/92bbefac76458345bf4e5830ed2adf00a1e4c623))
+
 ## [0.3.2](https://github.com/leoisl/plasnet/compare/v0.3.1...v0.3.2) (2023-11-27)
 
 

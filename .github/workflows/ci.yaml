@@ -33,12 +33,15 @@ jobs:
       run:  make test
 
     - name: Coverage
+      if: matrix.python-version == '3.11'
       run:  make coverage
 
     - name: Coverage Badge
+      if: matrix.python-version == '3.11'
       uses: tj-actions/coverage-badge-py@v2
 
     - name: Verify Changed files
+      if: matrix.python-version == '3.11'
       uses: tj-actions/verify-changed-files@v16
       id: verify-changed-files
       with:

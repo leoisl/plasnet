@@ -60,8 +60,9 @@ Options:
   --help     Show this message and exit.
 
 Commands:
-  split  Creates and split a plasmid graph into communities
-  type   Type the communities of a previously split plasmid graph into...
+  add-sample-hits  Add sample hits annotations on top of previously...
+  split            Creates and split a plasmid graph into communities
+  type             Type the communities of a previously split plasmid...
 ```
 
 ### split subcommand
@@ -81,6 +82,7 @@ Options:
                                   plasmid as blackhole
   -p, --output-plasmid-graph      Also outputs the full, unsplit, plasmid
                                   graph
+  --plasmids-metadata PATH        Plasmids metadata text file.
   --help                          Show this message and exit.
 
   Creates and split a plasmid graph into communities.

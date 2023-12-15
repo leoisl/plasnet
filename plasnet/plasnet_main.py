@@ -1,7 +1,7 @@
 import logging
 from copy import deepcopy
 from pathlib import Path
-from typing import cast
+from typing import Optional, cast
 
 import click
 import pandas as pd
@@ -88,6 +88,9 @@ AP024796.1      CP027485.1      0.8
     is_flag=True,
     help="Also outputs the full, unsplit, plasmid graph",
 )
+@click.option(
+    "--plasmids-metadata", type=PathlibPath(exists=True), help="Plasmids metadata text file."
+)
 def split(
     plasmids: Path,
     distances: Path,
@@ -96,10 +99,14 @@ def split(
     bh_connectivity: int,
     bh_neighbours_edge_density: float,
     output_plasmid_graph: bool,
+    plasmids_metadata: Optional[Path],
 ) -> None:
     visualisations_dir = output_dir / "visualisations"
     logging.info(f"Creating plasmid graph from {plasmids} and {distances}")
-    plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold)
+    metadata = []
+    if plasmids_metadata:
+        metadata = plasmids_metadata.read_text().splitlines()
+    plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold, metadata)
 
     if output_plasmid_graph:
         logging.info("Producing full plasmid graph visualisation")

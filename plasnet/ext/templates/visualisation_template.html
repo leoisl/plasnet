@@ -208,7 +208,11 @@
                         style: {
                             'background-color': 'data(color)',
                             'color': 'data(color)',
-                            'label': 'data(name)',
+                            'label': function(node) {
+                                        var name = node.data('name');
+                                        var metadata = node.data('metadata');
+                                        return metadata ? `${name} (${metadata})` : name;
+                                    },
                             'z-index': 10,
                             'width': 'data(size)',
                             'height': 'data(size)',

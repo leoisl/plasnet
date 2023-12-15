@@ -22,7 +22,10 @@ class PlasmidGraph(BaseGraph):
 
     @staticmethod
     def build(
-        plasmids_filepath: Path, distance_filepath: Path, distance_threshold: float
+        plasmids_filepath: Path,
+        distance_filepath: Path,
+        distance_threshold: float,
+        plasmids_metadata: list[str],
     ) -> "PlasmidGraph":
         """
         Creates a plasmid graph from plasmid and distance files.
@@ -80,7 +83,19 @@ class PlasmidGraph(BaseGraph):
             edge_attr=DistanceTags.SplitDistanceTag.value,
             create_using=PlasmidGraph,
         )
-        graph.add_nodes_from(plasmids["plasmid"])
+
+        # add all nodes to the graph, including those that have no edges
+        # possibly add metadata if they were provided
+        plasmid_metadata_is_too_short = len(plasmids_metadata) < len(plasmids["plasmid"])
+        if plasmid_metadata_is_too_short:
+            amount_to_extend = len(plasmids["plasmid"]) - len(plasmids_metadata)
+            plasmids_metadata.extend([""] * amount_to_extend)
+
+        nodes_and_metadata = [
+            (node, {"metadata": metadata})
+            for node, metadata in zip(plasmids["plasmid"], plasmids_metadata)
+        ]
+        graph.add_nodes_from(nodes_and_metadata)
 
         return PlasmidGraph(graph)
 

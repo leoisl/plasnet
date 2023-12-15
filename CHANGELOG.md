@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/leoisl/plasnet/compare/v0.3.4...v0.4.0) (2023-12-15)
+
+
+### chore
+
+* release 0.4.0 ([a6b7441](https://github.com/leoisl/plasnet/commit/a6b744116216fca7d37917a2ceb365c77f58d781))
+
+
+### Features
+
+* now we can provide metadata to plasmids (param --plasmids-metadata in plasnet split) ([46df1b5](https://github.com/leoisl/plasnet/commit/46df1b556bfdee55b43b6856405f6093985a6af7))
+
 ## [0.3.4](https://github.com/leoisl/plasnet/compare/v0.3.3...v0.3.4) (2023-12-12)
 
 

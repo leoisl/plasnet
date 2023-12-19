@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/leoisl/plasnet/compare/v0.4.0...v0.4.1) (2023-12-19)
+
+
+### Bug Fixes
+
+* add parameter use_cached to BlackholeGraph._get_blackhole_plasmids(), solving the slowdown introduced in releases v0.3.3 and v0.3.4 ([fc7685e](https://github.com/leoisl/plasnet/commit/fc7685e5661f1a3eebb5fb0bd1b477dd2b60987c))
+
 ## [0.4.0](https://github.com/leoisl/plasnet/compare/v0.3.4...v0.4.0) (2023-12-15)
 
 

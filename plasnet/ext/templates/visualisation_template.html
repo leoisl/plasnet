@@ -217,7 +217,7 @@
                             'width': 'data(size)',
                             'height': 'data(size)',
                             'shape': 'data(shape)',
-                            'is_blackhole': 'data(is_blackhole)'
+                            'is_hub': 'data(is_hub)'
                         },
                     },
                     {
@@ -235,13 +235,13 @@
 
             <samples_selectors>
 
-            // hides blackholes
-            hide_blackholes = $("#hide_blackholes").is(":checked")
-            if (hide_blackholes) {
-                blackholes = cy.elements(`node[is_blackhole > 0]`)
-                console.log("Removing the following blackholes:")
-                console.log(blackholes)
-                cy.remove(blackholes)
+            // hides hubs
+            hide_hubs = $("#hide_hubs").is(":checked")
+            if (hide_hubs) {
+                hubs = cy.elements(`node[is_hub > 0]`)
+                console.log("Removing the following hubs:")
+                console.log(hubs)
+                cy.remove(hubs)
             }
 
             // lays out the graph
@@ -279,7 +279,7 @@
               <p>But hopefully they won't be connected, so we can infer they are still different communities.</p>
               <p>Node shapes:</p>
               <p>&#9679; Normal plasmids</p>
-              <p>&#9733; Blackhole plasmids</p>
+              <p>&#9733; Hub plasmids</p>
         </div>
         <div>
                 <br/><br/>

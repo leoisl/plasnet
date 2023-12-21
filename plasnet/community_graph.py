@@ -4,22 +4,22 @@ from typing import Optional
 
 import networkx as nx
 
-from plasnet.blackhole_graph import BlackholeGraph
 from plasnet.ColorPicker import ColorPicker
+from plasnet.hub_graph import HubGraph
 from plasnet.subcommunities import Subcommunities
 from plasnet.subcommunity_graph import SubcommunityGraph
 from plasnet.utils import DistanceDict, DistanceTags
 
 
-class CommunityGraph(BlackholeGraph):
+class CommunityGraph(HubGraph):
     def __init__(
         self,
         graph: Optional[nx.Graph] = None,
-        blackhole_connectivity_threshold: int = 0,
+        hub_connectivity_threshold: int = 0,
         edge_density: float = 0.0,
         label: str = "",
     ):
-        super().__init__(graph, blackhole_connectivity_threshold, edge_density, label)
+        super().__init__(graph, hub_connectivity_threshold, edge_density, label)
         self._node_to_colour: dict[str, str] = {}
 
     def _get_node_color(self, node: str) -> str:
@@ -87,7 +87,7 @@ class CommunityGraph(BlackholeGraph):
 
             subcommunity = SubcommunityGraph(
                 self.subgraph(subcommunity_nodes),
-                self._blackhole_connectivity_threshold,
+                self._hub_connectivity_threshold,
                 self._edge_density,
                 label=f"{self.label}_subcommunity_{subcommunity_index}",
                 colour=colour,

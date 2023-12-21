@@ -20,19 +20,6 @@ class BaseGraph(nx.Graph):  # type: ignore
     between the different types of graphs.
     """
 
-    # def fix_node_to_subcommunity_attributes(self, node_to_subcommunity, blackhole_plasmids):
-    #     for node, attrs in self.nodes.items():
-    #         if node in node_to_subcommunity:
-    #             attrs["color"] = ColorPicker.get_color_given_index(node_to_subcommunity[node])
-    #         else:
-    #             attrs["color"] = ColorPicker.get_default_color()
-    #
-    #         if node in blackhole_plasmids:
-    #             attrs["shape"] = "star"
-    #             attrs["is_blackhole"] = True
-    #         else:
-    #             attrs["is_blackhole"] = False
-
     def __init__(self, graph: Optional[nx.Graph] = None, label: str = "") -> None:
         super().__init__(graph)
         self._label = label

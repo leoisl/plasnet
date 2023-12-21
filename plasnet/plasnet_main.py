@@ -72,15 +72,15 @@ AP024796.1      CP027485.1      0.8
     "-b",
     type=int,
     default=10,
-    help="Minimum number of connections a plasmid need to be considered a blackhole plasmid",
+    help="Minimum number of connections a plasmid need to be considered a hub plasmid",
 )
 @click.option(
     "--bh-neighbours-edge-density",
     "-e",
     type=float,
     default=0.2,
-    help="Maximum number of edge density between blackhole plasmid neighbours to "
-    "label the plasmid as blackhole",
+    help="Maximum number of edge density between hub plasmid neighbours to "
+    "label the plasmid as hub",
 )
 @click.option(
     "--output-plasmid-graph",
@@ -206,7 +206,7 @@ def type(
     logging.info("Typing communities (i.e. splitting them into subcommunities)")
     all_subcommunities = Subcommunities()
     for community in communities:
-        community.remove_blackhole_plasmids()
+        community.remove_hub_plasmids()
         subcommunities = community.split_graph_into_subcommunities(
             small_subcommunity_size_threshold
         )

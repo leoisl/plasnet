@@ -74,45 +74,42 @@ class TestAddSampleHitsCommand(TestCase):
         self.assertEqual(result.exit_code, 0)
 
 
-class TestRemoveBlackholePlasmids(TestCase):
-    def test_remove_blackhole_plasmids(self) -> None:
+class TestRemoveHubPlasmidsIteratively(TestCase):
+    def test_remove_hub_plasmids_iteratively(self) -> None:
         runner = CliRunner()
         result = runner.invoke(
             cli,
             [
-                "type",
-                "tests/data/blackhole/communities.pkl",
-                "tests/data/blackhole/all_plasmids_distances.tsv",
-                "tests/data/blackhole/out",
+                "split",
+                "tests/data/hub/plasmids.tsv",
+                "tests/data/hub/all_pairs_jaccard_distance.tsv",
+                "tests/data/hub/out/split_out",
+                "--distance-threshold",
+                "0.6",
+                "--bh-connectivity",
+                "10",
+                "--bh-neighbours-edge-density",
+                "0.2",
+                "--output-plasmid-graph",
             ],
         )
         self.assertEqual(result.exit_code, 0)
-        self.assertTrue(
-            check_if_files_are_equal(
-                Path("tests/data/blackhole/out/objects/typing.tsv"),
-                Path("tests/data/blackhole/truth_typing.tsv"),
-                sort=True,
-            )
-        )
 
-
-class TestRemoveBlackholePlasmidsIteratively(TestCase):
-    def test_remove_blackhole_plasmids_iteratively(self) -> None:
-        runner = CliRunner()
         result = runner.invoke(
             cli,
             [
                 "type",
-                "tests/data/blackhole_2/communities.pkl",
-                "tests/data/blackhole_2/all_plasmids_distances.tsv",
-                "tests/data/blackhole_2/out",
+                "tests/data/hub/out/split_out/objects/communities.pkl",
+                "tests/data/hub/all_plasmids_distances.tsv",
+                "tests/data/hub/out/type_out",
             ],
         )
         self.assertEqual(result.exit_code, 0)
+
         self.assertTrue(
             check_if_files_are_equal(
-                Path("tests/data/blackhole_2/out/objects/typing.tsv"),
-                Path("tests/data/blackhole_2/truth_typing.tsv"),
+                Path("tests/data/hub/out/type_out/objects/typing.tsv"),
+                Path("tests/data/hub/truth_typing.tsv"),
                 sort=True,
             )
         )

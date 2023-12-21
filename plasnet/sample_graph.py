@@ -11,13 +11,13 @@ class SampleGraph(SubcommunityGraph):
     def __init__(
         self,
         graph: Optional[nx.Graph] = None,
-        blackhole_connectivity_threshold: int = 0,
+        hub_connectivity_threshold: int = 0,
         edge_density: float = 0.0,
         label: str = "",
         colour: str = ColorPicker.get_default_color(),
         sample_plasmid: Optional[pd.DataFrame] = None,
     ):
-        super().__init__(graph, blackhole_connectivity_threshold, edge_density, label, colour)
+        super().__init__(graph, hub_connectivity_threshold, edge_density, label, colour)
         if sample_plasmid is not None:
             self._sample_to_plasmids = (
                 sample_plasmid.groupby("sample")["plasmid"].apply(list).to_dict()
@@ -29,7 +29,7 @@ class SampleGraph(SubcommunityGraph):
     ) -> "SampleGraph":
         return cls(
             subcommunity_graph,
-            subcommunity_graph._blackhole_connectivity_threshold,
+            subcommunity_graph._hub_connectivity_threshold,
             subcommunity_graph._edge_density,
             subcommunity_graph.label,
             subcommunity_graph._colour,

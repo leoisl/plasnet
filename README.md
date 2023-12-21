@@ -75,11 +75,11 @@ Usage: plasnet split [OPTIONS] PLASMIDS DISTANCES OUTPUT_DIR
 Options:
   -d, --distance-threshold FLOAT  Distance threshold
   -b, --bh-connectivity INTEGER   Minimum number of connections a plasmid need
-                                  to be considered a blackhole plasmid
+                                  to be considered a hub plasmid
   -e, --bh-neighbours-edge-density FLOAT
-                                  Maximum number of edge density between
-                                  blackhole plasmid neighbours to label the
-                                  plasmid as blackhole
+                                  Maximum number of edge density between hub
+                                  plasmid neighbours to label the plasmid as
+                                  hub
   -p, --output-plasmid-graph      Also outputs the full, unsplit, plasmid
                                   graph
   --plasmids-metadata PATH        Plasmids metadata text file.

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/leoisl/plasnet/compare/v0.4.2...v0.5.0) (2023-12-21)
+
+
+### Features
+
+* now creating a hub_plasmids.csv file when running the plasnet type command explicitly listing each hub plasmid ([214fb9e](https://github.com/leoisl/plasnet/commit/214fb9e497260657f8b89d8b7b64fccc973c010d))
+
 ## [0.4.2](https://github.com/leoisl/plasnet/compare/v0.4.1...v0.4.2) (2023-12-21)
 
 

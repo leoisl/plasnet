@@ -113,3 +113,11 @@ class TestRemoveHubPlasmidsIteratively(TestCase):
                 sort=True,
             )
         )
+
+        self.assertTrue(
+            check_if_files_are_equal(
+                Path("tests/data/hub/out/type_out/objects/hub_plasmids.csv"),
+                Path("tests/data/hub/hub_plasmids.csv"),
+                sort=True,
+            )
+        )

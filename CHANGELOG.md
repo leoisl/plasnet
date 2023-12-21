@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/leoisl/plasnet/compare/v0.4.1...v0.4.2) (2023-12-21)
+
+
+### Code Refactoring
+
+* switching terminology from blackhole to hub ([c0edfca](https://github.com/leoisl/plasnet/commit/c0edfcaac8de519c4dfffe38e65f98a0872ea49a))
+
 ## [0.4.1](https://github.com/leoisl/plasnet/compare/v0.4.0...v0.4.1) (2023-12-19)
 
 

@@ -55,14 +55,17 @@ class HubGraph(BaseGraph):
 
         return self._hub_plasmids
 
-    def remove_hub_plasmids(self) -> None:
+    def remove_hub_plasmids(self) -> set[str]:
+        all_hub_plasmids = set()
         while True:
             hub_plasmids = self._get_hub_plasmids()
+            all_hub_plasmids.update(hub_plasmids)
             there_are_still_hub_plasmids = len(hub_plasmids) > 0
             if there_are_still_hub_plasmids:
                 self.remove_nodes_from(hub_plasmids)
             else:
                 break
+        return all_hub_plasmids
 
     def _get_filters_HTML(self) -> str:
         nb_of_hubs = len(self._get_hub_plasmids(use_cached=True))

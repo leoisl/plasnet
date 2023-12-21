@@ -205,8 +205,10 @@ def type(
 
     logging.info("Typing communities (i.e. splitting them into subcommunities)")
     all_subcommunities = Subcommunities()
+    all_hub_plasmids = set()
     for community in communities:
-        community.remove_hub_plasmids()
+        hub_plasmids = community.remove_hub_plasmids()
+        all_hub_plasmids.update(hub_plasmids)
         subcommunities = community.split_graph_into_subcommunities(
             small_subcommunity_size_threshold
         )
@@ -229,6 +231,10 @@ def type(
     original_communities.save(objects_dir / "communities.pkl")
     all_subcommunities.save(objects_dir / "subcommunities.pkl")
     all_subcommunities.save_classification(objects_dir / "typing.tsv", "plasmid\ttype")
+    with open(objects_dir / "hub_plasmids.csv", "w") as hub_plasmids_fh:
+        print("hub_plasmids", file=hub_plasmids_fh)
+        for plasmid in all_hub_plasmids:
+            print(plasmid, file=hub_plasmids_fh)
 
     logging.info("All done!")
 

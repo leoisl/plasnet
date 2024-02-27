@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/leoisl/plasnet/compare/v0.5.0...v0.5.1) (2024-02-27)
+
+
+### Bug Fixes
+
+* fix bug: key error exception when building RH PLSDB DB ([3175ca5](https://github.com/leoisl/plasnet/commit/3175ca5cb7ed3a26990cc092ba296021a9cd935f))
+
 ## [0.5.0](https://github.com/leoisl/plasnet/compare/v0.4.2...v0.5.0) (2023-12-21)
 
 

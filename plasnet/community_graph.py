@@ -107,7 +107,9 @@ class CommunityGraph(HubGraph):
 
     def add_typing_distances(self, distance_dict: DistanceDict) -> None:
         for edge in self.edges:
-            self.edges[edge][DistanceTags.TypeDistanceTag.value] = distance_dict[edge]
+            self.edges[edge][DistanceTags.TypeDistanceTag.value] = distance_dict.get(
+                edge, float("inf")
+            )
 
     def filter_by_distance(self, distance_threshold: float) -> None:
         edges_to_remove = []

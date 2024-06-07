@@ -10,6 +10,8 @@ from plasnet.subcommunities import Subcommunities
 from plasnet.subcommunity_graph import SubcommunityGraph
 from plasnet.utils import DistanceDict, DistanceTags
 
+import itertools
+from networkx import edge_betweenness_centrality as betweenness
 
 class CommunityGraph(HubGraph):
     def __init__(
@@ -69,14 +71,31 @@ class CommunityGraph(HubGraph):
                     subcommunities[subcommunity_idx] = set()
         return subcommunities
 
+    #to be used in girvan_newman
+    def most_central_edge(G):
+        centrality = betweenness(G, weight=DistanceTags.TypeDistanceTag.value)
+        return max(centrality, key=centrality.get)
+
     def split_graph_into_subcommunities(
         self, small_subcommunity_size_threshold: int
     ) -> Subcommunities:
-        subcommunities_nodes: list[set[str]] = list(
-            nx.community.girvan_newman(
-                G=self, most_valuable_edge=None
-            )
-        )
+        communities_iterator = girvan_newman(self, most_valuable_edge=most_central_edge)
+    
+        # Use itertools.takewhile to get communities until we exceed 20
+        limited = itertools.takewhile(lambda c: len(c) <= 20, communities_iterator)
+    
+        # Initialize the variable to store the last level with 20 communities
+        subcommunities_nodes: list[set[str]] = []
+    
+        # Iterate through the limited levels to find the last one with exactly 20 communities
+        for communities in limited:
+            if len(communities) == 20:
+                subcommunities_nodes = list(communities)
+                break
+      # If we didn't find exactly 20 communities, handle the case
+        if not subcommunities_nodes:
+            raise ValueError("Could not find a level with exactly 20 communities.")
+
         subcommunities_nodes = self._fix_small_subcommunities(
             subcommunities_nodes, small_subcommunity_size_threshold
         )

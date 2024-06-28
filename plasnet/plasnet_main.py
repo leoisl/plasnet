@@ -89,6 +89,12 @@ AP024796.1      CP027485.1      0.8
     help="Also outputs the full, unsplit, plasmid graph",
 )
 @click.option(
+    "--output-type",
+    type=str,
+    default="html",
+    help="Whether to output networks as html visualisations, cytoscape formatted json, or both."
+)
+@click.option(
     "--plasmids-metadata", type=PathlibPath(exists=True), help="Plasmids metadata text file."
 )
 def split(
@@ -99,6 +105,7 @@ def split(
     bh_connectivity: int,
     bh_neighbours_edge_density: float,
     output_plasmid_graph: bool,
+    output_type: Optional[str],
     plasmids_metadata: Optional[Path],
 ) -> None:
     visualisations_dir = output_dir / "visualisations"
@@ -121,7 +128,7 @@ def split(
 
     logging.info("Producing communities visualisation")
     OutputProducer.produce_communities_visualisation(
-        communities, visualisations_dir / "communities"
+        communities, visualisations_dir / "communities", output_type
     )
 
     logging.info("Serialising objects")
@@ -178,12 +185,19 @@ AP024796.1      CP027485.1      1
     help="Subcommunities with size up to this parameter will be joined to "
     "neighbouring larger subcommunities",
 )
+@click.option(
+    "--output-type",
+    type=str,
+    default="html",
+    help="Whether to output networks as html visualisations, cytoscape formatted json, or both."
+)
 def type(
     communities_pickle: Path,
     distances: Path,
     output_dir: Path,
     distance_threshold: float,
     small_subcommunity_size_threshold: int,
+    output_type: Optional[str],
 ) -> None:
     logging.info(f"Loading communities from {communities_pickle}")
     communities = cast(Communities, Communities.load(communities_pickle))
@@ -217,12 +231,12 @@ def type(
     logging.info("Producing communities visualisations")
     original_communities.recolour_nodes(communities)
     OutputProducer.produce_communities_visualisation(
-        original_communities, output_dir / "visualisations/communities"
+        original_communities, output_dir / "visualisations/communities", output_type
     )
 
     logging.info("Producing subcommunities visualisations")
     OutputProducer.produce_subcommunities_visualisation(
-        all_subcommunities, output_dir / "visualisations/subcommunities"
+        all_subcommunities, output_dir / "visualisations/subcommunities", output_type
     )
 
     logging.info("Serialising objects")
@@ -269,6 +283,12 @@ cpe021_trim_ill     NZ_CP006799.1
 @click.argument("subcommunities-pickle", type=PathlibPath(exists=True))
 @click.argument("sample-hits", type=PathlibPath(exists=True))
 @click.argument("output-dir", type=PathlibPath(exists=False))
+@click.option(
+    "--output-type",
+    type=str,
+    default="html",
+    help="Whether to output networks as html visualisations, cytoscape formatted json, or both."
+)
 def add_sample_hits(
     subcommunities_pickle: Path,
     sample_hits: Path,
@@ -295,7 +315,7 @@ def add_sample_hits(
 
     logging.info("Producing sample graphs visualisations")
     OutputProducer.produce_subcommunities_visualisation(
-        sample_graphs, output_dir / "visualisations/sample_graphs"
+        sample_graphs, output_dir / "visualisations/sample_graphs", output_type
     )
 
     logging.info("All done!")

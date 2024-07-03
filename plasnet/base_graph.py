@@ -95,8 +95,6 @@ class BaseGraph(nx.Graph):  # type: ignore
         graph_as_cy_dict = nx.cytoscape_data(self)
         elements_as_cy_json = json.dumps(graph_as_cy_dict["elements"])
 
-
-
         # [CRITICAL] TODO: improve this horrible performance
         libs_relative_path = self._get_libs_relative_path()
         samples_selectors = self._get_samples_selectors_HTML()

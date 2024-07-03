@@ -92,7 +92,7 @@ AP024796.1      CP027485.1      0.8
     "--output-type",
     type=str,
     default="html",
-    help="Whether to output networks as html visualisations, cytoscape formatted json, or both."
+    help="Whether to output networks as html visualisations, cytoscape formatted json, or both.",
 )
 @click.option(
     "--plasmids-metadata", type=PathlibPath(exists=True), help="Plasmids metadata text file."
@@ -189,7 +189,7 @@ AP024796.1      CP027485.1      1
     "--output-type",
     type=str,
     default="html",
-    help="Whether to output networks as html visualisations, cytoscape formatted json, or both."
+    help="Whether to output networks as html visualisations, cytoscape formatted json, or both.",
 )
 def type(
     communities_pickle: Path,
@@ -287,7 +287,7 @@ cpe021_trim_ill     NZ_CP006799.1
     "--output-type",
     type=str,
     default="html",
-    help="Whether to output networks as html visualisations, cytoscape formatted json, or both."
+    help="Whether to output networks as html visualisations, cytoscape formatted json, or both.",
 )
 def add_sample_hits(
     subcommunities_pickle: Path,

@@ -1,6 +1,6 @@
+import json
 import shutil
 from pathlib import Path
-import json
 
 from plasnet.base_graph import BaseGraph
 from plasnet.communities import Communities
@@ -12,7 +12,9 @@ from plasnet.utils import get_libs_dir
 
 class OutputProducer:
     @staticmethod
-    def produce_graph_visualisation(graph: BaseGraph, html_path: Path = None, json_path: Path = None) -> None:
+    def produce_graph_visualisation(
+        graph: BaseGraph, html_path: Path = None, json_path: Path = None
+    ) -> None:
         outdir = html_path.parent
         outdir.mkdir(exist_ok=True, parents=True)
 
@@ -28,7 +30,9 @@ class OutputProducer:
                 json.dump(json_dict, file)
 
     @staticmethod
-    def produce_communities_visualisation(communities: Communities, outdir: Path, output_type: str) -> None:
+    def produce_communities_visualisation(
+        communities: Communities, outdir: Path, output_type: str
+    ) -> None:
         OutputProducer._write_html_for_all_subgraphs(communities, outdir, output_type)
         if output_type == "html" or output_type == "both":
             OutputProducer._produce_index_file(outdir, communities, "Communities")
@@ -45,7 +49,6 @@ class OutputProducer:
     def _write_html_for_all_subgraphs(
         cls, subgraphs: ListOfGraphs[BaseGraph], outdir: Path, output_type: str
     ) -> None:
-
         if output_type == "html" or output_type == "both":
             graphs_dir = outdir / "graphs"
             graphs_dir.mkdir(exist_ok=True, parents=True)

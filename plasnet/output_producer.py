@@ -67,7 +67,6 @@ class OutputProducer:
                 json_path = json_dir / f"{subgraph.label}.json"
                 with open(json_path, "w") as file:
                     json.dump(json_dict, file)
-                relative_json_path = Path(f"jsons/{subgraph.label}.json")
 
     @staticmethod
     def _produce_index_file(

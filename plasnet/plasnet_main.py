@@ -293,6 +293,7 @@ def add_sample_hits(
     subcommunities_pickle: Path,
     sample_hits: Path,
     output_dir: Path,
+    output_type: Optional[str],
 ) -> None:
     logging.info(f"Loading subcommunities from {subcommunities_pickle}")
     subcommunities = cast(Subcommunities, Subcommunities.load(subcommunities_pickle))

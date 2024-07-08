@@ -79,7 +79,7 @@ class CommunityGraph(HubGraph):
     def split_graph_into_subcommunities(
         self, small_subcommunity_size_threshold: int
     ) -> Subcommunities:
-        communities_iterator = girvan_newman(self, most_valuable_edge=most_central_edge)
+        communities_iterator = nx.community.girvan_newman(G=self, most_valuable_edge=most_central_edge)
     
         # Use itertools.takewhile to get communities until we exceed 20
         limited = itertools.takewhile(lambda c: len(c) <= 20, communities_iterator)

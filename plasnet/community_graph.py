@@ -73,7 +73,7 @@ class CommunityGraph(HubGraph):
 
     #to be used in girvan_newman
     def most_central_edge(G):
-        centrality = betweenness(G, weight=DistanceTags.TypeDistanceTag.value)
+        centrality = betweenness(G, weight=None)
         return max(centrality, key=centrality.get)
 
     def split_graph_into_subcommunities(

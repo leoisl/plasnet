@@ -81,21 +81,19 @@ class CommunityGraph(HubGraph):
     ) -> Subcommunities:
         communities_iterator = nx.community.girvan_newman(G=self, most_valuable_edge=None)
     
-        # Use itertools.takewhile to get communities until we exceed 5
-        limited = itertools.takewhile(lambda c: len(c) <= 5, communities_iterator)
+        # Use itertools.takewhile to get communities until we exceed 20
+        limited = itertools.takewhile(lambda c: len(c) <= 20, communities_iterator)
     
-        # Initialize the variable to store the last level with 5 communities
+        # Initialize the variable to store the last level with 20 communities
         subcommunities_nodes: list[set[str]] = []
     
-        # Iterate through the limited levels to find the last one with exactly 5 communities
+        # Iterate through the limited levels to find the last one with up to 20 communities
         for communities in limited:
-            if len(communities) == 5:
+            if len(communities) <= 20:
                 subcommunities_nodes = list(communities)
+            if len(communities) == 20:
                 break
-      # If we didn't find exactly 5 communities, handle the case
-        if not subcommunities_nodes:
-            raise ValueError("Could not find a level with exactly 5 communities.")
-
+          
         subcommunities_nodes = self._fix_small_subcommunities(
             subcommunities_nodes, small_subcommunity_size_threshold
         )

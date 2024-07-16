@@ -80,20 +80,25 @@ class CommunityGraph(HubGraph):
         self, small_subcommunity_size_threshold: int
     ) -> Subcommunities:
         communities_iterator = nx.community.girvan_newman(G=self, most_valuable_edge=None)
-    
-        # Use itertools.takewhile to get communities until we exceed 5
-        limited = itertools.takewhile(lambda c: len(c) <= 5, communities_iterator)
-    
-        # Initialize the variable to store the last level with 5 communities
+        
         subcommunities_nodes: list[set[str]] = []
     
-        # Iterate through the limited levels to find the last one with up to 5 communities
-        for communities in limited:
-            if len(communities) <= 5:
-                subcommunities_nodes = list(communities)
-            if len(communities) == 5:
-                break
-          
+        # Initialize the variable to store the best level of subcommunities based on modularity
+        best_subcommunities_nodes: list[set[str]] = []
+        best_modularity = -1  # Modularity is always between -1 and 1
+    
+        # Iterate through the communities iterator to find the best level based on modularity
+        for communities in communities_iterator:
+            # Compute the modularity of the current split
+            current_modularity = nx.community.modularity(self, communities)
+            
+            # Update the best subcommunities if the current modularity is better
+            if current_modularity > best_modularity:
+                best_modularity = current_modularity
+                best_subcommunities_nodes = list(communities)
+        
+        subcommunities_nodes = best_subcommunities_nodes  
+        
         subcommunities_nodes = self._fix_small_subcommunities(
             subcommunities_nodes, small_subcommunity_size_threshold
         )

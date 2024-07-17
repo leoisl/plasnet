@@ -86,9 +86,14 @@ class CommunityGraph(HubGraph):
         # Initialize the variable to store the best level of subcommunities based on modularity
         best_subcommunities_nodes: list[set[str]] = []
         best_modularity = -1  # Modularity is always between -1 and 1
-    
+            
         # Iterate through the communities iterator to find the best level based on modularity
         for communities in communities_iterator:
+            
+            # Skip communities with only one node
+            if any(len(community) < 2 for community in communities):
+                continue
+                
             # Compute the modularity of the current split
             current_modularity = nx.community.modularity(self, communities)
             

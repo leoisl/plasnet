@@ -71,7 +71,7 @@ class CommunityGraph(HubGraph):
                     subcommunities[subcommunity_idx] = set()
         return subcommunities
 
-    #to be used in girvan_newman
+    # to be used in girvan_newman
     #def most_central_edge(G):
     #    centrality = betweenness(G, weight=None)
     #    return max(centrality, key=centrality.get)
@@ -89,18 +89,24 @@ class CommunityGraph(HubGraph):
             
         # Iterate through the communities iterator to find the best level based on modularity
         for communities in communities_iterator:
-            
+
+            # Convert the tuple of sets to a list of sets (though it seems automatically done within nx.modularity)
+            community_list = [set(community) for community in communities]
+
             # Skip communities with only one node
-            if any(len(community) < 2 for community in communities):
+            community_list_for_calculation = [community for community in community_list if len(community) > 1]
+
+            # Check if there are any communities left to compute modularity
+            if not community_list_for_calculation:
                 continue
                 
-            # Compute the modularity of the current split
-            current_modularity = nx.community.modularity(self, communities)
+            # Calculate modularity
+            current_modularity = nx.community.modularity(self, community_list_for_calculation)
             
             # Update the best subcommunities if the current modularity is better
             if current_modularity > best_modularity:
                 best_modularity = current_modularity
-                best_subcommunities_nodes = list(communities)
+                best_subcommunities_nodes = community_list
         
         subcommunities_nodes = best_subcommunities_nodes  
         

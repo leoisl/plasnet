@@ -109,7 +109,7 @@ class CommunityGraph(HubGraph):
                     best_modularity = current_modularity
                     best_subcommunities_nodes = community_list
         
-        subcommunities_nodes = best_subcommunities_nodes  
+            subcommunities_nodes = best_subcommunities_nodes  
         
         subcommunities_nodes = self._fix_small_subcommunities(
             subcommunities_nodes, small_subcommunity_size_threshold

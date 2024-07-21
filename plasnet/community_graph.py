@@ -82,31 +82,32 @@ class CommunityGraph(HubGraph):
         communities_iterator = nx.community.girvan_newman(G=self, most_valuable_edge=None)
         
         subcommunities_nodes: list[set[str]] = []
+
+        # Get the first iteration of subcommunities, it's a tuple
+        first_iteration = next(communities_iterator)
     
-        # Initialize the variable to store the best level of subcommunities based on modularity
-        best_subcommunities_nodes: list[set[str]] = []
-        best_modularity = -1  # Modularity is always between -1 and 1
-            
-        # Iterate through the communities iterator to find the best level based on modularity
-        for communities in communities_iterator:
-
-            # Convert the tuple of sets to a list of sets (though it seems automatically done within nx.modularity)
-            community_list = [set(community) for community in communities]
-
-            # Skip communities with only one node
-            community_list_for_calculation = [community for community in community_list if len(community) > 1]
-
-            # Check if there are any communities left to compute modularity
-            if not community_list_for_calculation:
-                continue
+        # Check if there's only one community and if that community has only one node
+        # there is only one set in the tuple and this set only contains one element
+        if len(first_iteration) == 1 and len(next(iter(first_iteration))) == 1:
+            subcommunities_nodes = list(first_iteration)
+        else:
+            # Initialize the variable to store the best level of subcommunities based on modularity
+            best_subcommunities_nodes: list[set[str]] = []
+            best_modularity = -1  # Modularity is always between -1 and 1
                 
-            # Calculate modularity
-            current_modularity = nx.community.modularity(self, community_list_for_calculation)
-            
-            # Update the best subcommunities if the current modularity is better
-            if current_modularity > best_modularity:
-                best_modularity = current_modularity
-                best_subcommunities_nodes = community_list
+            # Iterate through the communities iterator to find the best level based on modularity
+            for communities in communities_iterator:
+    
+                # Convert the tuple of sets to a list of sets (though it seems automatically done within nx.modularity)
+                community_list = [set(community) for community in communities]
+    
+                # Calculate modularity
+                current_modularity = nx.community.modularity(self, community_list)
+                
+                # Update the best subcommunities if the current modularity is better
+                if current_modularity > best_modularity:
+                    best_modularity = current_modularity
+                    best_subcommunities_nodes = community_list
         
         subcommunities_nodes = best_subcommunities_nodes  
         

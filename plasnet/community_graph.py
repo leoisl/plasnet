@@ -82,18 +82,14 @@ class CommunityGraph(HubGraph):
         communities_iterator = nx.community.girvan_newman(G=self, most_valuable_edge=None)
         
         subcommunities_nodes: list[set[str]] = []
-
-        # Get the first iteration of subcommunities, it's a tuple
-        first_iteration = next(communities_iterator)
     
-        # Check if there's only one community and if that community has only one node
-        # there is only one set in the tuple and this set only contains one element
-        if len(first_iteration) == 1 and len(next(iter(first_iteration))) == 1:
-            subcommunities_nodes = list(first_iteration)
+        # Check if there's only one node in the community 
+        if len(self.nodes()) == 1:
+            subcommunities_nodes = [set(self.nodes())]
         else:
             # Initialize the variable to store the best level of subcommunities based on modularity
             best_subcommunities_nodes: list[set[str]] = []
-            best_subcommunities_nodes = [set(self.nodes())] #need the initial value
+            best_subcommunities_nodes = list(nx.connected_components(self)) #some nodes are isolated and needs to be put into separate subcommunity
             best_modularity = nx.community.modularity(self, best_subcommunities_nodes)
                 
             # Iterate through the communities iterator to find the best level based on modularity

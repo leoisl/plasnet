@@ -33,7 +33,7 @@ class OutputProducer:
     def produce_communities_visualisation(
         communities: Communities, outdir: Path, output_type: str
     ) -> None:
-        OutputProducer._write_html_for_all_subgraphs(communities, outdir, output_type)
+        OutputProducer._write_vis_for_all_subgraphs(communities, outdir, output_type)
         if output_type == "html" or output_type == "both":
             OutputProducer._produce_index_file(outdir, communities, "Communities")
 
@@ -41,12 +41,12 @@ class OutputProducer:
     def produce_subcommunities_visualisation(
         subcommunities: ListOfGraphs[HubGraph], outdir: Path, output_type: str
     ) -> None:
-        OutputProducer._write_html_for_all_subgraphs(subcommunities, outdir, output_type)
+        OutputProducer._write_vis_for_all_subgraphs(subcommunities, outdir, output_type)
         if output_type == "html" or output_type == "both":
             OutputProducer._produce_index_file(outdir, subcommunities, "subcommunity")
 
     @classmethod
-    def _write_html_for_all_subgraphs(
+    def _write_vis_for_all_subgraphs(
         cls, subgraphs: ListOfGraphs[BaseGraph], outdir: Path, output_type: str
     ) -> None:
         if output_type == "html" or output_type == "both":

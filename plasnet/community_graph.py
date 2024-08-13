@@ -90,16 +90,28 @@ class CommunityGraph(HubGraph):
             # Initialize the variable to store the best level of subcommunities based on modularity
             best_subcommunities_nodes: list[set[str]] = []
             best_subcommunities_nodes = list(nx.connected_components(self)) #some nodes are isolated and needs to be put into separate subcommunity
-            best_modularity = nx.community.modularity(self, best_subcommunities_nodes)
+            if self.number_of_edges() == 0:
+                best_modularity = 0
+            else:
+                best_modularity = nx.community.modularity(self, best_subcommunities_nodes)
                 
             # Iterate through the communities iterator to find the best level based on modularity
             for communities in communities_iterator:
     
                 # Convert the tuple of sets to a list of sets (though it seems automatically done within nx.modularity)
                 community_list = [set(community) for community in communities]
-    
-                # Calculate modularity
-                current_modularity = nx.community.modularity(self, community_list)
+                
+                # Flatten the communities into a single list of nodes
+                nodes_in_communities = set(node for community in community_list for node in community)                
+
+                # Create the subgraph induced by the nodes in the communities
+                subgraph = self.subgraph(nodes_in_communities)
+                
+                # Check if there are any edges in the subgraph
+                if subgraph.number_of_edges() == 0:
+                    current_modularity = 0  # Return 0 if the subgraph has no edges
+                else:
+                    current_modularity = nx.community.modularity(self, community_list)
                 
                 # Update the best subcommunities if the current modularity is better
                 if current_modularity > best_modularity:

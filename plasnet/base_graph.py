@@ -87,7 +87,7 @@ class BaseGraph(nx.Graph):  # type: ignore
         else:
             return self.TIME_LIMIT_FOR_LARGE_GRAPHS
 
-    def produce_visualisation(self) -> str:
+    def produce_visualisation(self) -> tuple[str, dict]:
         self.fix_node_attributes()
         self.fix_edge_attributes()
         visualisation_src = Templates.read_template("visualisation_template")
@@ -112,7 +112,7 @@ class BaseGraph(nx.Graph):  # type: ignore
             line = line.replace("<custom_buttons_tag>", custom_buttons)
             final_html_lines.append(line)
 
-        return "\n".join(final_html_lines)
+        return "\n".join(final_html_lines), graph_as_cy_dict
 
     @abstractmethod
     def _get_libs_relative_path(self) -> str:

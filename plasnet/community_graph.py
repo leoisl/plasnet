@@ -73,9 +73,7 @@ class CommunityGraph(HubGraph):
         self, small_subcommunity_size_threshold: int
     ) -> Subcommunities:
         subcommunities_nodes: list[set[str]] = list(
-            nx.community.asyn_lpa_communities(
-                G=self, weight=DistanceTags.TypeDistanceTag.value, seed=42
-            )
+            nx.community.asyn_lpa_communities(G=self, seed=42)
         )
         subcommunities_nodes = self._fix_small_subcommunities(
             subcommunities_nodes, small_subcommunity_size_threshold

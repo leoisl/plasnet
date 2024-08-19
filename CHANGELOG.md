@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.6.0](https://github.com/leoisl/plasnet/compare/v0.5.1...v0.6.0) (2024-08-19)
+
+
+### Features
+
+* Allow user to ask for cytoscape compatible json files so they can load the network directly into cytoscape if they want. Default remains the html visualisation. ([aeee623](https://github.com/leoisl/plasnet/commit/aeee6239c5e3192b6aedddea10c5eea5f837db95))
+* Created a style file which can be loaded into cytoscape. This will colour nodes and label edges like in the html visualisations plasnet produces by default. To be used in conjugtion with json files directly in cytoscape. Does not include a layout. Is not outputted by plasnet at any point, as it doesn't change between datasets and only needs to be loaded into cytoscape once. ([db36474](https://github.com/leoisl/plasnet/commit/db3647436bde90c2dbbbd24f830f183d8499b55d))
+
+
+### Bug Fixes
+
+* adding output_type to add_sample_hits() ([792774f](https://github.com/leoisl/plasnet/commit/792774fdf87d4aebc51a5e753bacb571c7d4b31c))
+* Remove weights from asynchronuous label propagation algorithm ([e7cccfc](https://github.com/leoisl/plasnet/commit/e7cccfcb4f354f4a6e05951892db358ab53699cb))
+* removing unused variable relative_json_path ([eab515e](https://github.com/leoisl/plasnet/commit/eab515ea0c0a975597cf53a464093e097fcfa51d))
+
 ## [0.5.1](https://github.com/leoisl/plasnet/compare/v0.5.0...v0.5.1) (2024-02-27)
 
 

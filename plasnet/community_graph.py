@@ -2,6 +2,8 @@
 
 from typing import Optional
 
+from alt_label_propagation import appendable_lpa_communities
+
 import networkx as nx
 
 from plasnet.ColorPicker import ColorPicker
@@ -74,6 +76,34 @@ class CommunityGraph(HubGraph):
     ) -> Subcommunities:
         subcommunities_nodes: list[set[str]] = list(
             nx.community.asyn_lpa_communities(G=self, seed=42)
+        )
+        subcommunities_nodes = self._fix_small_subcommunities(
+            subcommunities_nodes, small_subcommunity_size_threshold
+        )
+
+        subcommunities = []
+        for subcommunity_index, subcommunity_nodes in enumerate(subcommunities_nodes):
+            colour = ColorPicker.get_color_given_index(subcommunity_index)
+
+            subcommunity = SubcommunityGraph(
+                self.subgraph(subcommunity_nodes),
+                self._hub_connectivity_threshold,
+                self._edge_density,
+                label=f"{self.label}_subcommunity_{subcommunity_index}",
+                colour=colour,
+            )
+            subcommunities.append(subcommunity)
+
+            for node in subcommunity_nodes:
+                self._node_to_colour[node] = colour
+
+        return Subcommunities(subcommunities)
+    
+    def split_graph_given_labels(
+            self, small_subcommunity_size_threshold: int, initial_labels: dict
+    ) -> Subcommunities:
+        subcommunities_nodes: list[set[str]] = list(
+            appendable_lpa_communities(G=self, initial_labels=initial_labels, seed=42)
         )
         subcommunities_nodes = self._fix_small_subcommunities(
             subcommunities_nodes, small_subcommunity_size_threshold

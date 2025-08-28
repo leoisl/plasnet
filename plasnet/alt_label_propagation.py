@@ -8,7 +8,7 @@ from networkx.utils import groups, not_implemented_for, py_random_state
 
 @py_random_state(2)
 @nx._dispatchable(edge_attrs="weight")
-def appendable_lpa_communities(G, labels=None, weight=None, seed=None):
+def appendable_lpa_communities(G, initial_labels=None, weight=None, seed=None):
     """Returns communities in `G` as detected by asynchronous label
     propagation.
 
@@ -58,8 +58,14 @@ def appendable_lpa_communities(G, labels=None, weight=None, seed=None):
            networks." Physical Review E 76.3 (2007): 036106.
     """
 
-    if not labels:
+    if not initial_labels:
         labels = {n: i for i, n in enumerate(G)}
+    else:
+        start = max(initial_labels.values())
+        H = G.remove_nodes_from(initial_labels.keys())
+        labels = {n: i+start for i,n in enumerate(H)}
+        labels.update(initial_labels)
+            
     cont = True
 
     while cont:

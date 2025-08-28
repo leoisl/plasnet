@@ -97,6 +97,12 @@ AP024796.1      CP027485.1      0.8
 @click.option(
     "--plasmids-metadata", type=PathlibPath(exists=True), help="Plasmids metadata text file."
 )
+@click.option(
+    "--graph-pickle", type=PathlibPath(exists=True), help="Existing plasmid graph to append new plasmids to."
+)
+@click.option(
+    "--prev_typing", type=PathlibPath(exists=True), help="Previous community typing, if appending to an existing plasmid graph."
+)
 def split(
     plasmids: Path,
     distances: Path,
@@ -107,13 +113,21 @@ def split(
     output_plasmid_graph: bool,
     output_type: Optional[str],
     plasmids_metadata: Optional[Path],
+    graph_pickle: Optional[Path],
+    prev_typing: Optional[Path]
 ) -> None:
     visualisations_dir = output_dir / "visualisations"
     logging.info(f"Creating plasmid graph from {plasmids} and {distances}")
     metadata = []
+
     if plasmids_metadata:
         metadata = plasmids_metadata.read_text().splitlines()
-    plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold, metadata)
+    if graph_pickle:
+        existing_graph = cast(PlasmidGraph, PlasmidGraph.load(graph_pickle))
+        plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold, metadata, existing_graph)
+        typing = pd.read_csv(prev_typing, sep="\t").to_dict()
+    else:
+        plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold, metadata)
 
     if output_plasmid_graph:
         logging.info("Producing full plasmid graph visualisation")
@@ -138,6 +152,7 @@ def split(
     communities.save(objects_dir / "communities.pkl")
     communities.save_graph_as_text(objects_dir / "communities.txt")
     communities.save_classification(objects_dir / "communities.tsv", "plasmid\tcommunity")
+    communities.save_classification(objects_dir / "compare_communities.tsv", "plasmid\tcommunity\tprevious_community", prev_typing=typing)
 
     logging.info("All done!")
 
@@ -191,6 +206,9 @@ AP024796.1      CP027485.1      1
     default="html",
     help="Whether to output networks as html visualisations, cytoscape formatted json, or both.",
 )
+@click.option(
+    "--prev_typing", type=PathlibPath(exists=True), help="Previous subcommunity typing, if it exists."
+)
 def type(
     communities_pickle: Path,
     distances: Path,
@@ -198,6 +216,7 @@ def type(
     distance_threshold: float,
     small_subcommunity_size_threshold: int,
     output_type: Optional[str],
+    prev_typing: Optional[Path]
 ) -> None:
     logging.info(f"Loading communities from {communities_pickle}")
     communities = cast(Communities, Communities.load(communities_pickle))
@@ -249,6 +268,8 @@ def type(
         print("hub_plasmids", file=hub_plasmids_fh)
         for plasmid in all_hub_plasmids:
             print(plasmid, file=hub_plasmids_fh)
+    typing = pd.read_csv(prev_typing, sep="\t").to_dict()
+    all_subcommunities.save_classification(objects_dir / "compare_typing.tsv", "plasmid\ttype\tprevious_type",prev_typing=typing)
 
     logging.info("All done!")
 

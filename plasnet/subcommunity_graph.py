@@ -1,5 +1,7 @@
 from typing import Optional
 
+from alt_label_propagation import appendable_lpa_communities
+
 import networkx as nx
 
 from plasnet.ColorPicker import ColorPicker

@@ -26,6 +26,7 @@ class PlasmidGraph(BaseGraph):
         distance_filepath: Path,
         distance_threshold: float,
         plasmids_metadata: list[str],
+        existing_graph: Optional["PlasmidGraph"]=None
     ) -> "PlasmidGraph":
         """
         Creates a plasmid graph from plasmid and distance files.
@@ -75,6 +76,7 @@ class PlasmidGraph(BaseGraph):
             DistanceTags.SplitDistanceTag.value
         ].round(2)
 
+
         # create graph
         graph = nx.from_pandas_edgelist(
             distance_df,
@@ -83,6 +85,10 @@ class PlasmidGraph(BaseGraph):
             edge_attr=DistanceTags.SplitDistanceTag.value,
             create_using=PlasmidGraph,
         )
+
+        if existing_graph:
+            graph = nx.compose(graph,existing_graph.graph)
+
 
         # add all nodes to the graph, including those that have no edges
         # possibly add metadata if they were provided
@@ -98,6 +104,7 @@ class PlasmidGraph(BaseGraph):
         graph.add_nodes_from(nodes_and_metadata)
 
         return PlasmidGraph(graph)
+    
 
     def split_graph_into_communities(
         self, bh_connectivity: int, bh_neighbours_edge_density: float

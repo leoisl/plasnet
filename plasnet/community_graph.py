@@ -100,8 +100,10 @@ class CommunityGraph(HubGraph):
         return Subcommunities(subcommunities)
     
     def split_graph_given_labels(
-            self, small_subcommunity_size_threshold: int, initial_labels: dict
+            self, small_subcommunity_size_threshold: int, typing: dict
     ) -> Subcommunities:
+        if typing:
+            initial_labels = {n: typing[n].split("_")[-1] for n in self}
         subcommunities_nodes: list[set[str]] = list(
             appendable_lpa_communities(G=self, initial_labels=initial_labels, seed=42)
         )

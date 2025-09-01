@@ -237,14 +237,19 @@ def type(
     communities.filter_by_distance(distance_threshold)
 
     logging.info("Typing communities (i.e. splitting them into subcommunities)")
+    if prev_typing:
+        typing = pd.read_csv(prev_typing, sep="\t").to_dict()
     all_subcommunities = Subcommunities()
     all_hub_plasmids = set()
     for community in communities:
         hub_plasmids = community.remove_hub_plasmids()
         all_hub_plasmids.update(hub_plasmids)
-        subcommunities = community.split_graph_into_subcommunities(
-            small_subcommunity_size_threshold
-        )
+        if prev_typing:
+            subcommunities = community.split_graph_given_labels(small_subcommunity_size_threshold, typing)
+        else:
+            subcommunities = community.split_graph_into_subcommunities(
+                small_subcommunity_size_threshold
+            )
         all_subcommunities.extend(subcommunities)
 
     logging.info("Producing communities visualisations")
@@ -268,8 +273,8 @@ def type(
         print("hub_plasmids", file=hub_plasmids_fh)
         for plasmid in all_hub_plasmids:
             print(plasmid, file=hub_plasmids_fh)
-    typing = pd.read_csv(prev_typing, sep="\t").to_dict()
-    all_subcommunities.save_classification(objects_dir / "compare_typing.tsv", "plasmid\ttype\tprevious_type",prev_typing=typing)
+    if prev_typing:
+        all_subcommunities.save_classification(objects_dir / "compare_typing.tsv", "plasmid\ttype\tprevious_type",prev_typing=typing)
 
     logging.info("All done!")
 

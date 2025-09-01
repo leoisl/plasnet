@@ -7,8 +7,7 @@ from networkx.utils import groups, not_implemented_for, py_random_state
 
 
 @py_random_state(2)
-@nx._dispatchable(edge_attrs="weight")
-def appendable_lpa_communities(G, initial_labels=None, weight=None, seed=None):
+def appendable_lpa_communities(G, initial_labels=None, seed=None):
     """Returns communities in `G` as detected by asynchronous label
     propagation.
 
@@ -58,52 +57,50 @@ def appendable_lpa_communities(G, initial_labels=None, weight=None, seed=None):
            networks." Physical Review E 76.3 (2007): 036106.
     """
 
-    if not initial_labels:
-        labels = {n: i for i, n in enumerate(G)}
-    else:
-        start = max(initial_labels.values())
-        H = G.remove_nodes_from(initial_labels.keys())
-        labels = {n: i+start for i,n in enumerate(H)}
-        labels.update(initial_labels)
-            
-    cont = True
+    if len(initial_labels.keys())!=len(G.nodes): #initial condition already assigned labels to all nodes
 
-    while cont:
-        cont = False
-        nodes = list(G)
-        seed.shuffle(nodes)
+        if not initial_labels:
+            labels = {n: i for i, n in enumerate(G)}
+        else:
+            print(len(initial_labels.keys()), len(G.nodes))
+            start = max(initial_labels.values())
+            H = G.remove_nodes_from(initial_labels.keys())
+            labels = {n: i+start for i,n in enumerate(H)}
+            labels.update(initial_labels)
+                
+        cont = True
 
-        for node in nodes:
-            if not G[node]:
-                continue
+        while cont:
+            cont = False
+            nodes = list(G)
+            seed.shuffle(nodes)
 
-            # Get label frequencies among adjacent nodes.
-            # Depending on the order they are processed in,
-            # some nodes will be in iteration t and others in t-1,
-            # making the algorithm asynchronous.
-            if weight is None:
+            for node in nodes:
+                if not G[node]:
+                    continue
+
+                # Get label frequencies among adjacent nodes.
+                # Depending on the order they are processed in,
+                # some nodes will be in iteration t and others in t-1,
+                # making the algorithm asynchronous.
                 # initialising a Counter from an iterator of labels is
                 # faster for getting unweighted label frequencies
                 label_freq = Counter(map(labels.get, G[node]))
-            else:
-                # updating a defaultdict is substantially faster
-                # for getting weighted label frequencies
-                label_freq = defaultdict(float)
-                for _, v, wt in G.edges(node, data=weight, default=1):
-                    label_freq[labels[v]] += wt
 
-            # Get the labels that appear with maximum frequency.
-            max_freq = max(label_freq.values())
-            best_labels = [
-                label for label, freq in label_freq.items() if freq == max_freq
-            ]
+                # Get the labels that appear with maximum frequency.
+                max_freq = max(label_freq.values())
+                best_labels = [
+                    label for label, freq in label_freq.items() if freq == max_freq
+                ]
 
-            # If the node does not have one of the maximum frequency labels,
-            # randomly choose one of them and update the node's label.
-            # Continue the iteration as long as at least one node
-            # doesn't have a maximum frequency label.
-            if labels[node] not in best_labels:
-                labels[node] = seed.choice(best_labels)
-                cont = True
+                # If the node does not have one of the maximum frequency labels,
+                # randomly choose one of them and update the node's label.
+                # Continue the iteration as long as at least one node
+                # doesn't have a maximum frequency label.
+                if labels[node] not in best_labels:
+                    labels[node] = seed.choice(best_labels)
+                    cont = True
+    else:
+        labels=initial_labels
 
     yield from groups(labels).values()

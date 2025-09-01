@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from alt_label_propagation import appendable_lpa_communities
+from plasnet.alt_label_propagation import appendable_lpa_communities
 
 import networkx as nx
 
@@ -103,7 +103,7 @@ class CommunityGraph(HubGraph):
             self, small_subcommunity_size_threshold: int, typing: dict
     ) -> Subcommunities:
         if typing:
-            initial_labels = {n: typing[n].split("_")[-1] for n in self}
+            initial_labels = {n: typing[n].split("_")[-1] for n in self if n in typing.keys()}
         subcommunities_nodes: list[set[str]] = list(
             appendable_lpa_communities(G=self, initial_labels=initial_labels, seed=42)
         )

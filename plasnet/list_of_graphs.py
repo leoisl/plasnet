@@ -32,7 +32,7 @@ class ListOfGraphs(list[BaseGraphType]):
             print(header, file=fh)
             for subgraph in self:
                 if prev_typing:
-                    subgraph.compare_classification(fh, prev_typing)
+                    subgraph.compare_classification(prev_typing, fh)
                 else:
                     subgraph.write_classification(fh)
                 

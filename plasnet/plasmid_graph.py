@@ -87,7 +87,7 @@ class PlasmidGraph(BaseGraph):
         )
 
         if existing_graph:
-            graph = nx.compose(graph,existing_graph.graph)
+            graph = nx.compose(graph,existing_graph)
 
 
         # add all nodes to the graph, including those that have no edges

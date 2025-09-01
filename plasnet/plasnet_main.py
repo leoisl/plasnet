@@ -238,7 +238,7 @@ def type(
 
     logging.info("Typing communities (i.e. splitting them into subcommunities)")
     if prev_typing:
-        typing = pd.read_csv(prev_typing, sep="\t").to_dict()
+        typing = pd.read_csv(prev_typing, sep="\t", index_col=0).to_dict()["type"]
     all_subcommunities = Subcommunities()
     all_hub_plasmids = set()
     for community in communities:

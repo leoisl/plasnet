@@ -62,9 +62,9 @@ def appendable_lpa_communities(G, initial_labels=None, seed=None):
         if not initial_labels:
             labels = {n: i for i, n in enumerate(G)}
         else:
-            print(len(initial_labels.keys()), len(G.nodes))
             start = max(initial_labels.values())
-            H = G.remove_nodes_from(initial_labels.keys())
+            H = G.copy()
+            H.remove_nodes_from(initial_labels.keys())
             labels = {n: i+start for i,n in enumerate(H)}
             labels.update(initial_labels)
                 

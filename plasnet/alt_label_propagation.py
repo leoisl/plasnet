@@ -57,7 +57,7 @@ def appendable_lpa_communities(G, initial_labels=None, seed=None):
            networks." Physical Review E 76.3 (2007): 036106.
     """
 
-    if len(initial_labels.keys())!=len(G.nodes): #initial condition already assigned labels to all nodes
+    if set(initial_labels.keys())==set(G.nodes): #initial condition already assigned labels to all nodes
 
         if not initial_labels:
             labels = {n: i for i, n in enumerate(G)}

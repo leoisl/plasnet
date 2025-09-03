@@ -125,7 +125,7 @@ def split(
     if graph_pickle:
         existing_graph = cast(PlasmidGraph, PlasmidGraph.load(graph_pickle))
         plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold, metadata, existing_graph)
-        typing = pd.read_csv(prev_typing, sep="\t").to_dict()
+        typing = pd.read_csv(prev_typing, sep="\t", index_col=0).to_dict()["type"]
     else:
         plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold, metadata)
 

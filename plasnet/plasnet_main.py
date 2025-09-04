@@ -152,7 +152,8 @@ def split(
     communities.save(objects_dir / "communities.pkl")
     communities.save_graph_as_text(objects_dir / "communities.txt")
     communities.save_classification(objects_dir / "communities.tsv", "plasmid\tcommunity")
-    communities.save_classification(objects_dir / "compare_communities.tsv", "plasmid\tcommunity\tprevious_community", prev_typing=typing)
+    if prev_typing:
+        communities.save_classification(objects_dir / "compare_communities.tsv", "plasmid\tcommunity\tprevious_community", prev_typing=typing)
 
     logging.info("All done!")
 

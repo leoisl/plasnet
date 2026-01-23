@@ -210,6 +210,10 @@ AP024796.1      CP027485.1      1
 @click.option(
     "--prev_typing", type=PathlibPath(exists=True), help="Previous subcommunity typing, if it exists."
 )
+@click.option(
+    "--biased", is_flag = True, help="If including a previous subcommunity typing, the asynchronous label"
+    "propagation will start with the previous typing as initial labels."
+)
 def type(
     communities_pickle: Path,
     distances: Path,
@@ -217,7 +221,9 @@ def type(
     distance_threshold: float,
     small_subcommunity_size_threshold: int,
     output_type: Optional[str],
-    prev_typing: Optional[Path]
+    prev_typing: Optional[Path],
+    biased: Optional[bool],
+    nearest_neighbour: Optional[bool]
 ) -> None:
     logging.info(f"Loading communities from {communities_pickle}")
     communities = cast(Communities, Communities.load(communities_pickle))
@@ -245,8 +251,10 @@ def type(
     for community in communities:
         hub_plasmids = community.remove_hub_plasmids()
         all_hub_plasmids.update(hub_plasmids)
-        if prev_typing:
+        if prev_typing and biased:
             subcommunities = community.split_graph_given_labels(small_subcommunity_size_threshold, typing)
+        elif prev_typing and nearest_neighbour:
+            subcommunities = community.nearest_neighbours(typing)
         else:
             subcommunities = community.split_graph_into_subcommunities(
                 small_subcommunity_size_threshold

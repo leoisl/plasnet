@@ -129,6 +129,39 @@ class CommunityGraph(HubGraph):
                 self._node_to_colour[node] = colour
 
         return Subcommunities(subcommunities)
+    
+    def nearest_neighbour(
+        self, typing, new_plasmids
+    ) -> Subcommunities:
+        
+        subcommunities_labels = typing[typing["type"]] #select only those that are in this community
+        singletons = []
+        
+        for plasmid in new_plasmids:
+            neighbours = [n for n in self.graph[plasmid]]
+            if len(neighbours)==0:
+                singletons.append(plasmid)
+            else:
+                nearest = min(sorted(neighbours, key=lambda n: self.graph[n,plasmid][DistanceTags.SplitDistanceTag.value]))
+                #modify this to select larger subcommunity if there is multiple nearest neighbours, and random otherwise
+
+        for subcommunity_label in subcommunities_labels:
+            
+            colour = ColorPicker.get_color_given_index(subcommunity_index)
+
+            subcommunity = SubcommunityGraph(
+                self.subgraph(subcommunity_nodes),
+                self._hub_connectivity_threshold,
+                self._edge_density,
+                label=f"{self.label}_subcommunity_{subcommunity_index}", #reuse old labels here!
+                colour=colour,
+            )
+            subcommunities.append(subcommunity)
+
+            for node in subcommunity_nodes:
+                self._node_to_colour[node] = colour
+
+        return Subcommunities(subcommunities)
 
     def _get_libs_relative_path(self) -> str:
         return ".."

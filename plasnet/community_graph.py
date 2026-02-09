@@ -133,32 +133,40 @@ class CommunityGraph(HubGraph):
     def nearest_neighbour(
         self, typing, new_plasmids
     ) -> Subcommunities:
-        
-        subcommunities_labels = typing[typing["type"]] #select only those that are in this community
-        singletons = []
+        subcommunity_names = set(typing["type"].to_list()) 
+        subcommunity_labels = {subcomm:[plasmid for plasmid in typing[typing["type"]==subcomm].values] for subcomm in list(subcommunity_names) if subcomm.split("_")[-1]==self.label} #select only those that are in this community
+        max_label = len(subcommunity_labels.keys())
         
         for plasmid in new_plasmids:
-            neighbours = [n for n in self.graph[plasmid]]
-            if len(neighbours)==0:
-                singletons.append(plasmid)
-            else:
-                nearest = min(sorted(neighbours, key=lambda n: self.graph[n,plasmid][DistanceTags.SplitDistanceTag.value]))
-                #modify this to select larger subcommunity if there is multiple nearest neighbours, and random otherwise
+            if plasmid in self.graph:
+                neighbours = [n for n in self.graph[plasmid]]
+                if len(neighbours)==0:
+                    subcommunity_labels[f"community_{self.label}_subcommunity_{max_label}"] = [plasmid]
+                    max_label = max_label + 1
+                else:
+                    neighbours = sorted(neighbours, key=lambda n: self.graph[n,plasmid][DistanceTags.SplitDistanceTag.value])
+                    min_dist = self.graph[neighbours[0],plasmid][DistanceTags.SplitDistanceTag.value]
+                    nearest = [neighbour for neighbour in neighbours if self.graph[neighbour,plasmid][DistanceTags.SplitDistanceTag.value]==min_dist]
+                    nearest = sorted(nearest, key=lambda n: len(typing[typing["type"]==typing[typing["plasmid"]==n]["type"].values[0]]))
+                    nn = nearest[-1] #select nearest neighbour with largest subcommunity size
+                    subcommunity_labels[typing[typing["plasmid"]==nn]["type"].values[0]].append(nn)
+                
 
-        for subcommunity_label in subcommunities_labels:
-            
+        subcommunities = []
+        for subcommunity_label in subcommunity_labels.keys():
+            subcommunity_index = subcommunity_label.split("_")[-1]
             colour = ColorPicker.get_color_given_index(subcommunity_index)
 
             subcommunity = SubcommunityGraph(
-                self.subgraph(subcommunity_nodes),
+                self.subgraph(subcommunity_labels[subcommunity_label]),
                 self._hub_connectivity_threshold,
                 self._edge_density,
-                label=f"{self.label}_subcommunity_{subcommunity_index}", #reuse old labels here!
+                label=subcommunity_label, #reuse old labels here!
                 colour=colour,
             )
             subcommunities.append(subcommunity)
 
-            for node in subcommunity_nodes:
+            for node in subcommunity_labels[subcommunity_label]:
                 self._node_to_colour[node] = colour
 
         return Subcommunities(subcommunities)

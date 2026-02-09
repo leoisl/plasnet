@@ -244,8 +244,12 @@ def type(
     communities.filter_by_distance(distance_threshold)
 
     logging.info("Typing communities (i.e. splitting them into subcommunities)")
-    if prev_typing:
+
+    if prev_typing and biased:
         typing = pd.read_csv(prev_typing, sep="\t", index_col=0).to_dict()["type"]
+    elif prev_typing and nearest_neighbour:
+        typing = pd.read_csv(prev_typing, sep="\t")
+
     all_subcommunities = Subcommunities()
     all_hub_plasmids = set()
     for community in communities:
@@ -254,7 +258,8 @@ def type(
         if prev_typing and biased:
             subcommunities = community.split_graph_given_labels(small_subcommunity_size_threshold, typing)
         elif prev_typing and nearest_neighbour:
-            subcommunities = community.nearest_neighbours(typing)
+            new_plasmids = [plasmid for plasmid in community.graph.nodes if plasmid not in prev_typing["plasmid"].to_list()]
+            subcommunities = community.nearest_neighbours(typing, new_plasmids)
         else:
             subcommunities = community.split_graph_into_subcommunities(
                 small_subcommunity_size_threshold

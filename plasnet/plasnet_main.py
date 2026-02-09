@@ -214,6 +214,10 @@ AP024796.1      CP027485.1      1
     "--biased", is_flag = True, help="If including a previous subcommunity typing, the asynchronous label"
     "propagation will start with the previous typing as initial labels."
 )
+@click.option(
+    "--nearest-neighbour", is_flag = True, help="If including a previous subcommunity typing, type new plasmids"
+    "based on which previous subcommunity they are closest to."
+)
 def type(
     communities_pickle: Path,
     distances: Path,
@@ -258,8 +262,8 @@ def type(
         if prev_typing and biased:
             subcommunities = community.split_graph_given_labels(small_subcommunity_size_threshold, typing)
         elif prev_typing and nearest_neighbour:
-            new_plasmids = [plasmid for plasmid in community.graph.nodes if plasmid not in prev_typing["plasmid"].to_list()]
-            subcommunities = community.nearest_neighbours(typing, new_plasmids)
+            new_plasmids = [plasmid for plasmid in community.nodes if plasmid not in typing["plasmid"].to_list()]
+            subcommunities = community.nearest_neighbour(typing, new_plasmids)
         else:
             subcommunities = community.split_graph_into_subcommunities(
                 small_subcommunity_size_threshold
@@ -288,6 +292,7 @@ def type(
         for plasmid in all_hub_plasmids:
             print(plasmid, file=hub_plasmids_fh)
     if prev_typing:
+        typing = typing.to_dict()["type"]
         all_subcommunities.save_classification(objects_dir / "compare_typing.tsv", "plasmid\ttype\tprevious_type",prev_typing=typing)
 
     logging.info("All done!")

@@ -134,7 +134,7 @@ class CommunityGraph(HubGraph):
         self, typing, new_plasmids
     ) -> Subcommunities:
         subcommunity_names = set(typing["type"].to_list()) 
-        subcommunity_labels = {subcomm:[plasmid for plasmid in typing[typing["type"]==subcomm].values] for subcomm in list(subcommunity_names) if subcomm.split("_")[-1]==self.label} #select only those that are in this community
+        subcommunity_labels = {subcomm:[plasmid for plasmid in typing[typing["type"]==subcomm]["plasmid"].values] for subcomm in list(subcommunity_names) if subcomm.split("_")[1]==self.label.split("_")[1]} #select only those that are in this community
         max_label = len(subcommunity_labels.keys())
         
         for plasmid in new_plasmids:
@@ -154,7 +154,7 @@ class CommunityGraph(HubGraph):
 
         subcommunities = []
         for subcommunity_label in subcommunity_labels.keys():
-            subcommunity_index = subcommunity_label.split("_")[-1]
+            subcommunity_index = int(subcommunity_label.split("_")[-1])
             colour = ColorPicker.get_color_given_index(subcommunity_index)
 
             subcommunity = SubcommunityGraph(

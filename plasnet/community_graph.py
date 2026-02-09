@@ -100,11 +100,26 @@ class CommunityGraph(HubGraph):
         return Subcommunities(subcommunities)
     
     def split_graph_given_labels(
-            self, small_subcommunity_size_threshold: int, typing: dict
+            self, small_subcommunity_size_threshold: int, typings: list[dict]
     ) -> Subcommunities:
-        if typing:
-            map = {typing[n]: i for i,n in enumerate(typing.keys())}
-            initial_labels = {n: map[typing[n]] for n in self if n in typing.keys()}
+        
+        old_plasmids = [plasmid for typing in typings for plasmid in typing.keys()]
+        new_plasmids = [plasmid for plasmid in self.nodes if plasmid not in old_plasmids]
+        new_subcommunities_nodes: list[set[str]] = list(
+            nx.community.asyn_lpa_communities(G=self.subgraph(new_plasmids), seed=42)
+        )
+
+        label = 0
+        map = {}
+        for typing in typings:
+            for i, n in enumerate(typing.keys()):
+                map[typing[n]] = label + i
+            label = label + len(typing.keys())
+        initial_labels = {n: map[typing[n]] for n in old_plasmids}
+        for subcomm in new_subcommunities_nodes:
+            for plasmid in list(subcomm):
+                initial_labels[plasmid] = label
+                label = label + 1
         subcommunities_nodes: list[set[str]] = list(
             appendable_lpa_communities(G=self, initial_labels=initial_labels, seed=42)
         )
@@ -139,7 +154,7 @@ class CommunityGraph(HubGraph):
         
         for plasmid in new_plasmids:
             if plasmid in self.graph:
-                neighbours = [n for n in self.graph[plasmid]]
+                neighbours = [n for n in self.graph[plasmid] if n not in new_plasmids]
                 if len(neighbours)==0:
                     subcommunity_labels[f"community_{self.label}_subcommunity_{max_label}"] = [plasmid]
                     max_label = max_label + 1

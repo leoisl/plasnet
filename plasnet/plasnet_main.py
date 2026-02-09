@@ -98,10 +98,10 @@ AP024796.1      CP027485.1      0.8
     "--plasmids-metadata", type=PathlibPath(exists=True), help="Plasmids metadata text file."
 )
 @click.option(
-    "--graph-pickle", type=PathlibPath(exists=True), help="Existing plasmid graph to append new plasmids to."
+    "--graph-pickle", multiple=True, help="Existing plasmid graph to append new plasmids to."
 )
 @click.option(
-    "--prev_typing", type=PathlibPath(exists=True), help="Previous community typing, if appending to an existing plasmid graph."
+    "--prev_typing", multiple=True, help="Previous community typing, if appending to an existing plasmid graph."
 )
 def split(
     plasmids: Path,
@@ -113,8 +113,8 @@ def split(
     output_plasmid_graph: bool,
     output_type: Optional[str],
     plasmids_metadata: Optional[Path],
-    graph_pickle: Optional[Path],
-    prev_typing: Optional[Path]
+    graph_pickle: Optional[tuple],
+    prev_typing: Optional[tuple]
 ) -> None:
     visualisations_dir = output_dir / "visualisations"
     logging.info(f"Creating plasmid graph from {plasmids} and {distances}")
@@ -123,9 +123,9 @@ def split(
     if plasmids_metadata:
         metadata = plasmids_metadata.read_text().splitlines()
     if graph_pickle:
-        existing_graph = cast(PlasmidGraph, PlasmidGraph.load(graph_pickle))
-        plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold, metadata, existing_graph)
-        typing = pd.read_csv(prev_typing, sep="\t", index_col=0).to_dict()["community"]
+        existing_graphs = [cast(PlasmidGraph, PlasmidGraph.load(graph)) for graph in graph_pickle]
+        plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold, metadata, existing_graphs)
+        typings = [pd.read_csv(prev, sep="\t", index_col=0).to_dict()["community"] for prev in prev_typing]
     else:
         plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold, metadata)
 
@@ -153,7 +153,8 @@ def split(
     communities.save_graph_as_text(objects_dir / "communities.txt")
     communities.save_classification(objects_dir / "communities.tsv", "plasmid\tcommunity")
     if prev_typing:
-        communities.save_classification(objects_dir / "compare_communities.tsv", "plasmid\tcommunity\tprevious_community", prev_typing=typing)
+        for i, typing in enumerate(typings):
+            communities.save_classification(objects_dir / f"compare_communities_{i}.tsv", "plasmid\tcommunity\tprevious_community", prev_typing=typing)
 
     logging.info("All done!")
 
@@ -208,7 +209,7 @@ AP024796.1      CP027485.1      1
     help="Whether to output networks as html visualisations, cytoscape formatted json, or both.",
 )
 @click.option(
-    "--prev_typing", type=PathlibPath(exists=True), help="Previous subcommunity typing, if it exists."
+    "--prev_typing", multiple=True, help="Previous subcommunity typing, if it exists."
 )
 @click.option(
     "--biased", is_flag = True, help="If including a previous subcommunity typing, the asynchronous label"
@@ -225,7 +226,7 @@ def type(
     distance_threshold: float,
     small_subcommunity_size_threshold: int,
     output_type: Optional[str],
-    prev_typing: Optional[Path],
+    prev_typing: Optional[tuple],
     biased: Optional[bool],
     nearest_neighbour: Optional[bool]
 ) -> None:
@@ -249,10 +250,10 @@ def type(
 
     logging.info("Typing communities (i.e. splitting them into subcommunities)")
 
-    if prev_typing and biased:
-        typing = pd.read_csv(prev_typing, sep="\t", index_col=0).to_dict()["type"]
-    elif prev_typing and nearest_neighbour:
-        typing = pd.read_csv(prev_typing, sep="\t")
+    if prev_typing and nearest_neighbour:
+        typing = pd.read_csv(prev_typing[0], sep="\t") #nearest neighbour does not support merging graphs
+    elif prev_typing:
+        typings = [pd.read_csv(prev, sep="\t", index_col=0).to_dict()["type"] for prev in prev_typing]
 
     all_subcommunities = Subcommunities()
     all_hub_plasmids = set()
@@ -260,7 +261,7 @@ def type(
         hub_plasmids = community.remove_hub_plasmids()
         all_hub_plasmids.update(hub_plasmids)
         if prev_typing and biased:
-            subcommunities = community.split_graph_given_labels(small_subcommunity_size_threshold, typing)
+            subcommunities = community.split_graph_given_labels(small_subcommunity_size_threshold, typings)
         elif prev_typing and nearest_neighbour:
             new_plasmids = [plasmid for plasmid in community.nodes if plasmid not in typing["plasmid"].to_list()]
             subcommunities = community.nearest_neighbour(typing, new_plasmids)
@@ -291,9 +292,10 @@ def type(
         print("hub_plasmids", file=hub_plasmids_fh)
         for plasmid in all_hub_plasmids:
             print(plasmid, file=hub_plasmids_fh)
-    if prev_typing:
-        typing = typing.to_dict()["type"]
-        all_subcommunities.save_classification(objects_dir / "compare_typing.tsv", "plasmid\ttype\tprevious_type",prev_typing=typing)
+
+    if prev_typing and not nearest_neighbour:
+        for i, typing in enumerate(typings):
+            all_subcommunities.save_classification(objects_dir / f"compare_typing_{i}.tsv", "plasmid\ttype\tprevious_type",prev_typing=typing)
 
     logging.info("All done!")
 

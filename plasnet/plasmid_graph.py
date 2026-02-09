@@ -26,7 +26,7 @@ class PlasmidGraph(BaseGraph):
         distance_filepath: Path,
         distance_threshold: float,
         plasmids_metadata: list[str],
-        existing_graph: Optional["PlasmidGraph"]=None
+        existing_graphs: Optional[tuple]=None
     ) -> "PlasmidGraph":
         """
         Creates a plasmid graph from plasmid and distance files.
@@ -86,8 +86,9 @@ class PlasmidGraph(BaseGraph):
             create_using=PlasmidGraph,
         )
 
-        if existing_graph:
-            graph = nx.compose(graph,existing_graph)
+        if existing_graphs:
+            for existing_graph in existing_graphs:
+                graph = nx.compose(graph,existing_graph)
 
 
         # add all nodes to the graph, including those that have no edges

@@ -211,13 +211,10 @@ AP024796.1      CP027485.1      1
 @click.option(
     "--prev_typing", multiple=True, help="Previous subcommunity typing, if it exists."
 )
-@click.option(
-    "--biased", is_flag = True, help="If including a previous subcommunity typing, the asynchronous label"
-    "propagation will start with the previous typing as initial labels."
-)
-@click.option(
-    "--nearest-neighbour", is_flag = True, help="If including a previous subcommunity typing, type new plasmids"
-    "based on which previous subcommunity they are closest to."
+@click.option("--reclustering_method", type=click.Choice(["unbiased", "biased", "nearest_neighbour"]), default="unbiased", help=
+    "unbiased: If including a previous subcommunity typing, all previous and new genomes will be reclustered from scratch, ignoring previous typing.\n"
+    "biased: The asynchronous label propagation will start with the previous typing as initial labels.\n"
+    "nearest_neighbour: Does not cluster the new genomes, rather, assigns type based on the closest neighbour of the previous typing."
 )
 def type(
     communities_pickle: Path,
@@ -227,8 +224,7 @@ def type(
     small_subcommunity_size_threshold: int,
     output_type: Optional[str],
     prev_typing: Optional[tuple],
-    biased: Optional[bool],
-    nearest_neighbour: Optional[bool]
+    reclustering_method: Optional[str]
 ) -> None:
     logging.info(f"Loading communities from {communities_pickle}")
     communities = cast(Communities, Communities.load(communities_pickle))
@@ -250,7 +246,7 @@ def type(
 
     logging.info("Typing communities (i.e. splitting them into subcommunities)")
 
-    if prev_typing and nearest_neighbour:
+    if prev_typing and reclustering_method=="nearest_neighbour":
         typing = pd.read_csv(prev_typing[0], sep="\t") #nearest neighbour does not support merging graphs
     elif prev_typing:
         typings = [pd.read_csv(prev, sep="\t", index_col=0).to_dict()["type"] for prev in prev_typing]
@@ -260,9 +256,9 @@ def type(
     for community in communities:
         hub_plasmids = community.remove_hub_plasmids()
         all_hub_plasmids.update(hub_plasmids)
-        if prev_typing and biased:
+        if prev_typing and reclustering_method=="biased":
             subcommunities = community.split_graph_given_labels(small_subcommunity_size_threshold, typings)
-        elif prev_typing and nearest_neighbour:
+        elif prev_typing and reclustering_method=="nearest_neighbour":
             new_plasmids = [plasmid for plasmid in community.nodes if plasmid not in typing["plasmid"].to_list()]
             subcommunities = community.nearest_neighbour(typing, new_plasmids)
         else:

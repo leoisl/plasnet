@@ -103,6 +103,7 @@ AP024796.1      CP027485.1      0.8
 @click.option(
     "--prev_typing", multiple=True, help="Previous community typing, if appending to an existing plasmid graph."
 )
+@click.option("--no-community-vis", is_flag=True)
 def split(
     plasmids: Path,
     distances: Path,
@@ -114,7 +115,8 @@ def split(
     output_type: Optional[str],
     plasmids_metadata: Optional[Path],
     graph_pickle: Optional[tuple],
-    prev_typing: Optional[tuple]
+    prev_typing: Optional[tuple],
+    no_community_vis: bool
 ) -> None:
     visualisations_dir = output_dir / "visualisations"
     logging.info(f"Creating plasmid graph from {plasmids} and {distances}")
@@ -140,10 +142,11 @@ def split(
         bh_connectivity, bh_neighbours_edge_density
     )
 
-    logging.info("Producing communities visualisation")
-    OutputProducer.produce_communities_visualisation(
-        communities, visualisations_dir / "communities", output_type
-    )
+    if not no_community_vis:
+        logging.info("Producing communities visualisation")
+        OutputProducer.produce_communities_visualisation(
+            communities, visualisations_dir / "communities", output_type
+        )
 
     logging.info("Serialising objects")
     objects_dir = output_dir / "objects"
@@ -216,6 +219,7 @@ AP024796.1      CP027485.1      1
     "biased: The asynchronous label propagation will start with the previous typing as initial labels.\n"
     "nearest_neighbour: Does not cluster the new genomes, rather, assigns type based on the closest neighbour of the previous typing."
 )
+@click.option("--no-vis", is_flag=True)
 def type(
     communities_pickle: Path,
     distances: Path,
@@ -224,7 +228,8 @@ def type(
     small_subcommunity_size_threshold: int,
     output_type: Optional[str],
     prev_typing: Optional[tuple],
-    reclustering_method: Optional[str]
+    reclustering_method: Optional[str],
+    no_vis: bool
 ) -> None:
     logging.info(f"Loading communities from {communities_pickle}")
     communities = cast(Communities, Communities.load(communities_pickle))
@@ -267,16 +272,17 @@ def type(
             )
         all_subcommunities.extend(subcommunities)
 
-    logging.info("Producing communities visualisations")
-    original_communities.recolour_nodes(communities)
-    OutputProducer.produce_communities_visualisation(
-        original_communities, output_dir / "visualisations/communities", output_type
-    )
+    if not no_vis:
+        logging.info("Producing communities visualisations")
+        original_communities.recolour_nodes(communities)
+        OutputProducer.produce_communities_visualisation(
+            original_communities, output_dir / "visualisations/communities", output_type
+        )
 
-    logging.info("Producing subcommunities visualisations")
-    OutputProducer.produce_subcommunities_visualisation(
-        all_subcommunities, output_dir / "visualisations/subcommunities", output_type
-    )
+        logging.info("Producing subcommunities visualisations")
+        OutputProducer.produce_subcommunities_visualisation(
+            all_subcommunities, output_dir / "visualisations/subcommunities", output_type
+        )
 
     logging.info("Serialising objects")
     objects_dir = output_dir / "objects"
@@ -289,7 +295,7 @@ def type(
         for plasmid in all_hub_plasmids:
             print(plasmid, file=hub_plasmids_fh)
 
-    if prev_typing and  reclustering_method!="nearest_neighbour":
+    if prev_typing and reclustering_method!="nearest_neighbour":
         for i, typing in enumerate(typings):
             all_subcommunities.save_classification(objects_dir / f"compare_typing_{i}.tsv", "plasmid\ttype\tprevious_type",prev_typing=typing)
 

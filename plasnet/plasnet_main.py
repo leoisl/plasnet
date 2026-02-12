@@ -289,7 +289,7 @@ def type(
         for plasmid in all_hub_plasmids:
             print(plasmid, file=hub_plasmids_fh)
 
-    if prev_typing and not nearest_neighbour:
+    if prev_typing and  reclustering_method!="nearest_neighbour":
         for i, typing in enumerate(typings):
             all_subcommunities.save_classification(objects_dir / f"compare_typing_{i}.tsv", "plasmid\ttype\tprevious_type",prev_typing=typing)
 

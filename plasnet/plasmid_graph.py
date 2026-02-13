@@ -63,7 +63,7 @@ class PlasmidGraph(BaseGraph):
         """  # noqa: E501
         plasmids = pd.read_csv(plasmids_filepath)
 
-        distance_df = pd.read_csv(distance_filepath, dtype={{"plasmid_1":str, "plasmid_2":str}}, sep="\t")
+        distance_df = pd.read_csv(distance_filepath, dtype={"plasmid_1":str, "plasmid_2":str}, sep="\t")
         distance_df[DistanceTags.SplitDistanceTag.value] = distance_df["distance"]
 
         # apply distance threshold

@@ -14,6 +14,7 @@ from plasnet.sample_graph import SampleGraph
 from plasnet.sample_graphs import SampleGraphs
 from plasnet.subcommunities import Subcommunities
 from plasnet.utils import PathlibPath, distance_df_to_dict
+from plasnet.clustering_dists import read_in_clusters, make_contingency_matrix, all_clustering_dists
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
@@ -298,6 +299,15 @@ def type(
     if prev_typing and reclustering_method!="nearest_neighbour":
         for i, typing in enumerate(typings):
             all_subcommunities.save_classification(objects_dir / f"compare_typing_{i}.tsv", "plasmid\ttype\tprevious_type",prev_typing=typing)
+            
+            clusters_pling, clusters_pling_old, plasmids = read_in_clusters(objects_dir / f"compare_typing_{i}.tsv")
+            n = len(plasmids)
+            contingency, k_1, k_2 = make_contingency_matrix(clusters_pling, clusters_pling_old)
+            clust_dists = all_clustering_dists(contingency, k_1, k_2, n)
+            with open(objects_dir / f"clustering_dists_{i}.tsv", "w") as f:
+                f.write("distance_type\tdistance\n")
+                for key in clust_dists.keys():
+                    f.write(f"{key}\t{clust_dists[key]}\n")
 
     logging.info("All done!")
 

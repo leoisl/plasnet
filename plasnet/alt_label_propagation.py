@@ -1,12 +1,8 @@
+from collections import Counter
 
-from collections import Counter, defaultdict, deque
-
-import networkx as nx
-from networkx.utils import groups, not_implemented_for, py_random_state
+from networkx.utils import groups
 
 
-
-@py_random_state(2)
 def appendable_lpa_communities(G, initial_labels=None, seed=None):
     """Returns communities in `G` as detected by asynchronous label
     propagation.
@@ -57,16 +53,15 @@ def appendable_lpa_communities(G, initial_labels=None, seed=None):
            networks." Physical Review E 76.3 (2007): 036106.
     """
 
-
     if not initial_labels:
         labels = {n: i for i, n in enumerate(G)}
     else:
         start = max(initial_labels.values())
         H = G.copy()
         H.remove_nodes_from(initial_labels.keys())
-        labels = {n: i+start for i,n in enumerate(H)}
+        labels = {n: i + start for i, n in enumerate(H)}
         labels.update(initial_labels)
-            
+
     cont = True
 
     while cont:
@@ -88,9 +83,7 @@ def appendable_lpa_communities(G, initial_labels=None, seed=None):
 
             # Get the labels that appear with maximum frequency.
             max_freq = max(label_freq.values())
-            best_labels = [
-                label for label, freq in label_freq.items() if freq == max_freq
-            ]
+            best_labels = [label for label, freq in label_freq.items() if freq == max_freq]
 
             # If the node does not have one of the maximum frequency labels,
             # randomly choose one of them and update the node's label.
@@ -99,6 +92,5 @@ def appendable_lpa_communities(G, initial_labels=None, seed=None):
             if labels[node] not in best_labels:
                 labels[node] = seed.choice(best_labels)
                 cont = True
-
 
     yield from groups(labels).values()

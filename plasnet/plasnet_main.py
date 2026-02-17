@@ -14,7 +14,6 @@ from plasnet.sample_graph import SampleGraph
 from plasnet.sample_graphs import SampleGraphs
 from plasnet.subcommunities import Subcommunities
 from plasnet.utils import PathlibPath, distance_df_to_dict
-from plasnet.clustering_dists import read_in_clusters, make_contingency_matrix, all_clustering_dists
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
@@ -98,13 +97,6 @@ AP024796.1      CP027485.1      0.8
 @click.option(
     "--plasmids-metadata", type=PathlibPath(exists=True), help="Plasmids metadata text file."
 )
-@click.option(
-    "--graph-pickle", multiple=True, help="Existing plasmid graph to append new plasmids to."
-)
-@click.option(
-    "--prev_typing", multiple=True, help="Previous community typing, if appending to an existing plasmid graph."
-)
-@click.option("--no-community-vis", is_flag=True)
 def split(
     plasmids: Path,
     distances: Path,
@@ -115,22 +107,13 @@ def split(
     output_plasmid_graph: bool,
     output_type: Optional[str],
     plasmids_metadata: Optional[Path],
-    graph_pickle: Optional[tuple],
-    prev_typing: Optional[tuple],
-    no_community_vis: bool
 ) -> None:
     visualisations_dir = output_dir / "visualisations"
     logging.info(f"Creating plasmid graph from {plasmids} and {distances}")
     metadata = []
-
     if plasmids_metadata:
         metadata = plasmids_metadata.read_text().splitlines()
-    if graph_pickle:
-        existing_graphs = [cast(PlasmidGraph, PlasmidGraph.load(graph)) for graph in graph_pickle]
-        plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold, metadata, existing_graphs)
-        typings = [pd.read_csv(prev, sep="\t", index_col=0).to_dict()["community"] for prev in prev_typing]
-    else:
-        plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold, metadata)
+    plasmid_graph = PlasmidGraph.build(plasmids, distances, distance_threshold, metadata)
 
     if output_plasmid_graph:
         logging.info("Producing full plasmid graph visualisation")
@@ -143,11 +126,10 @@ def split(
         bh_connectivity, bh_neighbours_edge_density
     )
 
-    if not no_community_vis:
-        logging.info("Producing communities visualisation")
-        OutputProducer.produce_communities_visualisation(
-            communities, visualisations_dir / "communities", output_type
-        )
+    logging.info("Producing communities visualisation")
+    OutputProducer.produce_communities_visualisation(
+        communities, visualisations_dir / "communities", output_type
+    )
 
     logging.info("Serialising objects")
     objects_dir = output_dir / "objects"
@@ -156,9 +138,6 @@ def split(
     communities.save(objects_dir / "communities.pkl")
     communities.save_graph_as_text(objects_dir / "communities.txt")
     communities.save_classification(objects_dir / "communities.tsv", "plasmid\tcommunity")
-    if prev_typing:
-        for i, typing in enumerate(typings):
-            communities.save_classification(objects_dir / f"compare_communities_{i}.tsv", "plasmid\tcommunity\tprevious_community", prev_typing=typing)
 
     logging.info("All done!")
 
@@ -212,15 +191,6 @@ AP024796.1      CP027485.1      1
     default="html",
     help="Whether to output networks as html visualisations, cytoscape formatted json, or both.",
 )
-@click.option(
-    "--prev_typing", multiple=True, help="Previous subcommunity typing, if it exists."
-)
-@click.option("--reclustering_method", type=click.Choice(["unbiased", "biased", "nearest_neighbour"]), default="unbiased", help=
-    "unbiased: If including a previous subcommunity typing, all previous and new genomes will be reclustered from scratch, ignoring previous typing.\n"
-    "biased: The asynchronous label propagation will start with the previous typing as initial labels.\n"
-    "nearest_neighbour: Does not cluster the new genomes, rather, assigns type based on the closest neighbour of the previous typing."
-)
-@click.option("--no-vis", is_flag=True)
 def type(
     communities_pickle: Path,
     distances: Path,
@@ -228,9 +198,6 @@ def type(
     distance_threshold: float,
     small_subcommunity_size_threshold: int,
     output_type: Optional[str],
-    prev_typing: Optional[tuple],
-    reclustering_method: Optional[str],
-    no_vis: bool
 ) -> None:
     logging.info(f"Loading communities from {communities_pickle}")
     communities = cast(Communities, Communities.load(communities_pickle))
@@ -251,39 +218,26 @@ def type(
     communities.filter_by_distance(distance_threshold)
 
     logging.info("Typing communities (i.e. splitting them into subcommunities)")
-
-    if prev_typing and reclustering_method=="nearest_neighbour":
-        typing = pd.read_csv(prev_typing[0], sep="\t") #nearest neighbour does not support merging graphs
-    elif prev_typing:
-        typings = [pd.read_csv(prev, sep="\t", index_col=0).to_dict()["type"] for prev in prev_typing]
-
     all_subcommunities = Subcommunities()
     all_hub_plasmids = set()
     for community in communities:
         hub_plasmids = community.remove_hub_plasmids()
         all_hub_plasmids.update(hub_plasmids)
-        if prev_typing and reclustering_method=="biased":
-            subcommunities = community.split_graph_given_labels(small_subcommunity_size_threshold, typings)
-        elif prev_typing and reclustering_method=="nearest_neighbour":
-            new_plasmids = [plasmid for plasmid in community.nodes if plasmid not in typing["plasmid"].to_list()]
-            subcommunities = community.nearest_neighbour(typing, new_plasmids)
-        else:
-            subcommunities = community.split_graph_into_subcommunities(
-                small_subcommunity_size_threshold
-            )
+        subcommunities = community.split_graph_into_subcommunities(
+            small_subcommunity_size_threshold
+        )
         all_subcommunities.extend(subcommunities)
 
-    if not no_vis:
-        logging.info("Producing communities visualisations")
-        original_communities.recolour_nodes(communities)
-        OutputProducer.produce_communities_visualisation(
-            original_communities, output_dir / "visualisations/communities", output_type
-        )
+    logging.info("Producing communities visualisations")
+    original_communities.recolour_nodes(communities)
+    OutputProducer.produce_communities_visualisation(
+        original_communities, output_dir / "visualisations/communities", output_type
+    )
 
-        logging.info("Producing subcommunities visualisations")
-        OutputProducer.produce_subcommunities_visualisation(
-            all_subcommunities, output_dir / "visualisations/subcommunities", output_type
-        )
+    logging.info("Producing subcommunities visualisations")
+    OutputProducer.produce_subcommunities_visualisation(
+        all_subcommunities, output_dir / "visualisations/subcommunities", output_type
+    )
 
     logging.info("Serialising objects")
     objects_dir = output_dir / "objects"
@@ -295,19 +249,6 @@ def type(
         print("hub_plasmids", file=hub_plasmids_fh)
         for plasmid in all_hub_plasmids:
             print(plasmid, file=hub_plasmids_fh)
-
-    if prev_typing and reclustering_method!="nearest_neighbour":
-        for i, typing in enumerate(typings):
-            all_subcommunities.save_classification(objects_dir / f"compare_typing_{i}.tsv", "plasmid\ttype\tprevious_type",prev_typing=typing)
-            
-            clusters_pling, clusters_pling_old, plasmids = read_in_clusters(objects_dir / f"compare_typing_{i}.tsv")
-            n = len(plasmids)
-            contingency, k_1, k_2 = make_contingency_matrix(clusters_pling, clusters_pling_old)
-            clust_dists = all_clustering_dists(contingency, k_1, k_2, n)
-            with open(objects_dir / f"clustering_dists_{i}.tsv", "w") as f:
-                f.write("distance_type\tdistance\n")
-                for key in clust_dists.keys():
-                    f.write(f"{key}\t{clust_dists[key]}\n")
 
     logging.info("All done!")
 

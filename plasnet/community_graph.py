@@ -103,7 +103,7 @@ class CommunityGraph(HubGraph):
             self, small_subcommunity_size_threshold: int, typings: list[dict]
     ) -> Subcommunities:
         
-        old_plasmids = [plasmid for typing in typings for plasmid in typing.keys()]
+        old_plasmids = [plasmid for typing in typings for plasmid in typing.keys() if plasmid in self.nodes]
         new_plasmids = [plasmid for plasmid in self.nodes if plasmid not in old_plasmids]
         new_subcommunities_nodes: list[set[str]] = list(
             nx.community.asyn_lpa_communities(G=self.subgraph(new_plasmids), seed=42)
@@ -112,14 +112,14 @@ class CommunityGraph(HubGraph):
         label = 0
         map = {}
         for typing in typings:
-            for i, n in enumerate(typing.keys()):
-                map[typing[n]] = label + i
+            for i, subcomm in enumerate(typing.values()):
+                map[subcomm] = label + i
             label = label + len(typing.keys())
         initial_labels = {n: map[typing[n]] for n in old_plasmids}
         for subcomm in new_subcommunities_nodes:
             for plasmid in list(subcomm):
                 initial_labels[plasmid] = label
-                label = label + 1
+            label = label + 1
         subcommunities_nodes: list[set[str]] = list(
             appendable_lpa_communities(G=self, initial_labels=initial_labels, seed=42)
         )

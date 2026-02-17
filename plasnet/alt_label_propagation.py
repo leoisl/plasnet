@@ -57,50 +57,48 @@ def appendable_lpa_communities(G, initial_labels=None, seed=None):
            networks." Physical Review E 76.3 (2007): 036106.
     """
 
-    if set(initial_labels.keys())!=set(G.nodes): #initial condition already assigned labels to all nodes
 
-        if not initial_labels:
-            labels = {n: i for i, n in enumerate(G)}
-        else:
-            start = max(initial_labels.values())
-            H = G.copy()
-            H.remove_nodes_from(initial_labels.keys())
-            labels = {n: i+start for i,n in enumerate(H)}
-            labels.update(initial_labels)
-                
-        cont = True
-
-        while cont:
-            cont = False
-            nodes = list(G)
-            seed.shuffle(nodes)
-
-            for node in nodes:
-                if not G[node]:
-                    continue
-
-                # Get label frequencies among adjacent nodes.
-                # Depending on the order they are processed in,
-                # some nodes will be in iteration t and others in t-1,
-                # making the algorithm asynchronous.
-                # initialising a Counter from an iterator of labels is
-                # faster for getting unweighted label frequencies
-                label_freq = Counter(map(labels.get, G[node]))
-
-                # Get the labels that appear with maximum frequency.
-                max_freq = max(label_freq.values())
-                best_labels = [
-                    label for label, freq in label_freq.items() if freq == max_freq
-                ]
-
-                # If the node does not have one of the maximum frequency labels,
-                # randomly choose one of them and update the node's label.
-                # Continue the iteration as long as at least one node
-                # doesn't have a maximum frequency label.
-                if labels[node] not in best_labels:
-                    labels[node] = seed.choice(best_labels)
-                    cont = True
+    if not initial_labels:
+        labels = {n: i for i, n in enumerate(G)}
     else:
-        labels=initial_labels
+        start = max(initial_labels.values())
+        H = G.copy()
+        H.remove_nodes_from(initial_labels.keys())
+        labels = {n: i+start for i,n in enumerate(H)}
+        labels.update(initial_labels)
+            
+    cont = True
+
+    while cont:
+        cont = False
+        nodes = list(G)
+        seed.shuffle(nodes)
+
+        for node in nodes:
+            if not G[node]:
+                continue
+
+            # Get label frequencies among adjacent nodes.
+            # Depending on the order they are processed in,
+            # some nodes will be in iteration t and others in t-1,
+            # making the algorithm asynchronous.
+            # initialising a Counter from an iterator of labels is
+            # faster for getting unweighted label frequencies
+            label_freq = Counter(map(labels.get, G[node]))
+
+            # Get the labels that appear with maximum frequency.
+            max_freq = max(label_freq.values())
+            best_labels = [
+                label for label, freq in label_freq.items() if freq == max_freq
+            ]
+
+            # If the node does not have one of the maximum frequency labels,
+            # randomly choose one of them and update the node's label.
+            # Continue the iteration as long as at least one node
+            # doesn't have a maximum frequency label.
+            if labels[node] not in best_labels:
+                labels[node] = seed.choice(best_labels)
+                cont = True
+
 
     yield from groups(labels).values()

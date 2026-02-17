@@ -153,18 +153,18 @@ class CommunityGraph(HubGraph):
         max_label = len(subcommunity_labels.keys())
         
         for plasmid in new_plasmids:
-            if plasmid in self.graph:
-                neighbours = [n for n in self.graph[plasmid] if n not in new_plasmids]
+            if plasmid in self.nodes:
+                neighbours = [n for n in self[plasmid] if n not in new_plasmids]
                 if len(neighbours)==0:
                     subcommunity_labels[f"community_{self.label}_subcommunity_{max_label}"] = [plasmid]
                     max_label = max_label + 1
                 else:
-                    neighbours = sorted(neighbours, key=lambda n: self.graph[n,plasmid][DistanceTags.SplitDistanceTag.value])
-                    min_dist = self.graph[neighbours[0],plasmid][DistanceTags.SplitDistanceTag.value]
-                    nearest = [neighbour for neighbour in neighbours if self.graph[neighbour,plasmid][DistanceTags.SplitDistanceTag.value]==min_dist]
+                    neighbours = sorted(neighbours, key=lambda n: self.edges[n,plasmid][DistanceTags.SplitDistanceTag.value])
+                    min_dist = self.edges[neighbours[0],plasmid][DistanceTags.SplitDistanceTag.value]
+                    nearest = [neighbour for neighbour in neighbours if self.edges[neighbour,plasmid][DistanceTags.SplitDistanceTag.value]==min_dist]
                     nearest = sorted(nearest, key=lambda n: len(typing[typing["type"]==typing[typing["plasmid"]==n]["type"].values[0]]))
                     nn = nearest[-1] #select nearest neighbour with largest subcommunity size
-                    subcommunity_labels[typing[typing["plasmid"]==nn]["type"].values[0]].append(nn)
+                    subcommunity_labels[typing[typing["plasmid"]==nn]["type"].values[0]].append(plasmid)
                 
 
         subcommunities = []

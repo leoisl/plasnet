@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.0](https://github.com/leoisl/plasnet/compare/v0.6.0...v0.7.0) (2026-02-17)
+
+
+### Features
+
+* Make some of the visualisation outputs optional via flags that turn them off. ([d1bb9e9](https://github.com/leoisl/plasnet/commit/d1bb9e9a601fc9844112948649d10c265d0a7bd5))
+* Option to run split and type commands with previous results from split and type on a subset of plasmids, using three different approaches. Outputs a comparison and distances to previous results. ([d1bb9e9](https://github.com/leoisl/plasnet/commit/d1bb9e9a601fc9844112948649d10c265d0a7bd5))
+
 ## [0.6.0](https://github.com/leoisl/plasnet/compare/v0.5.1...v0.6.0) (2024-08-19)
 
 

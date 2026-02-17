@@ -143,8 +143,3 @@ class BaseGraph(nx.Graph):  # type: ignore
     def write_classification(self, typing_fh: TextIO) -> None:
         for node in self.nodes:
             typing_fh.write(f"{node}\t{self.label}\n")
-
-    def compare_classification(self, prev_typing: dict, typing_fh: TextIO) -> None:
-        for node in self.nodes:
-            if node in prev_typing.keys():
-                typing_fh.write(f"{node}\t{self.label}\t{prev_typing[node]}\n")

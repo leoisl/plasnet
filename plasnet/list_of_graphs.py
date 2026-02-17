@@ -1,6 +1,6 @@
 import pickle
 from pathlib import Path
-from typing import Generator, cast
+from typing import Generator, cast, Optional
 
 from plasnet.base_graph import BaseGraphType
 
@@ -27,11 +27,15 @@ class ListOfGraphs(list[BaseGraphType]):
             for graph_as_text in self._get_each_graph_as_list_of_nodes_in_text_format():
                 print(graph_as_text, file=fh)
 
-    def save_classification(self, filepath: Path, header: str) -> None:
+    def save_classification(self, filepath: Path, header: str, prev_typing: Optional[dict]=None) -> None:
         with open(filepath, "w") as fh:
             print(header, file=fh)
             for subgraph in self:
-                subgraph.write_classification(fh)
+                if prev_typing:
+                    subgraph.compare_classification(prev_typing, fh)
+                else:
+                    subgraph.write_classification(fh)
+                
 
     def get_graphs_sorted_by_size(self) -> "ListOfGraphs[BaseGraphType]":
         return ListOfGraphs(sorted(self, key=lambda graph: graph.number_of_nodes(), reverse=True))

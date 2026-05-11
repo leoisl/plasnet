@@ -1,3 +1,4 @@
+import random
 from collections import Counter
 
 from networkx.utils import groups
@@ -53,6 +54,8 @@ def appendable_lpa_communities(G, initial_labels=None, seed=None):
            networks." Physical Review E 76.3 (2007): 036106.
     """
 
+    random.seed(seed)
+
     if not initial_labels:
         labels = {n: i for i, n in enumerate(G)}
     else:
@@ -67,7 +70,7 @@ def appendable_lpa_communities(G, initial_labels=None, seed=None):
     while cont:
         cont = False
         nodes = list(G)
-        seed.shuffle(nodes)
+        random.shuffle(nodes)
 
         for node in nodes:
             if not G[node]:
@@ -90,7 +93,7 @@ def appendable_lpa_communities(G, initial_labels=None, seed=None):
             # Continue the iteration as long as at least one node
             # doesn't have a maximum frequency label.
             if labels[node] not in best_labels:
-                labels[node] = seed.choice(best_labels)
+                labels[node] = random.choice(best_labels)
                 cont = True
 
     yield from groups(labels).values()
